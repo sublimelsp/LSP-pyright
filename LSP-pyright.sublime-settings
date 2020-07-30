@@ -14,6 +14,8 @@
 	"settings": {
 		// Automatically add common search paths like 'src'?
 		"python.analysis.autoSearchPaths": true,
+		// Additional import search resolution paths
+		"python.analysis.extraPaths": [],
 		// Path to directory containing custom type stub files.
 		"python.analysis.stubPath": "./typings",
 		// "openFilesOnly" or "workspace"
