@@ -3,7 +3,6 @@
 	"languages": [
 		{
 			"languageId": "python",
-			"document_selector": "source.python",
 		},
 	],
 	// @see https://github.com/microsoft/pyright/blob/master/docs/configuration.md
