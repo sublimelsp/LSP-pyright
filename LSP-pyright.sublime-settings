@@ -1,0 +1,44 @@
+{
+	// @see https://github.com/microsoft/pyright
+	"languages": [
+		{
+			"languageId": "python",
+			"document_selector": "source.python",
+		},
+	],
+	// @see https://github.com/microsoft/pyright/blob/master/docs/configuration.md
+	"initializationOptions": {
+		// ...
+	},
+	// @see https://github.com/microsoft/pyright/blob/master/docs/settings.md
+	"settings": {
+		// Automatically add common search paths like 'src'?
+		"python.analysis.autoSearchPaths": true,
+		// Path to directory containing custom type stub files.
+		"python.analysis.stubPath": "./typings",
+		// "openFilesOnly" or "workspace"
+		"python.analysis.diagnosticMode": "openFilesOnly",
+		// Allows a user to override the severity levels for individual diagnostics.
+		"python.analysis.diagnosticSeverityOverrides": {
+			// "reportUnboundVariable": "information",
+			// "reportImplicitStringConcatenation": "warning",
+		},
+		// Specifies the level of logging for the Output panel
+		"python.analysis.logLevel": "info",
+		// Defines the default rule set for type checking.
+		"python.analysis.typeCheckingMode": "basic",
+		// Paths to look for typeshed modules.
+		// Hmm... doesn't seem to work on my side. May track https://github.com/microsoft/pylance-release/issues/29
+		"python.analysis.typeshedPaths": [],
+		// Use library implementations to extract type information when type stub is not present.
+		"python.analysis.useLibraryCodeForTypes": true,
+		// Disables type completion, definitions, and references.
+		"pyright.disableLanguageServices": false,
+		// Disables the "Organize Imports" command.
+		"pyright.disableOrganizeImports": false,
+		// Path to Python, you can use a custom version of Python.
+		"python.pythonPath": "python",
+		// Path to folder with a list of Virtual Environments.
+		"python.venvPath": "",
+	},
+}

@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "Preferences: LSP-pyright Settings",
+        "command": "edit_settings",
+        "args": {
+            "base_file": "${packages}/LSP-pyright/LSP-pyright.sublime-settings",
+            "default": "// Settings in here override those in \"LSP-pyright/LSP-pyright.sublime-settings\"\n\n{\n\t$0\n}\n",
+        },
+    },
+]
