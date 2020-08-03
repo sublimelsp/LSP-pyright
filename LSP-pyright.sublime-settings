@@ -17,7 +17,7 @@
 		"python.analysis.extraPaths": [
 			// For Sublime Text plugin development
 			"$sublime_py_files_dir",
-			"$sublime_packages_dir",
+			"$packages",
 		],
 		// Path to directory containing custom type stub files.
 		"python.analysis.stubPath": "./typings",
