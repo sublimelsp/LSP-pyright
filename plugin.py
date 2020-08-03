@@ -16,9 +16,7 @@ def plugin_unloaded() -> None:
 class LspPyrightPlugin(NpmClientHandler):
     package_name = __package__
     server_directory = "language-server"
-    server_binary_path = os.path.join(
-        server_directory, "node_modules", "pyright", "langserver.index.js"
-    )
+    server_binary_path = os.path.join(server_directory, "node_modules", "pyright", "langserver.index.js")
 
     @classmethod
     def additional_variables(cls) -> Optional[Dict[str, str]]:
