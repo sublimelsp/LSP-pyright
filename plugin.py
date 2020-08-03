@@ -5,11 +5,11 @@ from LSP.plugin.core.typing import Dict, Optional
 from lsp_utils import NpmClientHandler
 
 
-def plugin_loaded():
+def plugin_loaded() -> None:
     LspPyrightPlugin.setup()
 
 
-def plugin_unloaded():
+def plugin_unloaded() -> None:
     LspPyrightPlugin.cleanup()
 
 
