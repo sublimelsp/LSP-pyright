@@ -11,6 +11,8 @@
 	},
 	// @see https://github.com/microsoft/pyright/blob/master/docs/settings.md
 	"settings": {
+		// Offer auto-import completions.
+		"python.analysis.autoImportCompletions": true,
 		// Automatically add common search paths like 'src'?
 		"python.analysis.autoSearchPaths": true,
 		// Additional import search resolution paths
