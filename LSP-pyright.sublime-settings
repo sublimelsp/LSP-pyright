@@ -3,7 +3,9 @@
 	"languages": [
 		{
 			"languageId": "python",
-		},
+			"scopes": ["source.python"],
+			"syntaxes": ["Packages/Python/Python.sublime-syntax"]
+		}
 	],
 	// @see https://github.com/microsoft/pyright/blob/master/docs/configuration.md
 	"initializationOptions": {
@@ -12,47 +14,54 @@
 	// @see https://github.com/microsoft/pyright/blob/master/docs/settings.md
 	// @see https://github.com/microsoft/pyright/blob/master/client/package.json
 	"settings": {
-		// Offer auto-import completions.
-		"python.analysis.autoImportCompletions": true,
-		// Automatically add common search paths like 'src'?
-		"python.analysis.autoSearchPaths": true,
-		// Additional import search resolution paths
-		"python.analysis.extraPaths": [
-			// For Sublime Text plugin development
-			"$sublime_py_files_dir",
-			"$packages",
-		],
-		// Path to directory containing custom type stub files.
-		"python.analysis.stubPath": "./typings",
-		// "openFilesOnly" or "workspace"
-		"python.analysis.diagnosticMode": "openFilesOnly",
-		// Allows a user to override the severity levels for individual diagnostics.
-		// @see https://github.com/microsoft/pyright/blob/master/docs/configuration.md#type-check-diagnostics-settings
-		"python.analysis.diagnosticSeverityOverrides": {
-			// "reportImplicitStringConcatenation": "warning",
-			// "reportUnboundVariable": "warning",
-			// "reportDuplicateImport ": "warning",
-			// "reportUnusedClass": "information",
-			// "reportUnusedFunction": "information",
-			// "reportUnusedImport": "information",
-			// "reportUnusedVariable": "information",
+		"python": {
+			"analysis": {
+				// Offer auto-import completions.
+				"autoImportCompletions": true,
+				// Automatically add common search paths like 'src'?
+				"autoSearchPaths": true,
+				// Additional import search resolution paths
+				"extraPaths": [
+					// For Sublime Text plugin development, you should add your
+					// `Packages` directory (`sublime.packages_path()`)
+					// and the path to sublime's python files
+					// (`import os.path;os.path.dirname(sublime.__file__)`)
+				],
+				// Path to directory containing custom type stub files.
+				"stubPath": "./typings",
+				// "openFilesOnly" or "workspace"
+				"diagnosticMode": "openFilesOnly",
+				// Allows a user to override the severity levels for individual diagnostics.
+				// @see https://github.com/microsoft/pyright/blob/master/docs/configuration.md#type-check-diagnostics-settings
+				"diagnosticSeverityOverrides": {
+					// "reportImplicitStringConcatenation": "warning",
+					// "reportUnboundVariable": "warning",
+					// "reportDuplicateImport ": "warning",
+					// "reportUnusedClass": "information",
+					// "reportUnusedFunction": "information",
+					// "reportUnusedImport": "information",
+					// "reportUnusedVariable": "information",
+				},
+				// Specifies the level of logging for the Output panel
+				"logLevel": "info",
+				// Defines the default rule set for type checking.
+				"typeCheckingMode": "basic",
+				// Paths to look for typeshed modules.
+				// Hmm... doesn't seem to work on my side. May track https://github.com/microsoft/pylance-release/issues/29
+				"typeshedPaths": [],
+				// Use library implementations to extract type information when type stub is not present.
+				"useLibraryCodeForTypes": true,
+			},
+			// Path to Python, you can use a custom version of Python.
+			"pythonPath": "python",
+			// Path to folder with a list of Virtual Environments.
+			"venvPath": "",
 		},
-		// Specifies the level of logging for the Output panel
-		"python.analysis.logLevel": "info",
-		// Defines the default rule set for type checking.
-		"python.analysis.typeCheckingMode": "basic",
-		// Paths to look for typeshed modules.
-		// Hmm... doesn't seem to work on my side. May track https://github.com/microsoft/pylance-release/issues/29
-		"python.analysis.typeshedPaths": [],
-		// Use library implementations to extract type information when type stub is not present.
-		"python.analysis.useLibraryCodeForTypes": true,
-		// Disables type completion, definitions, and references.
-		"pyright.disableLanguageServices": false,
-		// Disables the "Organize Imports" command.
-		"pyright.disableOrganizeImports": false,
-		// Path to Python, you can use a custom version of Python.
-		"python.pythonPath": "python",
-		// Path to folder with a list of Virtual Environments.
-		"python.venvPath": "",
-	},
+		"pyright": {
+			// Disables type completion, definitions, and references.
+			"disableLanguageServices": false,
+			// Disables the "Organize Imports" command.
+			"disableOrganizeImports": false,
+		}
+	}
 }
