@@ -1,8 +1,6 @@
 # LSP-pyright
 
-Python support for Sublime's LSP plugin provided through [microsoft/pyright](https://github.com/microsoft/pyright).
-
-Note that this plugin requires ST >= 4070.
+Python support for Sublime's LSP plugin provided through [microsoft/pyright](https://github.com/microsoft/pyright). 
 
 ## Installation
 
