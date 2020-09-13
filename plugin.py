@@ -1,7 +1,7 @@
 import os
 import sublime
 
-from LSP.plugin.core.typing import Dict, Optional
+from LSP.plugin.core.typing import Dict, Optional, Tuple
 from lsp_utils import NpmClientHandler
 
 
@@ -23,3 +23,7 @@ class LspPyrightPlugin(NpmClientHandler):
         variables = {}
         variables["sublime_py_files_dir"] = os.path.dirname(sublime.__file__)
         return variables
+
+    @classmethod
+    def minimum_node_version(cls) -> Tuple[int, int, int]:
+        return (12, 0, 0)
