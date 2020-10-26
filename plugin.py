@@ -20,8 +20,13 @@ class LspPyrightPlugin(NpmClientHandler):
 
     @classmethod
     def additional_variables(cls) -> Optional[Dict[str, str]]:
-        variables = {}
-        variables["sublime_py_files_dir"] = os.path.dirname(sublime.__file__)
+        variables = super().additional_variables() or {}
+        variables.update(
+            {
+                "sublime_py_files_dir": os.path.dirname(sublime.__file__),
+            }
+        )
+
         return variables
 
     @classmethod
