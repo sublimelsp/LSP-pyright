@@ -13,7 +13,7 @@
 		// ...
 	},
 	// @see https://github.com/microsoft/pyright/blob/master/docs/settings.md
-	// @see https://github.com/microsoft/pyright/blob/master/client/package.json
+	// @see https://github.com/microsoft/pyright/blob/master/packages/vscode-pyright/package.json
 	"settings": {
 		// Offer auto-import completions.
 		"python.analysis.autoImportCompletions": true,
