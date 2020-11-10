@@ -1,7 +1,8 @@
 import os
 import sublime
+import sys
 
-from LSP.plugin.core.typing import Any, Dict, List, Optional, Tuple
+from LSP.plugin.core.typing import Any, Dict, List, Tuple
 from lsp_utils import NpmClientHandler
 
 from .settings import get_setting
@@ -34,34 +35,15 @@ class LspPyrightPlugin(NpmClientHandler):
 
         if get_setting("st_plugin_development_mode"):
             configuration["settings"]["python.analysis.extraPaths"].extend(cls.find_package_dependency_dirs())
-            configuration["settings"]["python.analysis.extraPaths"].extend(
-                [
-                    "$packages",
-                    os.path.dirname(sublime.__file__),
-                ]
-            )
 
     @staticmethod
     def find_package_dependency_dirs() -> List[str]:
-        dep_dirs = []  # type: List[str]
-        dep_versions = ["all", "st4", "st3", "st2"]
+        dep_dirs = sys.path.copy()
+
+        # move the "Packages/" to the last
+        # @see https://github.com/sublimelsp/LSP-pyright/pull/26#discussion_r520747708
         packages_path = sublime.packages_path()
-
-        for path in os.listdir(packages_path):
-            test_package = os.path.join(packages_path, path)
-
-            # is the package a dependency?
-            if not (
-                os.path.isfile(os.path.join(test_package, ".sublime-dependency"))
-                or os.path.isfile(os.path.join(test_package, "dependency-metadata.json"))
-            ):
-                continue
-
-            for version in dep_versions:
-                test_version = os.path.join(test_package, version)
-
-                if os.path.isdir(test_version):
-                    dep_dirs.append(test_version)
-                    break
+        dep_dirs.remove(packages_path)
+        dep_dirs.append(packages_path)
 
         return dep_dirs
