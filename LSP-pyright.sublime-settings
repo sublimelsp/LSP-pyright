@@ -20,11 +20,7 @@
 		// Automatically add common search paths like 'src'?
 		"python.analysis.autoSearchPaths": true,
 		// Additional import search resolution paths
-		"python.analysis.extraPaths": [
-			// For Sublime Text plugin development
-			"$sublime_py_files_dir",
-			"$packages",
-		],
+		"python.analysis.extraPaths": [],
 		// Path to directory containing custom type stub files.
 		"python.analysis.stubPath": "./typings",
 		// "openFilesOnly" or "workspace"
@@ -58,4 +54,6 @@
 		// Path to folder with a list of Virtual Environments.
 		"python.venvPath": "",
 	},
+	// if enabled, things related to ST plugin development will be added into extraPath
+	"st_plugin_development_mode": false,
 }
