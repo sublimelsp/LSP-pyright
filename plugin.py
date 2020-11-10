@@ -46,4 +46,4 @@ class LspPyrightPlugin(NpmClientHandler):
         dep_dirs.remove(packages_path)
         dep_dirs.append(packages_path)
 
-        return dep_dirs
+        return [path for path in dep_dirs if os.path.isdir(path)]
