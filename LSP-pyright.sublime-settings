@@ -20,11 +20,7 @@
 		// Automatically add common search paths like 'src'?
 		"python.analysis.autoSearchPaths": true,
 		// Additional import search resolution paths
-		"python.analysis.extraPaths": [
-			// For Sublime Text plugin development
-			"$sublime_py_files_dir",
-			"$packages",
-		],
+		"python.analysis.extraPaths": [],
 		// Path to directory containing custom type stub files.
 		"python.analysis.stubPath": "./typings",
 		// "openFilesOnly" or "workspace"
@@ -58,4 +54,10 @@
 		// Path to folder with a list of Virtual Environments.
 		"python.venvPath": "",
 	},
+	// Use a predefined setup from this plugin, valid values are:
+	// - "": An empty string will does nothing.
+	// - "sublime_text": Suitable for people who are developing ST plugins.
+	//                  `sys.path` from plugin_host will be added into "python.analysis.extraPaths"
+	//                   so ST package dependecies can be resolved by the LSP server.
+	"dev_environment": "",
 }
