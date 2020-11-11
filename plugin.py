@@ -31,7 +31,7 @@ class LspPyrightPlugin(NpmClientHandler):
     def on_settings_read(cls, settings: sublime.Settings) -> bool:
         super().on_settings_read(settings)
 
-        if settings.get("use_predefined_setup") == "st_dev":
+        if settings.get("dev_environment") == "sublime_text":
             server_settings = settings.get("settings", {})  # type: Dict[str, Any]
 
             # add package dependencies into "python.analysis.extraPaths"
