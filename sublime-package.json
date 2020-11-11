@@ -1,0 +1,1107 @@
+{
+  "contributions": {
+    "settings": [
+      {
+        "file_patterns": [
+          "/LSP-pyright.sublime-settings"
+        ],
+        "schema": {
+          "$id": "sublime://settings/LSP-pyright",
+          "definitions": {
+            "PluginConfig": {
+              "properties": {
+                "dev_environment": {
+                  "description": "Enables the pre-defined environment setup for specific developing needs.",
+                  "enum": [
+                    "",
+                    "sublime_text"
+                  ],
+                  "markdownEnumDescriptions": [
+                    "No modifications applied.",
+                    "Suitable for people who are developing ST plugins - `sys.path` from the plugin_host will be added into \"python.analysis.extraPaths\" so that ST package dependencies can be resolved by the LSP server."
+                  ]
+                },
+                "settings": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "python.analysis.autoImportCompletions": {
+                      "type": "boolean",
+                      "default": true,
+                      "description": "Offer auto-import completions.",
+                    },
+                    "python.analysis.autoSearchPaths": {
+                      "type": "boolean",
+                      "default": true,
+                      "description": "Automatically add common search paths like 'src'?",
+                    },
+                    "python.analysis.stubPath": {
+                      "type": "string",
+                      "default": "typings",
+                      "description": "Path to directory containing custom type stub files.",
+                    },
+                    "python.analysis.diagnosticMode": {
+                      "type": "string",
+                      "default": "openFilesOnly",
+                      "enum": [
+                        "openFilesOnly",
+                        "workspace"
+                      ],
+                      "enumDescriptions": [
+                        "Analyzes and reports errors on only open files.",
+                        "Analyzes and reports errors on all files in the workspace."
+                      ],
+                    },
+                    "python.analysis.diagnosticSeverityOverrides": {
+                      "type": "object",
+                      "default": {},
+                      "description": "Allows a user to override the severity levels for individual diagnostics.",
+                      "properties": {
+                        "reportGeneralTypeIssues": {
+                          "type": "string",
+                          "description": "Diagnostics for general type inconsistencies, unsupported operations, argument/parameter mismatches, etc. Covers all of the basic type-checking rules not covered by other rules. Does not include syntax errors.",
+                          "default": "error",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportPropertyTypeMismatch": {
+                          "type": "string",
+                          "description": "Diagnostics for property whose setter and getter have mismatched types.",
+                          "default": "error",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportMissingImports": {
+                          "type": "string",
+                          "description": "Diagnostics for imports that have no corresponding imported python file or type stub file.",
+                          "default": "error",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportMissingModuleSource": {
+                          "type": "string",
+                          "description": "Diagnostics for imports that have no corresponding source file. This happens when a type stub is found, but the module source file was not found, indicating that the code may fail at runtime when using this execution environment. Type checking will be done using the type stub.",
+                          "default": "warning",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportMissingTypeStubs": {
+                          "type": "string",
+                          "description": "Diagnostics for imports that have no corresponding type stub file (either a typeshed file or a custom type stub). The type checker requires type stubs to do its best job at analysis.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportImportCycles": {
+                          "type": "string",
+                          "description": "Diagnostics for cyclical import chains. These are not errors in Python, but they do slow down type analysis and often hint at architectural layering issues. Generally, they should be avoided.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnusedImport": {
+                          "type": "string",
+                          "description": "Diagnostics for an imported symbol that is not referenced within that file.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnusedClass": {
+                          "type": "string",
+                          "description": "Diagnostics for a class with a private name (starting with an underscore) that is not accessed.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnusedFunction": {
+                          "type": "string",
+                          "description": "Diagnostics for a function or method with a private name (starting with an underscore) that is not accessed.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnusedVariable": {
+                          "type": "string",
+                          "description": "Diagnostics for a variable that is not accessed.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportDuplicateImport": {
+                          "type": "string",
+                          "description": "Diagnostics for an imported symbol or module that is imported more than once.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportWildcardImportFromLibrary": {
+                          "type": "string",
+                          "description": "Diagnostics for an wildcard import from an external library.",
+                          "default": "warning",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportOptionalSubscript": {
+                          "type": "string",
+                          "description": "Diagnostics for an attempt to subscript (index) a variable with an Optional type.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportOptionalMemberAccess": {
+                          "type": "string",
+                          "description": "Diagnostics for an attempt to access a member of a variable with an Optional type.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportOptionalCall": {
+                          "type": "string",
+                          "description": "Diagnostics for an attempt to call a variable with an Optional type.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportOptionalIterable": {
+                          "type": "string",
+                          "description": "Diagnostics for an attempt to use an Optional type as an iterable value (e.g. within a for statement).",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportOptionalContextManager": {
+                          "type": "string",
+                          "description": "Diagnostics for an attempt to use an Optional type as a context manager (as a parameter to a with statement).",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportOptionalOperand": {
+                          "type": "string",
+                          "description": "Diagnostics for an attempt to use an Optional type as an operand to a binary or unary operator (like '+', '==', 'or', 'not').",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUntypedFunctionDecorator": {
+                          "type": "string",
+                          "description": "Diagnostics for function decorators that have no type annotations. These obscure the function type, defeating many type analysis features.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUntypedClassDecorator": {
+                          "type": "string",
+                          "description": "Diagnostics for class decorators that have no type annotations. These obscure the class type, defeating many type analysis features.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUntypedBaseClass": {
+                          "type": "string",
+                          "description": "Diagnostics for base classes whose type cannot be determined statically. These obscure the class type, defeating many type analysis features.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUntypedNamedTuple": {
+                          "type": "string",
+                          "description": "Diagnostics when “namedtuple” is used rather than “NamedTuple”. The former contains no type information, whereas the latter does.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportPrivateUsage": {
+                          "type": "string",
+                          "description": "Diagnostics for incorrect usage of private or protected variables or functions. Protected class members begin with a single underscore _ and can be accessed only by subclasses. Private class members begin with a double underscore but do not end in a double underscore and can be accessed only within the declaring class. Variables and functions declared outside of a class are considered private if their names start with either a single or double underscore, and they cannot be accessed outside of the declaring module.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportConstantRedefinition": {
+                          "type": "string",
+                          "description": "Diagnostics for attempts to redefine variables whose names are all-caps with underscores and numerals.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportIncompatibleMethodOverride": {
+                          "type": "string",
+                          "description": "Diagnostics for methods that override a method of the same name in a base class in an incompatible manner (wrong number of parameters, incompatible parameter types, or incompatible return type).",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportIncompatibleVariableOverride": {
+                          "type": "string",
+                          "description": "Diagnostics for overrides in subclasses that redefine a variable in an incompatible way.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportInvalidStringEscapeSequence": {
+                          "type": "string",
+                          "description": "Diagnostics for invalid escape sequences used within string literals. The Python specification indicates that such sequences will generate a syntax error in future versions.",
+                          "default": "warning",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnknownParameterType": {
+                          "type": "string",
+                          "description": "Diagnostics for input or return parameters for functions or methods that have an unknown type.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnknownArgumentType": {
+                          "type": "string",
+                          "description": "Diagnostics for call arguments for functions or methods that have an unknown type.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnknownLambdaType": {
+                          "type": "string",
+                          "description": "Diagnostics for input or return parameters for lambdas that have an unknown type.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnknownVariableType": {
+                          "type": "string",
+                          "description": "Diagnostics for variables that have an unknown type..",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnknownMemberType": {
+                          "type": "string",
+                          "description": "Diagnostics for class or instance variables that have an unknown type.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportMissingTypeArgument": {
+                          "type": "string",
+                          "description": "Diagnostics for generic class reference with missing type arguments.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportCallInDefaultInitializer": {
+                          "type": "string",
+                          "description": "Diagnostics for function calls within a default value initialization expression. Such calls can mask expensive operations that are performed at module initialization time.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnnecessaryIsInstance": {
+                          "type": "string",
+                          "description": "Diagnostics for 'isinstance' or 'issubclass' calls where the result is statically determined to be always true or always false. Such calls are often indicative of a programming error.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnnecessaryCast": {
+                          "type": "string",
+                          "description": "Diagnostics for 'cast' calls that are statically determined to be unnecessary. Such calls are sometimes indicative of a programming error.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportAssertAlwaysTrue": {
+                          "type": "string",
+                          "description": "Diagnostics for 'assert' statement that will provably always assert. This can be indicative of a programming error.",
+                          "default": "warning",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportSelfClsParameterName": {
+                          "type": "string",
+                          "description": "Diagnostics for a missing or misnamed “self” parameter in instance methods and “cls” parameter in class methods. Instance methods in metaclasses (classes that derive from “type”) are allowed to use “cls” for instance methods.",
+                          "default": "warning",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportImplicitStringConcatenation": {
+                          "type": "string",
+                          "description": "Diagnostics for two or more string literals that follow each other, indicating an implicit concatenation. This is considered a bad practice and often masks bugs such as missing commas.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportInvalidStubStatement": {
+                          "type": "string",
+                          "description": "Diagnostics for type stub statements that do not conform to PEP 484",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUndefinedVariable": {
+                          "type": "string",
+                          "description": "Diagnostics for a missing or misnamed “self” parameter in instance methods and “cls” parameter in class methods. Instance methods in metaclasses (classes that derive from “type”) are allowed to use “cls” for instance methods.",
+                          "default": "error",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnboundVariable": {
+                          "type": "string",
+                          "description": "Diagnostics for unbound and possibly unbound variables.",
+                          "default": "error",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        }
+                      }
+                    },
+                    "python.analysis.extraPaths": {
+                      "type": "array",
+                      "description": "Additional import search resolution paths.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "python.analysis.logLevel": {
+                      "type": "string",
+                      "default": "info",
+                      "description": "Specifies the level of logging for the Output panel",
+                      "enum": [
+                        "error",
+                        "warning",
+                        "info",
+                        "trace"
+                      ]
+                    },
+                    "python.analysis.typeCheckingMode": {
+                      "type": "string",
+                      "default": "basic",
+                      "enum": [
+                        "off",
+                        "basic",
+                        "strict"
+                      ],
+                      "description": "Defines the default rule set for type checking.",
+                    },
+                    "python.analysis.typeshedPaths": {
+                      "type": "array",
+                      "default": [],
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Paths to look for typeshed modules.",
+                    },
+                    "python.analysis.useLibraryCodeForTypes": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Use library implementations to extract type information when type stub is not present.",
+                    },
+                    "pyright.disableLanguageServices": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Disables type completion, definitions, and references.",
+                    },
+                    "pyright.disableOrganizeImports": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Disables the “Organize Imports” command.",
+                    },
+                    "python.pythonPath": {
+                      "type": "string",
+                      "default": "python",
+                      "description": "Path to Python, you can use a custom version of Python.",
+                    },
+                    "python.venvPath": {
+                      "type": "string",
+                      "default": "",
+                      "description": "Path to folder with a list of Virtual Environments.",
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "sublime://settings/LSP-plugin-base"
+            },
+            {
+              "$ref": "sublime://settings/LSP-pyright#/definitions/PluginConfig"
+            }
+          ]
+        }
+      },
+      {
+        "file_patterns": [
+          "/pyrightconfig.json"
+        ],
+        "schema": {
+          "type": "object",
+          "title": "Pyright Configuration Schema",
+          "definitions": {
+            "diagnostic": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string",
+                  "enum": [
+                    "none",
+                    "information",
+                    "warning",
+                    "error"
+                  ]
+                }
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "properties": {
+            "include": {
+              "$id": "#/properties/include",
+              "type": "array",
+              "title": "Files and directories included in type analysis",
+              "items": {
+                "$id": "#/properties/include/items",
+                "type": "string",
+                "title": "File or directory to include in type analysis",
+                "pattern": "^(.*)$"
+              }
+            },
+            "exclude": {
+              "$id": "#/properties/exclude",
+              "type": "array",
+              "title": "Files and directories excluded from type analysis",
+              "items": {
+                "$id": "#/properties/exclude/items",
+                "type": "string",
+                "title": "File or directory to exclude from type analysis",
+                "pattern": "^(.*)$"
+              }
+            },
+            "ignore": {
+              "$id": "#/properties/ignore",
+              "type": "array",
+              "title": "Files and directories whose diagnostics are suppressed",
+              "items": {
+                "$id": "#/properties/ignore/items",
+                "type": "string",
+                "title": "File or directory where diagnostics should be suppressed",
+                "pattern": "^(.*)$"
+              }
+            },
+            "strict": {
+              "$id": "#/properties/strict",
+              "type": "array",
+              "title": "Files and directories that should use 'strict' type checking rules",
+              "items": {
+                "$id": "#/properties/strict/items",
+                "type": "string",
+                "title": "File or directory that should use 'strict' type checking rules",
+                "pattern": "^(.*)$"
+              }
+            },
+            "typeCheckingMode": {
+              "$id": "#/properties/typeCheckingMode",
+              "type": "string",
+              "enum": [
+                "off",
+                "basic",
+                "strict"
+              ],
+              "title": "Specifies the default rule set to use for type checking",
+              "default": "basic"
+            },
+            "useLibraryCodeForTypes": {
+              "$id": "#/properties/useLibraryCodeForTypes",
+              "type": "boolean",
+              "title": "Use library implementations to extract type information when type stub is not present",
+              "default": false
+            },
+            "typeshedPath": {
+              "$id": "#/properties/typeshedPath",
+              "type": "string",
+              "title": "Path to directory containing typeshed type stub files",
+              "default": "",
+              "pattern": "^(.*)$"
+            },
+            "stubPath": {
+              "$id": "#/properties/stubPath",
+              "type": "string",
+              "title": "Path to directory containing custom type stub files",
+              "default": "",
+              "examples": [
+                "src/typestubs"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "strictListInference": {
+              "$id": "#/properties/strictListInference",
+              "type": "boolean",
+              "title": "Infer strict types for list expressions",
+              "default": false
+            },
+            "strictDictionaryInference": {
+              "$id": "#/properties/strictDictionaryInference",
+              "type": "boolean",
+              "title": "Infer strict types for dictionary expressions",
+              "default": false
+            },
+            "strictParameterNoneValue": {
+              "$id": "#/properties/strictParameterNoneValue",
+              "type": "boolean",
+              "title": "Allow implicit Optional when default parameter value is None",
+              "default": false
+            },
+            "enableTypeIgnoreComments": {
+              "$id": "#/properties/enableTypeIgnoreComments",
+              "type": "boolean",
+              "title": "Allow \"# type: ignore\" comments",
+              "default": true
+            },
+            "reportGeneralTypeIssues": {
+              "$id": "#/properties/reportGeneralTypeIssues",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of general type issues",
+              "default": "error"
+            },
+            "reportPropertyTypeMismatch": {
+              "$id": "#/properties/reportPropertyTypeMismatch",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of property getter/setter type mismatches",
+              "default": "error"
+            },
+            "reportMissingImports": {
+              "$id": "#/properties/reportMissingImports",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of imports that cannot be resolved",
+              "default": "error"
+            },
+            "reportMissingModuleSource": {
+              "$id": "#/properties/reportMissingModuleSource",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of imports that cannot be resolved to source files",
+              "default": "warning"
+            },
+            "reportMissingTypeStubs": {
+              "$id": "#/properties/reportMissingTypeStubs",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of imports that cannot be resolved to type stub files",
+              "default": "none"
+            },
+            "reportImportCycles": {
+              "$id": "#/properties/reportImportCycles",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of module imports that create cycles in import graph",
+              "default": "none"
+            },
+            "reportUnusedImport": {
+              "$id": "#/properties/reportUnusedImport",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of imported symbols that are not referenced within the source file",
+              "default": "none"
+            },
+            "reportUnusedClass": {
+              "$id": "#/properties/reportUnusedClass",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of private classes that are not accessed",
+              "default": "none"
+            },
+            "reportUnusedFunction": {
+              "$id": "#/properties/reportUnusedFunction",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of private functions or methods that are not accessed",
+              "default": "none"
+            },
+            "reportUnusedVariable": {
+              "$id": "#/properties/reportUnusedVariable",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of local variables that are not accessed",
+              "default": "none"
+            },
+            "reportDuplicateImport": {
+              "$id": "#/properties/reportDuplicateImport",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of symbols or modules that are imported more than once",
+              "default": "none"
+            },
+            "reportOptionalSubscript": {
+              "$id": "#/properties/reportOptionalSubscript",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of attempts to subscript (index) a variable with Optional type",
+              "default": "none"
+            },
+            "reportOptionalMemberAccess": {
+              "$id": "#/properties/reportOptionalMemberAccess",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of attempts to access a member of a variable with Optional type",
+              "default": "none"
+            },
+            "reportOptionalCall": {
+              "$id": "#/properties/reportOptionalCall",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of attempts to call a variable with Optional type",
+              "default": "none"
+            },
+            "reportOptionalIterable": {
+              "$id": "#/properties/reportOptionalIterable",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of attempts to use an Optional type as an iterable value",
+              "default": "none"
+            },
+            "reportOptionalContextManager": {
+              "$id": "#/properties/reportOptionalContextManager",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of attempts to use an Optional type as a parameter to a with statement",
+              "default": "none"
+            },
+            "reportOptionalOperand": {
+              "$id": "#/properties/reportOptionalOperand",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of attempts to use an Optional type as an operand for a binary or unary operator",
+              "default": "none"
+            },
+            "reportUntypedFunctionDecorator": {
+              "$id": "#/properties/reportUntypedFunctionDecorator",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of function decorators without type annotations, which obscure function types",
+              "default": "none"
+            },
+            "reportUntypedClassDecorator": {
+              "$id": "#/properties/reportUntypedClassDecorator",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of class decorators without type annotations, which obscure class types",
+              "default": "none"
+            },
+            "reportUntypedBaseClass": {
+              "$id": "#/properties/reportUntypedBaseClass",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of a base class of an unknown type, which obscures most type checking for the class",
+              "default": "none"
+            },
+            "reportUntypedNamedTuple": {
+              "$id": "#/properties/reportUntypedNamedTuple",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of a named tuple definition that does not contain type information",
+              "default": "none"
+            },
+            "reportPrivateUsage": {
+              "$id": "#/properties/reportPrivateUsage",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of private variables and functions used outside of the owning class or module and usage of protected members outside of subclasses",
+              "default": "none"
+            },
+            "reportConstantRedefinition": {
+              "$id": "#/properties/reportConstantRedefinition",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of attempts to redefine variables that are in all-caps",
+              "default": "none"
+            },
+            "reportIncompatibleMethodOverride": {
+              "$id": "#/properties/reportIncompatibleMethodOverride",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of method overrides in subclasses that redefine the method in an incompatible way",
+              "default": "none"
+            },
+            "reportIncompatibleVariableOverride": {
+              "$id": "#/properties/reportIncompatibleVariableOverride",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of overrides in subclasses that redefine a variable in an incompatible way",
+              "default": "none"
+            },
+            "reportInvalidStringEscapeSequence": {
+              "$id": "#/properties/reportInvalidStringEscapeSequence",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of invalid escape sequences used within string literals",
+              "default": "warning"
+            },
+            "reportUnknownParameterType": {
+              "$id": "#/properties/reportUnknownParameterType",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting input and return parameters whose types are unknown",
+              "default": "none"
+            },
+            "reportUnknownArgumentType": {
+              "$id": "#/properties/reportUnknownArgumentType",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting argument expressions whose types are unknown",
+              "default": "none"
+            },
+            "reportUnknownLambdaType": {
+              "$id": "#/properties/reportUnknownLambdaType",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting input and return parameters for lambdas whose types are unknown",
+              "default": "none"
+            },
+            "reportUnknownVariableType": {
+              "$id": "#/properties/reportUnknownVariableType",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting local variables whose types are unknown",
+              "default": "none"
+            },
+            "reportUnknownMemberType": {
+              "$id": "#/properties/reportUnknownMemberType",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting class and instance variables whose types are unknown",
+              "default": "none"
+            },
+            "reportMissingTypeArgument": {
+              "$id": "#/properties/reportMissingTypeArgument",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting generic class reference with missing type arguments",
+              "default": "none"
+            },
+            "reportCallInDefaultInitializer": {
+              "$id": "#/properties/reportCallInDefaultInitializer",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting usage of function calls within a default value initializer expression",
+              "default": "none"
+            },
+            "reportUnnecessaryIsInstance": {
+              "$id": "#/properties/reportUnnecessaryIsInstance",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting calls to 'isinstance' or 'issubclass' where the result is statically determined to be always true or false",
+              "default": "none"
+            },
+            "reportUnnecessaryCast": {
+              "$id": "#/properties/reportUnnecessaryCast",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting calls to 'cast' that are unnecessary",
+              "default": "none"
+            },
+            "reportAssertAlwaysTrue": {
+              "$id": "#/properties/reportAssertAlwaysTrue",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting assert expressions that will always evaluate to true",
+              "default": "warning"
+            },
+            "reportSelfClsParameterName": {
+              "$id": "#/properties/reportSelfClsParameterName",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting assert expressions that will always evaluate to true",
+              "default": "warning"
+            },
+            "reportImplicitStringConcatenation": {
+              "$id": "#/properties/reportImplicitStringConcatenation",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting usage of implicit concatenation of string literals",
+              "default": "warning"
+            },
+            "reportUnboundVariable": {
+              "$id": "#/properties/reportUnboundVariable",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of attempts to use an unbound or possibly unbound variable",
+              "default": "error"
+            },
+            "reportUndefinedVariable": {
+              "$id": "#/properties/reportUndefinedVariable",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of attempts to use an undefined variable",
+              "default": "error"
+            },
+            "reportInvalidStubStatement": {
+              "$id": "#/properties/reportInvalidStubStatement",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of type stub statements that do not conform to PEP 484",
+              "default": "none"
+            },
+            "pythonVersion": {
+              "$id": "#/properties/pythonVersion",
+              "type": "string",
+              "title": "Python version to assume during type analysis",
+              "default": "",
+              "examples": [
+                "3.7"
+              ],
+              "pattern": "^3\\.[0-9]+$"
+            },
+            "pythonPlatform": {
+              "$id": "#/properties/pythonPlatform",
+              "type": "string",
+              "title": "Python platform to assume during type analysis",
+              "default": "",
+              "examples": [
+                "Linux"
+              ],
+              "pattern": "^(Linux|Windows|Darwin)$"
+            },
+            "venvPath": {
+              "$id": "#/properties/venvPath",
+              "type": "string",
+              "title": "Path to directory containing a folder of virtual environments",
+              "default": "",
+              "pattern": "^(.*)$"
+            },
+            "venv": {
+              "$id": "#/properties/venv",
+              "type": "string",
+              "title": "Name of virtual environment subdirectory within venvPath",
+              "default": "",
+              "examples": [
+                "python37"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "verboseOutput": {
+              "$id": "#/properties/verboseOutput",
+              "type": "boolean",
+              "title": "Output verbose logging",
+              "default": false
+            },
+            "executionEnvironments": {
+              "$id": "#/properties/executionEnvironments",
+              "type": "array",
+              "title": "Analysis settings to use for specified subdirectories of code",
+              "items": {
+                "$id": "#/properties/executionEnvironments/items",
+                "type": "object",
+                "title": "Analysis settings to use for specified subdirectories of code",
+                "required": [
+                  "root"
+                ],
+                "properties": {
+                  "root": {
+                    "$id": "#/properties/executionEnvironments/items/properties/root",
+                    "type": "string",
+                    "title": "Path to code subdirectory to which these settings apply",
+                    "default": "",
+                    "pattern": "^(.*)$"
+                  },
+                  "extraPaths": {
+                    "$id": "#/properties/executionEnvironments/items/properties/extraPaths",
+                    "type": "array",
+                    "title": "Additional import search resolution paths",
+                    "items": {
+                      "$id": "#/properties/executionEnvironments/items/properties/extraPaths/items",
+                      "type": "string",
+                      "title": "Additional import search resolution path",
+                      "default": "",
+                      "pattern": "^(.*)$"
+                    }
+                  },
+                  "pythonVersion": {
+                    "$id": "#/properties/pythonVersion",
+                    "type": "string",
+                    "title": "Python version to assume during type analysis",
+                    "default": "",
+                    "examples": [
+                      "3.7"
+                    ],
+                    "pattern": "^3\\.[0-9]+$"
+                  },
+                  "pythonPlatform": {
+                    "$id": "#/properties/pythonPlatform",
+                    "type": "string",
+                    "title": "Python platform to assume during type analysis",
+                    "default": "",
+                    "examples": [
+                      "Linux"
+                    ],
+                    "pattern": "^(Linux|Windows|Darwin)$"
+                  },
+                  "venv": {
+                    "$id": "#/properties/venv",
+                    "type": "string",
+                    "title": "Name of virtual environment subdirectory within venvPath",
+                    "default": "",
+                    "examples": [
+                      "python37"
+                    ],
+                    "pattern": "^(.*)$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "file_patterns": [
+        "/*.sublime-project"
+        ],
+        "schema": {
+          "properties": {
+            "settings": {
+              "properties": {
+                "LSP": {
+                  "properties": {
+                    "LSP-pyright": {
+                    "$ref": "sublime://settings/LSP-pyright#/definitions/PluginConfig"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

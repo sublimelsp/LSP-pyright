@@ -57,7 +57,7 @@
 	// Use a predefined setup from this plugin, valid values are:
 	// - "": An empty string will does nothing.
 	// - "sublime_text": Suitable for people who are developing ST plugins.
-	//                  `sys.path` from plugin_host will be added into "python.analysis.extraPaths"
-	//                   so ST package dependecies can be resolved by the LSP server.
+	//                  `sys.path` from the plugin_host will be added into "python.analysis.extraPaths"
+	//                   so that ST package dependencies can be resolved by the LSP server.
 	"dev_environment": "",
 }
