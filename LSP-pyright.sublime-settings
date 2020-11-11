@@ -54,6 +54,10 @@
 		// Path to folder with a list of Virtual Environments.
 		"python.venvPath": "",
 	},
-	// if enabled, things related to ST plugin development will be added into extraPath
-	"st_plugin_development_mode": false,
+	// Use a predefined setup from this plugin, valid values are:
+	// - "": An empty string will does nothing.
+	// - "st_dev": Suitable for people who are developing ST plugins.
+	//             `sys.path` from plugin_host will be added into "python.analysis.extraPaths"
+	//              so package dependecies will be resolved by the LSP server.
+	"use_predefined_setup": "",
 }

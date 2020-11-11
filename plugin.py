@@ -5,8 +5,6 @@ import sys
 from LSP.plugin.core.typing import Any, Dict, List, Tuple
 from lsp_utils import NpmClientHandler
 
-from .settings import get_setting
-
 
 def plugin_loaded() -> None:
     LspPyrightPlugin.setup()
@@ -30,11 +28,20 @@ class LspPyrightPlugin(NpmClientHandler):
         return (12, 0, 0)
 
     @classmethod
-    def on_client_configuration_ready(cls, configuration: Dict[str, Any]) -> None:
-        super().on_client_configuration_ready(configuration)
+    def on_settings_read(cls, settings: sublime.Settings) -> bool:
+        super().on_settings_read(settings)
 
-        if get_setting("st_plugin_development_mode"):
-            configuration["settings"]["python.analysis.extraPaths"].extend(cls.find_package_dependency_dirs())
+        if settings.get("use_predefined_setup") == "st_dev":
+            server_settings = settings.get("settings", {})  # type: Dict[str, Any]
+
+            # add package dependencies into "python.analysis.extraPaths"
+            extraPaths = server_settings.get("python.analysis.extraPaths", [])  # type: List[str]
+            extraPaths.extend(cls.find_package_dependency_dirs())
+            server_settings["python.analysis.extraPaths"] = extraPaths
+
+            settings.set("settings", server_settings)
+
+        return False
 
     @staticmethod
     def find_package_dependency_dirs() -> List[str]:
