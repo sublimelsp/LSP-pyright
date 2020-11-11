@@ -1084,7 +1084,7 @@
       },
       {
         "file_patterns": [
-        "/*.sublime-project"
+          "/*.sublime-project"
         ],
         "schema": {
           "properties": {
@@ -1093,7 +1093,7 @@
                 "LSP": {
                   "properties": {
                     "LSP-pyright": {
-                    "$ref": "sublime://settings/LSP-pyright#/definitions/PluginConfig"
+                      "$ref": "sublime://settings/LSP-pyright#/definitions/PluginConfig"
                     }
                   }
                 }
