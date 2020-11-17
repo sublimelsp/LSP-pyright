@@ -43,6 +43,20 @@ class LspPyrightPlugin(NpmClientHandler):
 
         return False
 
+    def on_ready(self, api) -> None:
+        api.on_notification("pyright/beginProgress", self.handle_begin_progress)
+        api.on_notification("pyright/endProgress", self.handle_end_progress)
+        api.on_notification("pyright/reportProgress", self.handle_report_progress)
+
+    def handle_begin_progress(self, params) -> None:
+        sublime.status_message("{}: Progress begins".format(self.package_name))
+
+    def handle_end_progress(self, params) -> None:
+        sublime.status_message("{}: Progress ends".format(self.package_name))
+
+    def handle_report_progress(self, params: List[str]) -> None:
+        sublime.status_message("{}: {}".format(self.package_name, "; ".join(params)))
+
     @staticmethod
     def find_package_dependency_dirs() -> List[str]:
         dep_dirs = sys.path.copy()
