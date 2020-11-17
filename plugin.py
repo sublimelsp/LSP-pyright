@@ -2,8 +2,9 @@ import os
 import sublime
 import sys
 
-from LSP.plugin.core.typing import Any, Dict, List, Tuple
+from LSP.plugin.core.typing import Any, Dict, List, Optional, Tuple
 from lsp_utils import NpmClientHandler
+from sublime_lib import ActivityIndicator
 
 
 def plugin_loaded() -> None:
@@ -18,6 +19,11 @@ class LspPyrightPlugin(NpmClientHandler):
     package_name = __package__
     server_directory = "language-server"
     server_binary_path = os.path.join(server_directory, "node_modules", "pyright", "langserver.index.js")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._activity_indicator = None  # type: Optional[ActivityIndicator]
 
     @classmethod
     def install_in_cache(cls) -> bool:
@@ -49,13 +55,15 @@ class LspPyrightPlugin(NpmClientHandler):
         api.on_notification("pyright/reportProgress", self.handle_report_progress)
 
     def handle_begin_progress(self, params) -> None:
-        sublime.status_message("{}: Progress begins".format(self.package_name))
+        # we don't know why we begin this progress
+        # the reason will be updated in "pyright/reportProgress"
+        self._start_indicator("{}: Working...".format(self.package_name))
 
     def handle_end_progress(self, params) -> None:
-        sublime.status_message("{}: Progress ends".format(self.package_name))
+        self._stop_indicator()
 
     def handle_report_progress(self, params: List[str]) -> None:
-        sublime.status_message("{}: {}".format(self.package_name, "; ".join(params)))
+        self._start_indicator("{}: {}".format(self.package_name, "; ".join(params)))
 
     @staticmethod
     def find_package_dependency_dirs() -> List[str]:
@@ -68,3 +76,18 @@ class LspPyrightPlugin(NpmClientHandler):
         dep_dirs.append(packages_path)
 
         return [path for path in dep_dirs if os.path.isdir(path)]
+
+    def _start_indicator(self, msg: str = "") -> None:
+        if self._activity_indicator:
+            self._activity_indicator.label = msg  # type: ignore
+            self._activity_indicator.update()
+        else:
+            view = sublime.active_window().active_view()
+            if view:
+                self._activity_indicator = ActivityIndicator(view, msg)  # type: ignore
+                self._activity_indicator.start()
+
+    def _stop_indicator(self) -> None:
+        if self._activity_indicator:
+            self._activity_indicator.stop()
+            self._activity_indicator = None
