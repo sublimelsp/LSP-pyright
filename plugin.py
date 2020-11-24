@@ -16,6 +16,30 @@ def plugin_unloaded() -> None:
     LspPyrightPlugin.cleanup()
 
 
+def deflate_dict(d: Dict[str, Any], sep: str = ".", prefix: str = "") -> Dict[str, Any]:
+    """
+    Deflated a nested dict into a single-level dict.
+
+    Converts `{"a":{"b":{"c":"d"}}}`` into `{"a.b.c":"d"}`.
+
+    :param      d:       The source dict
+    :param      sep:     The key separator
+    :param      prefix:  The key prefix
+    """
+
+    d_new = {}
+
+    for k, v in d.items():
+        prefix_next = (prefix + sep + k) if prefix else k
+
+        if isinstance(v, dict):
+            d_new.update(deflate_dict(v, sep, prefix_next))
+        else:
+            d_new[prefix_next] = v
+
+    return d_new
+
+
 class LspPyrightPlugin(NpmClientHandler):
     package_name = __package__
     server_directory = "language-server"
@@ -53,7 +77,7 @@ class LspPyrightPlugin(NpmClientHandler):
         super().on_settings_changed(settings)
 
         if self.get_dev_environment() == "sublime_text":
-            server_settings = settings.get()  # type: Dict[str, Any]
+            server_settings = deflate_dict(settings.get())
             self.inject_extra_paths_st(server_settings)
             settings.update(server_settings)
 
