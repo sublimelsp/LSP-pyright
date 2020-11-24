@@ -1,10 +1,10 @@
-import os
-import sublime
-import sys
-
+from LSP.plugin import DottedDict
 from LSP.plugin.core.typing import Any, Dict, List, Optional, Tuple
 from lsp_utils import NpmClientHandler
 from sublime_lib import ActivityIndicator
+import os
+import sublime
+import sys
 
 
 def plugin_loaded() -> None:
@@ -35,19 +35,26 @@ class LspPyrightPlugin(NpmClientHandler):
 
     @classmethod
     def on_settings_read(cls, settings: sublime.Settings) -> bool:
+        """ Only needed for ST 3, but won't bother in ST 4 """
+
         super().on_settings_read(settings)
 
-        if settings.get("dev_environment") == "sublime_text":
+        if cls.get_dev_environment() == "sublime_text":
             server_settings = settings.get("settings", {})  # type: Dict[str, Any]
-
-            # add package dependencies into "python.analysis.extraPaths"
-            extraPaths = server_settings.get("python.analysis.extraPaths", [])  # type: List[str]
-            extraPaths.extend(cls.find_package_dependency_dirs())
-            server_settings["python.analysis.extraPaths"] = extraPaths
-
+            cls.inject_extra_paths_st(server_settings)
             settings.set("settings", server_settings)
 
         return False
+
+    def on_settings_changed(self, settings: DottedDict) -> None:
+        """ Only works for ST 4 """
+
+        super().on_settings_changed(settings)
+
+        if self.get_dev_environment() == "sublime_text":
+            server_settings = settings.get()  # type: Dict[str, Any]
+            self.inject_extra_paths_st(server_settings)
+            settings.update(server_settings)
 
     def on_ready(self, api) -> None:
         api.on_notification("pyright/beginProgress", self.handle_begin_progress)
@@ -64,6 +71,20 @@ class LspPyrightPlugin(NpmClientHandler):
 
     def handle_report_progress(self, params: List[str]) -> None:
         self._start_indicator("{}: {}".format(self.package_name, "; ".join(params)))
+
+    @classmethod
+    def get_dev_environment(cls, settings: Optional[sublime.Settings] = None) -> str:
+        if not settings:
+            settings = sublime.load_settings(cls.package_name + ".sublime-settings")
+
+        return str(settings.get("dev_environment"))
+
+    @classmethod
+    def inject_extra_paths_st(cls, server_settings: Dict[str, Any]) -> None:
+        # add package dependencies into "python.analysis.extraPaths"
+        extraPaths = server_settings.get("python.analysis.extraPaths", [])  # type: List[str]
+        extraPaths.extend(cls.find_package_dependency_dirs())
+        server_settings["python.analysis.extraPaths"] = extraPaths
 
     @staticmethod
     def find_package_dependency_dirs() -> List[str]:
