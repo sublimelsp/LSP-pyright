@@ -1,3 +1,4 @@
+from LSP.plugin import __version__ as lsp_version
 from LSP.plugin import DottedDict
 from LSP.plugin.core.typing import Any, Dict, List, Optional, Tuple
 from lsp_utils import NpmClientHandler
@@ -35,11 +36,11 @@ class LspPyrightPlugin(NpmClientHandler):
 
     @classmethod
     def on_settings_read(cls, settings: sublime.Settings) -> bool:
-        """ Only needed for ST 3, but won't bother in ST 4 """
+        """ Only needed for ST 3 """
 
         super().on_settings_read(settings)
 
-        if cls.get_dev_environment() == "sublime_text":
+        if lsp_version < (1, 0, 0) and cls.get_dev_environment() == "sublime_text":
             server_settings = settings.get("settings", {})  # type: Dict[str, Any]
             cls.inject_extra_paths_st(server_settings)
             settings.set("settings", server_settings)
