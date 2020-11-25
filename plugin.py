@@ -37,7 +37,7 @@ class LspPyrightPlugin(NpmClientHandler):
         super().on_settings_changed(settings)
 
         if self.get_plugin_setting("dev_environment") == "sublime_text":
-            server_settings = settings.get()
+            server_settings = settings.get()  # type: Dict[str, Any]
 
             # add package dependencies into "python.analysis.extraPaths"
             extraPaths = server_settings.get("python.analysis.extraPaths", [])  # type: List[str]
