@@ -65,13 +65,6 @@ class LspPyrightPlugin(NpmClientHandler):
     def get_plugin_setting(cls, key: str, default: Optional[Any] = None) -> Any:
         return sublime.load_settings(cls.package_name + ".sublime-settings").get(key, default)
 
-    @classmethod
-    def inject_extra_paths_st(cls, server_settings: Dict[str, Any]) -> None:
-        # add package dependencies into "python.analysis.extraPaths"
-        extraPaths = server_settings.get("python.analysis.extraPaths", [])  # type: List[str]
-        extraPaths.extend(cls.find_package_dependency_dirs())
-        server_settings["python.analysis.extraPaths"] = extraPaths
-
     @staticmethod
     def find_package_dependency_dirs() -> List[str]:
         dep_dirs = sys.path.copy()
