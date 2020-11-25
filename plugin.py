@@ -1,4 +1,3 @@
-from LSP.plugin import __version__ as lsp_version
 from LSP.plugin import DottedDict
 from LSP.plugin.core.typing import Any, Dict, List, Optional, Tuple
 from lsp_utils import NpmClientHandler
@@ -14,30 +13,6 @@ def plugin_loaded() -> None:
 
 def plugin_unloaded() -> None:
     LspPyrightPlugin.cleanup()
-
-
-def deflate_dict(d: Dict[str, Any], sep: str = ".", prefix: str = "") -> Dict[str, Any]:
-    """
-    Deflated a nested dict into a single-level dict.
-
-    Converts `{"a":{"b":{"c":"d"}}}`` into `{"a.b.c":"d"}`.
-
-    :param      d:       The source dict
-    :param      sep:     The key separator
-    :param      prefix:  The key prefix
-    """
-
-    d_new = {}
-
-    for k, v in d.items():
-        prefix_next = (prefix + sep + k) if prefix else k
-
-        if isinstance(v, dict):
-            d_new.update(deflate_dict(v, sep, prefix_next))
-        else:
-            d_new[prefix_next] = v
-
-    return d_new
 
 
 class LspPyrightPlugin(NpmClientHandler):
@@ -58,27 +33,17 @@ class LspPyrightPlugin(NpmClientHandler):
     def minimum_node_version(cls) -> Tuple[int, int, int]:
         return (12, 0, 0)
 
-    @classmethod
-    def on_settings_read(cls, settings: sublime.Settings) -> bool:
-        """ Only needed for ST 3 """
-
-        super().on_settings_read(settings)
-
-        if lsp_version < (1, 0, 0) and cls.get_dev_environment() == "sublime_text":
-            server_settings = settings.get("settings", {})  # type: Dict[str, Any]
-            cls.inject_extra_paths_st(server_settings)
-            settings.set("settings", server_settings)
-
-        return False
-
     def on_settings_changed(self, settings: DottedDict) -> None:
-        """ Only works for ST 4 """
-
         super().on_settings_changed(settings)
 
-        if self.get_dev_environment() == "sublime_text":
-            server_settings = deflate_dict(settings.get())
-            self.inject_extra_paths_st(server_settings)
+        if self.get_plugin_setting("dev_environment") == "sublime_text":
+            server_settings = settings.get()
+
+            # add package dependencies into "python.analysis.extraPaths"
+            extraPaths = server_settings.get("python.analysis.extraPaths", [])  # type: List[str]
+            extraPaths.extend(self.find_package_dependency_dirs())
+            server_settings["python.analysis.extraPaths"] = extraPaths
+
             settings.update(server_settings)
 
     def on_ready(self, api) -> None:
@@ -98,11 +63,8 @@ class LspPyrightPlugin(NpmClientHandler):
         self._start_indicator("{}: {}".format(self.package_name, "; ".join(params)))
 
     @classmethod
-    def get_dev_environment(cls, settings: Optional[sublime.Settings] = None) -> str:
-        if not settings:
-            settings = sublime.load_settings(cls.package_name + ".sublime-settings")
-
-        return str(settings.get("dev_environment"))
+    def get_plugin_setting(cls, key: str, default: Optional[Any] = None) -> Any:
+        return sublime.load_settings(cls.package_name + ".sublime-settings").get(key, default)
 
     @classmethod
     def inject_extra_paths_st(cls, server_settings: Dict[str, Any]) -> None:
