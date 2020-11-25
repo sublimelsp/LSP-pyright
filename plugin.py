@@ -47,6 +47,10 @@ class LspPyrightPlugin(NpmClientHandler):
 
             settings.update(server_settings)
 
+    # ---------------- #
+    # message handlers #
+    # ---------------- #
+
     @notification_handler("pyright/beginProgress")
     def handle_begin_progress(self, params) -> None:
         # we don't know why we begin this progress
@@ -60,6 +64,10 @@ class LspPyrightPlugin(NpmClientHandler):
     @notification_handler("pyright/reportProgress")
     def handle_report_progress(self, params: List[str]) -> None:
         self._start_indicator("{}: {}".format(self.package_name, "; ".join(params)))
+
+    # -------------- #
+    # custom methods #
+    # -------------- #
 
     @classmethod
     def get_plugin_setting(cls, key: str, default: Optional[Any] = None) -> Any:
