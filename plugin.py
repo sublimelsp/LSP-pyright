@@ -1,5 +1,5 @@
 from LSP.plugin import DottedDict
-from LSP.plugin import on_notification
+from LSP.plugin import notification_handler
 from LSP.plugin.core.typing import Any, Dict, List, Optional, Tuple
 from lsp_utils import NpmClientHandler
 from sublime_lib import ActivityIndicator
@@ -47,17 +47,17 @@ class LspPyrightPlugin(NpmClientHandler):
 
             settings.update(server_settings)
 
-    @on_notification("pyright/beginProgress")
+    @notification_handler("pyright/beginProgress")
     def handle_begin_progress(self, params) -> None:
         # we don't know why we begin this progress
         # the reason will be updated in "pyright/reportProgress"
         self._start_indicator("{}: Working...".format(self.package_name))
 
-    @on_notification("pyright/endProgress")
+    @notification_handler("pyright/endProgress")
     def handle_end_progress(self, params) -> None:
         self._stop_indicator()
 
-    @on_notification("pyright/reportProgress")
+    @notification_handler("pyright/reportProgress")
     def handle_report_progress(self, params: List[str]) -> None:
         self._start_indicator("{}: {}".format(self.package_name, "; ".join(params)))
 
