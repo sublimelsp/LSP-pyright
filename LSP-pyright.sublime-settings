@@ -1,13 +1,14 @@
 {
 	// @see https://github.com/microsoft/pyright
+	// ST3
 	"languages": [
 		{
-			"languageId": "python",
-			// ST3
 			"scopes": ["source.python"],
 			"syntaxes": ["Packages/Python/Python.sublime-syntax"],
 		},
 	],
+	// ST4
+	"selector": "source.python",
 	// @see https://github.com/microsoft/pyright/blob/master/docs/configuration.md
 	"initializationOptions": {
 		// ...
