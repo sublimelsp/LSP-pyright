@@ -1,10 +1,11 @@
+from LSP.plugin import DottedDict
+from LSP.plugin.core.typing import Any, Dict, List, Optional, Tuple
+from lsp_utils import notification_handler
+from lsp_utils import NpmClientHandler
+from sublime_lib import ActivityIndicator
 import os
 import sublime
 import sys
-
-from LSP.plugin.core.typing import Any, Dict, List, Optional, Tuple
-from lsp_utils import NpmClientHandler
-from sublime_lib import ActivityIndicator
 
 
 def plugin_loaded() -> None:
@@ -16,7 +17,7 @@ def plugin_unloaded() -> None:
 
 
 class LspPyrightPlugin(NpmClientHandler):
-    package_name = __package__
+    package_name = __package__.split(".")[0]
     server_directory = "language-server"
     server_binary_path = os.path.join(server_directory, "node_modules", "pyright", "langserver.index.js")
 
@@ -33,37 +34,44 @@ class LspPyrightPlugin(NpmClientHandler):
     def minimum_node_version(cls) -> Tuple[int, int, int]:
         return (12, 0, 0)
 
-    @classmethod
-    def on_settings_read(cls, settings: sublime.Settings) -> bool:
-        super().on_settings_read(settings)
+    def on_settings_changed(self, settings: DottedDict) -> None:
+        super().on_settings_changed(settings)
 
-        if settings.get("dev_environment") == "sublime_text":
-            server_settings = settings.get("settings", {})  # type: Dict[str, Any]
+        if self.get_plugin_setting("dev_environment") == "sublime_text":
+            server_settings = settings.get()  # type: Dict[str, Any]
 
             # add package dependencies into "python.analysis.extraPaths"
             extraPaths = server_settings.get("python.analysis.extraPaths", [])  # type: List[str]
-            extraPaths.extend(cls.find_package_dependency_dirs())
+            extraPaths.extend(self.find_package_dependency_dirs())
             server_settings["python.analysis.extraPaths"] = extraPaths
 
-            settings.set("settings", server_settings)
+            settings.update(server_settings)
 
-        return False
+    # ---------------- #
+    # message handlers #
+    # ---------------- #
 
-    def on_ready(self, api) -> None:
-        api.on_notification("pyright/beginProgress", self.handle_begin_progress)
-        api.on_notification("pyright/endProgress", self.handle_end_progress)
-        api.on_notification("pyright/reportProgress", self.handle_report_progress)
-
+    @notification_handler("pyright/beginProgress")
     def handle_begin_progress(self, params) -> None:
         # we don't know why we begin this progress
         # the reason will be updated in "pyright/reportProgress"
         self._start_indicator("{}: Working...".format(self.package_name))
 
+    @notification_handler("pyright/endProgress")
     def handle_end_progress(self, params) -> None:
         self._stop_indicator()
 
+    @notification_handler("pyright/reportProgress")
     def handle_report_progress(self, params: List[str]) -> None:
         self._start_indicator("{}: {}".format(self.package_name, "; ".join(params)))
+
+    # -------------- #
+    # custom methods #
+    # -------------- #
+
+    @classmethod
+    def get_plugin_setting(cls, key: str, default: Optional[Any] = None) -> Any:
+        return sublime.load_settings(cls.package_name + ".sublime-settings").get(key, default)
 
     @staticmethod
     def find_package_dependency_dirs() -> List[str]:
