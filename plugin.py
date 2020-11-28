@@ -1,5 +1,5 @@
 from LSP.plugin import DottedDict
-from LSP.plugin.core.typing import Any, Dict, List, Optional, Tuple
+from LSP.plugin.core.typing import Any, List, Optional, Tuple
 from lsp_utils import notification_handler
 from lsp_utils import NpmClientHandler
 from sublime_lib import ActivityIndicator
