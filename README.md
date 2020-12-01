@@ -6,8 +6,8 @@ Python support for Sublime's LSP plugin provided through [microsoft/pyright](htt
 
 1. Install [LSP](https://packagecontrol.io/packages/LSP) and
    [LSP-pyright](https://packagecontrol.io/packages/LSP-pyright) via Package Control.
-2. Restart Sublime.
-3. Configure pyright for your virtualenv.
+1. Restart Sublime.
+1. Configure pyright for your virtualenv.
 
 ## Configuration
 
