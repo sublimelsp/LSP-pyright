@@ -20,9 +20,9 @@ Project specific settings can also be set for LSP-pyright (and all LSP plugins):
 
 - From the command palette `Project: Edit Project`
 
-You may add a `pyrightconfig.json` file to your project root.
-At a minimum, the file should define where your Python `virtualenvs` are located
-and the name of the one to use for your project:
+Your project will also require a `pyrightconfig.json` file, usually in the project root.
+
+At a minimum, the file should define where your Python virtualenvs are located and the name of the one to use for your project:
 
 ```json
 {
