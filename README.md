@@ -18,28 +18,29 @@ Here are some ways to configure the package and the language server.
 
 - From `Preferences > Package Settings > LSP > Servers > LSP-pyright`
 - From the command palette `Preferences: LSP-pyright Settings`
-- Project-specific configuration. From the command palette run `Project: Edit Project`
-and add your settings in:
+- Project-specific configuration.
+  From the command palette run `Project: Edit Project` and add your settings in:
 
-```js
-{
-   "settings": {
-      "LSP": {
-         "LSP-pyright": {
-            "settings": {
-               // Put your settings here
-            }
-         }
-      }
-   }
-}
-```
+  ```js
+  {
+     "settings": {
+        "LSP": {
+           "LSP-pyright": {
+              "settings": {
+                 // Put your settings here
+              }
+           }
+        }
+     }
+  }
+  ```
+
 - Through a `pyrightconfig.json` configuration file (check [settings documentation](https://github.com/microsoft/pyright/blob/master/docs/configuration.md))
 
 ### Virtual environments
 
-If your project needs to run and be validated within an virtual environment, the `pyrightconfig.json` file needs to be
-present at the root of your project.
+If your project needs to run and be validated within a virtual environment, the `pyrightconfig.json` file needs to be
+presented at the root of your project.
 
 The configuration file, at a minimum, should define where your Python virtualenvs are located and the name of the one to
 use for your project:
