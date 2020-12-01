@@ -40,7 +40,7 @@ Here are some ways to configure the package and the language server.
 ### Virtual environments
 
 If your project needs to run and be validated within a virtual environment, the `pyrightconfig.json` file needs to be
-presented at the root of your project.
+present at the root of your project.
 
 The configuration file, at a minimum, should define where your Python virtualenvs are located and the name of the one to
 use for your project:
