@@ -27,10 +27,6 @@ class LspPyrightPlugin(NpmClientHandler):
         self._activity_indicator = None  # type: Optional[ActivityIndicator]
 
     @classmethod
-    def install_in_cache(cls) -> bool:
-        return False
-
-    @classmethod
     def minimum_node_version(cls) -> Tuple[int, int, int]:
         return (12, 0, 0)
 
