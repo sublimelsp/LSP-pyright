@@ -4,10 +4,11 @@ Python support for Sublime's LSP plugin provided through [microsoft/pyright](htt
 
 ## Installation
 
-1. Install [LSP](https://packagecontrol.io/packages/LSP) and
+1. Make sure you have Node.js installed and `node` is in your `$PATH`. The language server subprocess is a Node.js app.
+2. Install [LSP](https://packagecontrol.io/packages/LSP) and
    [LSP-pyright](https://packagecontrol.io/packages/LSP-pyright) via Package Control.
-2. Restart Sublime.
-3. (Optional) Configure pyright for your `virtualenv`.
+3. Restart Sublime.
+4. (Optional) Configure pyright for your `virtualenv`.
 
 ## Configuration
 
