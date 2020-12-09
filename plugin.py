@@ -1,8 +1,8 @@
 from LSP.plugin import DottedDict
 from LSP.plugin.core.typing import Any, List, Optional, Tuple
+from lsp_utils import ActivityIndicator
 from lsp_utils import notification_handler
 from lsp_utils import NpmClientHandler
-from sublime_lib import ActivityIndicator
 import os
 import sublime
 import sys
@@ -79,12 +79,11 @@ class LspPyrightPlugin(NpmClientHandler):
 
     def _start_indicator(self, msg: str = "") -> None:
         if self._activity_indicator:
-            self._activity_indicator.label = msg  # type: ignore
-            self._activity_indicator.update()
+            self._activity_indicator.set_label(msg)
         else:
             view = sublime.active_window().active_view()
             if view:
-                self._activity_indicator = ActivityIndicator(view, msg)  # type: ignore
+                self._activity_indicator = ActivityIndicator(view, msg)
                 self._activity_indicator.start()
 
     def _stop_indicator(self) -> None:
