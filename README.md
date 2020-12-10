@@ -4,7 +4,7 @@ Python support for Sublime's LSP plugin provided through [microsoft/pyright](htt
 
 ## Installation
 
-1. Make sure you have Node.js installed and `node` is in your `$PATH`. The language server subprocess is a Node.js app.
+1. Make sure you have [Node.js](https://nodejs.org) installed and `node` is in your `$PATH`. The language server subprocess is a Node.js app. The minimum required Node.js version is 12.
 2. Install [LSP](https://packagecontrol.io/packages/LSP) and
    [LSP-pyright](https://packagecontrol.io/packages/LSP-pyright) via Package Control.
 3. Restart Sublime.
