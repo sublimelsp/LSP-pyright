@@ -27,17 +27,17 @@
                     "python.analysis.autoImportCompletions": {
                       "type": "boolean",
                       "default": true,
-                      "description": "Offer auto-import completions.",
+                      "description": "Offer auto-import completions."
                     },
                     "python.analysis.autoSearchPaths": {
                       "type": "boolean",
                       "default": true,
-                      "description": "Automatically add common search paths like 'src'?",
+                      "description": "Automatically add common search paths like 'src'?"
                     },
                     "python.analysis.stubPath": {
                       "type": "string",
                       "default": "typings",
-                      "description": "Path to directory containing custom type stub files.",
+                      "description": "Path to directory containing custom type stub files."
                     },
                     "python.analysis.diagnosticMode": {
                       "type": "string",
@@ -49,7 +49,7 @@
                       "enumDescriptions": [
                         "Analyzes and reports errors on only open files.",
                         "Analyzes and reports errors on all files in the workspace."
-                      ],
+                      ]
                     },
                     "python.analysis.diagnosticSeverityOverrides": {
                       "type": "object",
@@ -546,7 +546,7 @@
                         "basic",
                         "strict"
                       ],
-                      "description": "Defines the default rule set for type checking.",
+                      "description": "Defines the default rule set for type checking."
                     },
                     "python.analysis.typeshedPaths": {
                       "type": "array",
@@ -554,32 +554,32 @@
                       "items": {
                         "type": "string"
                       },
-                      "description": "Paths to look for typeshed modules.",
+                      "description": "Paths to look for typeshed modules."
                     },
                     "python.analysis.useLibraryCodeForTypes": {
                       "type": "boolean",
                       "default": false,
-                      "description": "Use library implementations to extract type information when type stub is not present.",
+                      "description": "Use library implementations to extract type information when type stub is not present."
                     },
                     "pyright.disableLanguageServices": {
                       "type": "boolean",
                       "default": false,
-                      "description": "Disables type completion, definitions, and references.",
+                      "description": "Disables type completion, definitions, and references."
                     },
                     "pyright.disableOrganizeImports": {
                       "type": "boolean",
                       "default": false,
-                      "description": "Disables the “Organize Imports” command.",
+                      "description": "Disables the “Organize Imports” command."
                     },
                     "python.pythonPath": {
                       "type": "string",
                       "default": "python",
-                      "description": "Path to Python, you can use a custom version of Python.",
+                      "description": "Path to Python, you can use a custom version of Python."
                     },
                     "python.venvPath": {
                       "type": "string",
                       "default": "",
-                      "description": "Path to folder with a list of Virtual Environments.",
+                      "description": "Path to folder with a list of Virtual Environments."
                     }
                   }
                 }
