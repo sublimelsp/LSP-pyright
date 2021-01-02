@@ -34,6 +34,14 @@
                       "default": true,
                       "description": "Automatically add common search paths like 'src'?"
                     },
+                    "python.analysis.extraPaths": {
+                      "type": "array",
+                      "default": [],
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Additional import search resolution paths"
+                    },
                     "python.analysis.stubPath": {
                       "type": "string",
                       "default": "typings",
@@ -71,6 +79,17 @@
                           "type": "string",
                           "description": "Diagnostics for property whose setter and getter have mismatched types.",
                           "default": "error",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportFunctionMemberAccess": {
+                          "type": "string",
+                          "description": "Diagnostics for member accesses on functions.",
+                          "default": "none",
                           "enum": [
                             "none",
                             "information",
@@ -419,6 +438,17 @@
                             "error"
                           ]
                         },
+                        "reportInvalidTypeVarUse": {
+                          "type": "string",
+                          "description": "Diagnostics for improper use of type variables in a function signature.",
+                          "default": "warning",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
                         "reportCallInDefaultInitializer": {
                           "type": "string",
                           "description": "Diagnostics for function calls within a default value initialization expression. Such calls can mask expensive operations that are performed at module initialization time.",
@@ -517,14 +547,40 @@
                             "warning",
                             "error"
                           ]
+                        },
+                        "reportUnusedCallResult": {
+                          "type": "string",
+                          "description": "Diagnostics for call expressions whose results are not consumed and are not None.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnusedCoroutine": {
+                          "type": "string",
+                          "description": "Diagnostics for call expressions that return a Coroutine and whose results are not consumed.",
+                          "default": "error",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
+                        },
+                        "reportUnsupportedDunderAll": {
+                          "type": "string",
+                          "description": "Diagnostics for unsupported operations performed on __all__.",
+                          "default": "warning",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
                         }
-                      }
-                    },
-                    "python.analysis.extraPaths": {
-                      "type": "array",
-                      "description": "Additional import search resolution paths.",
-                      "items": {
-                        "type": "string"
                       }
                     },
                     "python.analysis.logLevel": {
@@ -532,10 +588,10 @@
                       "default": "info",
                       "description": "Specifies the level of logging for the Output panel",
                       "enum": [
-                        "error",
-                        "warning",
-                        "info",
-                        "trace"
+                        "Error",
+                        "Warning",
+                        "Information",
+                        "Trace"
                       ]
                     },
                     "python.analysis.typeCheckingMode": {
