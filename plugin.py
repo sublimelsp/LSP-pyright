@@ -1,6 +1,5 @@
 from LSP.plugin import DottedDict
 from LSP.plugin.core.typing import Any, List, Optional, Tuple
-from lsp_utils import ActivityIndicator
 from lsp_utils import NpmClientHandler
 import os
 import sublime
@@ -19,11 +18,6 @@ class LspPyrightPlugin(NpmClientHandler):
     package_name = __package__.split(".")[0]
     server_directory = "language-server"
     server_binary_path = os.path.join(server_directory, "node_modules", "pyright", "langserver.index.js")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self._activity_indicator = None  # type: Optional[ActivityIndicator]
 
     @classmethod
     def minimum_node_version(cls) -> Tuple[int, int, int]:
