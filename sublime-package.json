@@ -585,7 +585,7 @@
                     },
                     "python.analysis.logLevel": {
                       "type": "string",
-                      "default": "info",
+                      "default": "information",
                       "description": "Specifies the level of logging for the Output panel",
                       "enum": [
                         "error",
