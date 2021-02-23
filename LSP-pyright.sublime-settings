@@ -1,4 +1,5 @@
 {
+	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	// @see https://github.com/microsoft/pyright
 	// ST3
 	"languages": [
