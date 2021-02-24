@@ -361,6 +361,17 @@
                             "error"
                           ]
                         },
+                        "reportOverlappingOverload": {
+                            "type": "string",
+                            "description": "Diagnostics for function overloads that overlap in signature and obscure each other or have incompatible return types.",
+                            "default": "none",
+                            "enum": [
+                                "none",
+                                "information",
+                                "warning",
+                                "error"
+                            ]
+                        },
                         "reportInvalidStringEscapeSequence": {
                           "type": "string",
                           "description": "Diagnostics for invalid escape sequences used within string literals. The Python specification indicates that such sequences will generate a syntax error in future versions.",
@@ -936,6 +947,12 @@
               "$id": "#/properties/reportIncompatibleVariableOverride",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of overrides in subclasses that redefine a variable in an incompatible way",
+              "default": "none"
+            },
+            "reportOverlappingOverload": {
+              "$id": "#/properties/reportOverlappingOverload",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of function overloads that overlap in signature and obscure each other or do not agree on return type",
               "default": "none"
             },
             "reportInvalidStringEscapeSequence": {
