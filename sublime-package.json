@@ -670,7 +670,9 @@
         ],
         "schema": {
           "type": "object",
-          "title": "Pyright Configuration Schema",
+          "description": "Pyright Configuration Schema",
+          "allowComments": true,
+          "allowTrailingCommas": true,
           "definitions": {
             "diagnostic": {
               "anyOf": [
