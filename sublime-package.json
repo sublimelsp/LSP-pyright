@@ -362,15 +362,15 @@
                           ]
                         },
                         "reportOverlappingOverload": {
-                            "type": "string",
-                            "description": "Diagnostics for function overloads that overlap in signature and obscure each other or have incompatible return types.",
-                            "default": "none",
-                            "enum": [
-                                "none",
-                                "information",
-                                "warning",
-                                "error"
-                            ]
+                          "type": "string",
+                          "description": "Diagnostics for function overloads that overlap in signature and obscure each other or have incompatible return types.",
+                          "default": "none",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ]
                         },
                         "reportInvalidStringEscapeSequence": {
                           "type": "string",
@@ -669,10 +669,11 @@
           "/pyrightconfig.json"
         ],
         "schema": {
-          "type": "object",
+          "$schema": "http://json-schema.org/draft-07/schema#",
           "description": "Pyright Configuration Schema",
           "allowComments": true,
           "allowTrailingCommas": true,
+          "type": "object",
           "definitions": {
             "diagnostic": {
               "anyOf": [
@@ -691,7 +692,6 @@
               ]
             }
           },
-          "additionalProperties": false,
           "properties": {
             "include": {
               "$id": "#/properties/include",
@@ -806,6 +806,12 @@
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of property getter/setter type mismatches",
               "default": "error"
+            },
+            "reportFunctionMemberAccess": {
+              "$id": "#/properties/reportFunctionMemberAccess",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of member accesses on function objects",
+              "default": "none"
             },
             "reportMissingImports": {
               "$id": "#/properties/reportMissingImports",
@@ -999,6 +1005,12 @@
               "title": "Controls reporting generic class reference with missing type arguments",
               "default": "none"
             },
+            "reportInvalidTypeVarUse": {
+              "$id": "#/properties/reportInvalidTypeVarUse",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting improper use of type variables within function signatures",
+              "default": "warning"
+            },
             "reportCallInDefaultInitializer": {
               "$id": "#/properties/reportCallInDefaultInitializer",
               "$ref": "#/definitions/diagnostic",
@@ -1053,6 +1065,36 @@
               "title": "Controls reporting of type stub statements that do not conform to PEP 484",
               "default": "none"
             },
+            "reportUnsupportedDunderAll": {
+              "$id": "#/properties/reportUnsupportedDunderAll",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of unsupported operations performed on __all__",
+              "default": "warning"
+            },
+            "reportUnusedCallResult": {
+              "$id": "#/properties/reportUnusedCallResult",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of call expressions whose results are not consumed",
+              "default": "none"
+            },
+            "reportUnusedCoroutine": {
+              "$id": "#/properties/reportUnusedCoroutine",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of call expressions that returns Coroutine whose results are not consumed",
+              "default": "error"
+            },
+            "extraPaths": {
+              "$id": "#/properties/executionEnvironments/items/properties/extraPaths",
+              "type": "array",
+              "title": "Additional import search resolution paths",
+              "items": {
+                "$id": "#/properties/executionEnvironments/items/properties/extraPaths/items",
+                "type": "string",
+                "title": "Additional import search resolution path",
+                "default": "",
+                "pattern": "^(.*)$"
+              }
+            },
             "pythonVersion": {
               "$id": "#/properties/pythonVersion",
               "type": "string",
@@ -1071,7 +1113,7 @@
               "examples": [
                 "Linux"
               ],
-              "pattern": "^(All|Linux|Windows|Darwin)$"
+              "pattern": "^(Linux|Windows|Darwin|All)$"
             },
             "venvPath": {
               "$id": "#/properties/venvPath",
@@ -1145,7 +1187,7 @@
                     "examples": [
                       "Linux"
                     ],
-                    "pattern": "^(All|Linux|Windows|Darwin)$"
+                    "pattern": "^(Linux|Windows|Darwin|All)$"
                   },
                   "venv": {
                     "$id": "#/properties/venv",
