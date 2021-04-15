@@ -51,6 +51,15 @@ This configuration file, at a minimum, should define where your Python virtualen
 }
 ```
 
-The `venv` option is only supported in the `pyrightconfig.json` file. The `venvPath` option can also be specified in your .sublime-project, in case you don't want to hard-code a system-specific path in a shared project.
+For example, if you have created a virtual environment inside the directory `.venv` within the project directory then you would use:
+
+```json
+{
+    "venvPath": ".",
+    "venv": ".venv"
+}
+```
+
+Note that the `venv` option is only supported in the `pyrightconfig.json` file. The `venvPath` option can also be specified in your .sublime-project, in case you don't want to hard-code a system-specific path in a shared project.
 
 Please see [Pyright Documentation](https://github.com/microsoft/pyright/blob/master/docs/configuration.md) for more options.
