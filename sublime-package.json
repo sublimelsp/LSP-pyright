@@ -14,11 +14,15 @@
                   "description": "Enables the pre-defined environment setup for specific developing needs.",
                   "enum": [
                     "",
-                    "sublime_text"
+                    "sublime_text",
+                    "sublime_text_33",
+                    "sublime_text_38"
                   ],
                   "markdownEnumDescriptions": [
                     "No modifications applied.",
-                    "Suitable for people who are developing ST plugins - `sys.path` from the plugin_host will be added into \"python.analysis.extraPaths\" so that ST package dependencies can be resolved by the LSP server."
+                    "Suitable for people who are developing ST python plugins. The Python version which this plugin runs on will be used. - `sys.path` from the plugin_host will be added into \"python.analysis.extraPaths\" so that ST package dependencies can be resolved by the LSP server.",
+                    "Similar to \"sublime_text\" but Python 3.3 forced.",
+                    "Similar to \"sublime_text\" but Python 3.8 forced."
                   ]
                 },
                 "settings": {
