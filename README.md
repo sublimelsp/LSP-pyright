@@ -5,15 +5,13 @@ Python support for Sublime's LSP plugin provided through [microsoft/pyright](htt
 ## Installation
 
 1. Make sure you have [Node.js](https://nodejs.org) installed and `node` is in your `$PATH`. The language server subprocess is a Node.js app. The minimum required Node.js version is 12.
-2. Install [LSP](https://packagecontrol.io/packages/LSP) and
-   [LSP-pyright](https://packagecontrol.io/packages/LSP-pyright) via Package Control.
+2. Install [LSP](https://packagecontrol.io/packages/LSP) and [LSP-pyright](https://packagecontrol.io/packages/LSP-pyright) via Package Control.
 3. Restart Sublime.
 4. (Optional) Configure pyright for your `virtualenv`.
 
 ## Configuration
 
-> **TIP**: It's recommended to additionally install the `LSP-json` package which provides validation and auto-complete for
-`LSP-pyright` settings and the `pyrightconfig.json` configuration file.
+> **TIP**: It's recommended to additionally install the `LSP-json` package which provides validation and auto-complete for `LSP-pyright` settings and the `pyrightconfig.json` configuration file.
 
 Here are some ways to configure the package and the language server.
 
@@ -37,6 +35,12 @@ Here are some ways to configure the package and the language server.
   ```
 
 - Through a `pyrightconfig.json` configuration file (check [settings documentation](https://github.com/microsoft/pyright/blob/master/docs/configuration.md))
+
+### Provided Command Palette commands
+
+| Command | Description |
+|---------|-------------|
+| `LSP-pyright: Create Pyright Configuration File` | Creates a `.pyrightconfig.json` file in the root of the project with basic options. Opens the configuration file if it already exists. |
 
 ### Virtual environments
 
