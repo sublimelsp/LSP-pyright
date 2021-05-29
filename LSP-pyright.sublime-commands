@@ -7,4 +7,8 @@
             "default": "// Settings in here override those in \"LSP-pyright/LSP-pyright.sublime-settings\"\n\n{\n\t$0\n}\n",
         },
     },
+    {
+        "caption": "LSP-pyright: Create Pyright Configuration File",
+        "command": "lsp_pyright_create_configuration",
+    },
 ]
