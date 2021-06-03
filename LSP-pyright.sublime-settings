@@ -18,7 +18,7 @@
 	// @see https://github.com/microsoft/pyright/blob/master/packages/vscode-pyright/package.json
 	"settings": {
 		// Use a predefined setup from this plugin, valid values are:
-		// - "": An empty string will does nothing.
+		// - "": An empty string does nothing.
 		// - "sublime_text": Suitable for people who are developing ST Python plugins.
 		//                   The Python version which this plugin runs on will be used.
 		//                   `sys.path` from plugin_host will be added into "python.analysis.extraPaths"
