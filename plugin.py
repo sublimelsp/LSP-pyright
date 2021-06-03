@@ -1,5 +1,5 @@
 from LSP.plugin import DottedDict
-from LSP.plugin.core.typing import List, Tuple, cast
+from LSP.plugin.core.typing import Any, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 import os
 import re
@@ -27,7 +27,7 @@ class LspPyrightPlugin(NpmClientHandler):
     def on_settings_changed(self, settings: DottedDict) -> None:
         super().on_settings_changed(settings)
 
-        dev_environment = settings.get("dev_environment")
+        dev_environment = self.get_dev_environment(settings)
 
         if dev_environment in ("sublime_text", "sublime_text_33", "sublime_text_38"):
             if dev_environment == "sublime_text":
@@ -44,6 +44,19 @@ class LspPyrightPlugin(NpmClientHandler):
     # -------------- #
     # custom methods #
     # -------------- #
+
+    @classmethod
+    def get_dev_environment(cls, settings: DottedDict) -> str:
+        # "dev_environment" has been deprecated, use "pyright.dev_environment" instead
+        dev_environment = cls.get_plugin_setting("dev_environment")
+        if dev_environment is None:
+            dev_environment = settings.get("pyright.dev_environment")
+
+        return dev_environment
+
+    @classmethod
+    def get_plugin_setting(cls, key: str, default: Optional[Any] = None) -> Any:
+        return sublime.load_settings(cls.package_name + ".sublime-settings").get(key, default)
 
     @staticmethod
     def find_package_dependency_dirs(py_ver: Tuple[int, int] = (3, 3)) -> List[str]:
