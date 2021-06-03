@@ -25,7 +25,7 @@
 		//                   so ST package dependecies can be resolved by the LSP server.
 		// - "sublime_text_33": Similar to "sublime_text" but Python 3.3 forced.
 		// - "sublime_text_38": Similar to "sublime_text" but Python 3.8 forced.
-		"dev_environment": "",
+		"pyright.dev_environment": "",
 		// Offer auto-import completions.
 		"python.analysis.autoImportCompletions": true,
 		// Automatically add common search paths like 'src'?

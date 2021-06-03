@@ -29,7 +29,7 @@
                 "settings": {
                   "additionalProperties": false,
                   "properties": {
-                    "dev_environment": {
+                    "pyright.dev_environment": {
                       "description": "Enables the pre-defined environment setup for specific developing needs.",
                       "enum": [
                         "",
