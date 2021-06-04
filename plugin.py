@@ -27,7 +27,7 @@ class LspPyrightPlugin(NpmClientHandler):
     def on_settings_changed(self, settings: DottedDict) -> None:
         super().on_settings_changed(settings)
 
-        dev_environment = self.get_plugin_setting("dev_environment")
+        dev_environment = self.get_dev_environment(settings)
 
         if dev_environment in ("sublime_text", "sublime_text_33", "sublime_text_38"):
             if dev_environment == "sublime_text":
@@ -44,6 +44,15 @@ class LspPyrightPlugin(NpmClientHandler):
     # -------------- #
     # custom methods #
     # -------------- #
+
+    @classmethod
+    def get_dev_environment(cls, settings: DottedDict) -> str:
+        # "dev_environment" has been deprecated, use "pyright.dev_environment" instead
+        dev_environment = cls.get_plugin_setting("dev_environment")
+        if dev_environment is None:
+            dev_environment = settings.get("pyright.dev_environment")
+
+        return dev_environment
 
     @classmethod
     def get_plugin_setting(cls, key: str, default: Optional[Any] = None) -> Any:
