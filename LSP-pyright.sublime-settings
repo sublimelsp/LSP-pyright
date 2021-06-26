@@ -10,14 +10,11 @@
 	],
 	// ST4
 	"selector": "source.python",
-    "schemes": [
-        // regular files
-        "file",
-        // in-memory buffers
-        "buffer",
-        // files in .sublime-package archives
-        "res"
-    ],
+	"schemes": [
+		"file", // regular files
+		"buffer", // in-memory buffers
+		"res", // files in .sublime-package archives
+	],
 	// @see https://github.com/microsoft/pyright/blob/master/docs/configuration.md
 	"initializationOptions": {
 		// ...
