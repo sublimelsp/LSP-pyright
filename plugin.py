@@ -50,7 +50,6 @@ class LspPyrightPlugin(NpmClientHandler):
         dest = os.path.join(cls.package_storage(), 'stubs')
         ResourcePath(src).copytree(dest, exist_ok=True)
 
-
     # -------------- #
     # custom methods #
     # -------------- #
