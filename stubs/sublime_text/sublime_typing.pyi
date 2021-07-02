@@ -42,13 +42,11 @@ CompletionNormalized = Tuple[
     int,  # kind
 ]
 
-Layout = TypedDict(
-    "Layout",
-    {
-        "cols": Sequence[float],
-        "rows": Sequence[float],
-        "cells": Sequence[Sequence[int]],
-    },
-)
 Location = Tuple[str, str, Tuple[int, int]]
 Vector = Tuple[Dip, Dip]
+
+
+class Layout(TypedDict):
+    cols: Sequence[float]
+    rows: Sequence[float]
+    cells: Sequence[Sequence[int]]

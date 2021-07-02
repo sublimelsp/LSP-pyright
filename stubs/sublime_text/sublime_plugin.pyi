@@ -3,11 +3,7 @@
 # ST version: 4109
 
 from __future__ import annotations
-from sublime_typing import (
-    Completion,
-    CompletionNormalized,
-    Point,
-)
+from sublime_typing import Completion, CompletionNormalized, Point
 from importlib.machinery import ModuleSpec
 from types import ModuleType
 from typing import (
@@ -612,10 +608,8 @@ class CommandInputHandler(Generic[InputType]):
         """Initial text shown in the text entry box. Empty by default."""
         ...
 
-    def initial_selection(self) -> List:
-        """
-        @todo List of what???
-        """
+    def initial_selection(self) -> List[Tuple[List[ListItem], int]]:
+        """A list of 2-element tuplues, defining the initially selected parts of the initial text."""
         ...
 
     def preview(self, arg: InputType) -> Union[str, sublime.Html]:

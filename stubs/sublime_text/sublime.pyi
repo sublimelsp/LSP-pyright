@@ -24,6 +24,7 @@ from typing import (
     Iterator,
     List,
     Literal,
+    Mapping,
     Optional,
     Reversible,
     Sequence,
@@ -655,7 +656,7 @@ class Window:
         """Returns the currently edited view"""
         ...
 
-    def new_html_sheet(self, name: str, contents: str, flags: int = 0, group: int = -1) -> Sheet:
+    def new_html_sheet(self, name: str, contents: str, flags: int = 0, group: int = -1) -> HtmlSheet:
         """
         Constructs a sheet with HTML contents rendered using minihtml.
 
@@ -2371,7 +2372,7 @@ class Settings:
         # when casting the returned value. So we probably just use "Any"...
         ...
 
-    def update(self, paris: Union[Dict, Iterable] = (), /, **kwargs: Any) -> None:
+    def update(self, paris: Union[Dict, Mapping, Iterable] = (), /, **kwargs: Any) -> None:
         """
         Update the settings from pairs, which may be any of the following:
 

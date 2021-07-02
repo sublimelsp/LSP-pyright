@@ -8,7 +8,7 @@ codecov.yml export-ignore
 docs/ export-ignore
 mkdocs.yml export-ignore
 mypy.ini export-ignore
-stubs/ export-ignore
+scripts/ export-ignore
 tests/ export-ignore
 tox.ini export-ignore
 unittesting.json export-ignore
