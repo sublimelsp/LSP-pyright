@@ -1,9 +1,10 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-#
 # ST version: 4109
 
 from __future__ import annotations
-from sublime_typing import Completion, CompletionNormalized, Point
+
+# __future__ must be the first import
+from _sublime_typing import Completion, CompletionNormalized, Point
 from importlib.machinery import ModuleSpec
 from types import ModuleType
 from typing import (

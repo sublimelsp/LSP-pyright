@@ -1,9 +1,10 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-#
 # ST version: 4109
 
 from __future__ import annotations
-from sublime_typing import (
+
+# __future__ must be the first import
+from _sublime_typing import (
     Callback0,
     Callback1,
     Completion,
