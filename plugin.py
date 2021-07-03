@@ -83,6 +83,6 @@ class LspPyrightPlugin(NpmClientHandler):
         dep_dirs.append(packages_path)
 
         # sublime stubs - add as first
-        dep_dirs.insert(0, os.path.join(self.package_storage(), 'resources', 'typings', 'sublime_text'))
+        dep_dirs.insert(0, os.path.join(self.package_storage(), 'typings', 'sublime_text'))
 
         return [path for path in dep_dirs if os.path.isdir(path)]
