@@ -1438,11 +1438,11 @@ class View:
         ...
 
     def sheet_id(self) -> int:
-        """Returns the sheet ID of this view"""
+        """Returns the sheet ID of this view or `0` if not part of a sheet."""
         ...
 
-    def sheet(self) -> Sheet:
-        """Return a Sheet object of this view"""
+    def sheet(self) -> Optional[Sheet]:
+        """Returns the sheet for this view, if displayed in a sheet."""
         ...
 
     def element(self) -> Optional[str]:
