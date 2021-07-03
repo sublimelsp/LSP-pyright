@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-SUBLIME_STUBS_DIR="$( cd "${SCRIPT_DIR}/../typings/sublime_text" && pwd )"
+SUBLIME_STUBS_DIR="$( cd "${SCRIPT_DIR}/../resources/typings/sublime_text" && pwd )"
 
 for filename in sublime sublime_plugin _sublime_typing
 do

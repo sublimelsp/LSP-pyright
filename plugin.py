@@ -46,7 +46,7 @@ class LspPyrightPlugin(NpmClientHandler):
     def install_or_update(cls) -> None:
         super().install_or_update()
         # Copy typings
-        src = 'Packages/{}/{}/'.format(cls.package_name, 'typings')
+        src = 'Packages/{}/resources/typings/'.format(cls.package_name)
         dest = os.path.join(cls.package_storage(), 'typings')
         ResourcePath(src).copytree(dest, exist_ok=True)
 
@@ -83,6 +83,6 @@ class LspPyrightPlugin(NpmClientHandler):
         dep_dirs.append(packages_path)
 
         # sublime stubs - add as first
-        dep_dirs.insert(0, os.path.join(self.package_storage(), 'typings', 'sublime_text'))
+        dep_dirs.insert(0, os.path.join(self.package_storage(), 'resources', 'typings', 'sublime_text'))
 
         return [path for path in dep_dirs if os.path.isdir(path)]
