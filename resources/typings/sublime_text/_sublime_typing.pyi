@@ -47,6 +47,6 @@ Vector = Tuple[Dip, Dip]
 
 
 class Layout(TypedDict):
-    cols: Sequence[float]
-    rows: Sequence[float]
-    cells: Sequence[Sequence[int]]
+    cols: List[float]
+    rows: List[float]
+    cells: List[List[int]]
