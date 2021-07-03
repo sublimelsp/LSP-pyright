@@ -1,6 +1,7 @@
 from LSP.plugin import DottedDict
 from LSP.plugin.core.typing import Any, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
+from sublime_lib import ResourcePath
 import os
 import re
 import sublime
@@ -41,6 +42,14 @@ class LspPyrightPlugin(NpmClientHandler):
             extraPaths.extend(self.find_package_dependency_dirs(py_ver))
             settings.set("python.analysis.extraPaths", extraPaths)
 
+    @classmethod
+    def install_or_update(cls) -> None:
+        super().install_or_update()
+        # Copy typings
+        src = 'Packages/{}/resources/typings/'.format(cls.package_name)
+        dest = os.path.join(cls.package_storage(), 'typings')
+        ResourcePath(src).copytree(dest, exist_ok=True)
+
     # -------------- #
     # custom methods #
     # -------------- #
@@ -58,8 +67,7 @@ class LspPyrightPlugin(NpmClientHandler):
     def get_plugin_setting(cls, key: str, default: Optional[Any] = None) -> Any:
         return sublime.load_settings(cls.package_name + ".sublime-settings").get(key, default)
 
-    @staticmethod
-    def find_package_dependency_dirs(py_ver: Tuple[int, int] = (3, 3)) -> List[str]:
+    def find_package_dependency_dirs(self, py_ver: Tuple[int, int] = (3, 3)) -> List[str]:
         dep_dirs = sys.path.copy()
 
         # replace paths for target Python version
@@ -73,5 +81,8 @@ class LspPyrightPlugin(NpmClientHandler):
         packages_path = sublime.packages_path()
         dep_dirs.remove(packages_path)
         dep_dirs.append(packages_path)
+
+        # sublime stubs - add as first
+        dep_dirs.insert(0, os.path.join(self.package_storage(), 'typings', 'sublime_text'))
 
         return [path for path in dep_dirs if os.path.isdir(path)]
