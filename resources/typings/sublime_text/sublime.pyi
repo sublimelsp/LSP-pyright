@@ -372,7 +372,7 @@ def get_clipboard(size_limit: int = 16777216) -> str:
     the clipboard content is bigger than size_limit, an empty string will be
     returned.
 
-    @deprecated in favor of `get_clipboard_async()`
+    @deprecated Use `get_clipboard_async()` when possible.
     """
     ...
 
@@ -1044,13 +1044,18 @@ class Window:
         ...
 
     def lookup_symbol_in_index(self, sym: str) -> List[Location]:
-        """Finds all files and locations where sym is defined, using the symbol index"""
+        """
+        Returns all locations where the symbol `sym` is defined across files in the current project.
+
+        @deprecated Use `symbol_locations()` when possible.
+        """
         ...
 
     def lookup_symbol_in_open_files(self, sym: str) -> List[Location]:
         """
-        Returns all files and locations where the symbol `sym` is defined, searching
-        through open files
+        Returns all locations where the symbol `sym` is defined across open files.
+
+        @deprecated Use `symbol_locations()` when possible.
         """
         ...
 
@@ -2094,13 +2099,13 @@ class View:
 
         - The path of a syntax: `"Packages/Python/Python.sublime-syntax"`
         - The top scope of a syntax: `"scope:source.python"`
-        - A `Syntax` object, which comes from other APIs.
+        - A `Syntax` object, which may come from other APIs.
         """
         ...
 
     def set_syntax_file(self, syntax: Union[str, Syntax]) -> None:
         """
-        @deprecated use `assign_syntax()` instead.
+        @deprecated Use `assign_syntax()` when possible.
         """
         ...
 
