@@ -403,6 +403,17 @@
                             "error"
                           ]
                         },
+                        "reportUninitializedInstanceVariable": {
+                            "type": "string",
+                            "description": "Diagnostics for instance variables that are not declared or initialized within class body or `__init__` method.",
+                            "default": "none",
+                            "enum": [
+                                "none",
+                                "information",
+                                "warning",
+                                "error"
+                            ]
+                        },
                         "reportInvalidStringEscapeSequence": {
                           "type": "string",
                           "description": "Diagnostics for invalid escape sequences used within string literals. The Python specification indicates that such sequences will generate a syntax error in future versions.",
@@ -1003,6 +1014,12 @@
               "$id": "#/properties/reportOverlappingOverload",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of function overloads that overlap in signature and obscure each other or do not agree on return type",
+              "default": "none"
+            },
+            "reportUninitializedInstanceVariable": {
+              "$id": "#/properties/reportUninitializedInstanceVariable",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Diagnostics for instance variables that are not declared or initialized within class body or `__init__` method.",
               "default": "none"
             },
             "reportInvalidStringEscapeSequence": {
