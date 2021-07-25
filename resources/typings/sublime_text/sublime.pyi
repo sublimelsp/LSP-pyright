@@ -162,27 +162,27 @@ COMPLETION_FLAG_KEEP_PREFIX: int = 1
 
 
 def version() -> str:
-    """Returns the version number"""
+    """Returns the version number."""
     ...
 
 
 def platform() -> Literal["osx", "linux", "windows"]:
-    """Returns the platform, which may be "osx", "linux" or "windows" """
+    """Returns the platform, which may be `"osx"`, `"linux"` or `"windows"`."""
     ...
 
 
 def arch() -> Literal["x32", "x64", "arm64"]:
-    """Returns the CPU architecture, which may be "x32", "x64" or "arm64" """
+    """Returns the CPU architecture, which may be `"x32"`, `"x64"` or `"arm64"`."""
     ...
 
 
 def channel() -> Literal["stable", "dev"]:
-    """Returns the release channel, which may be "stable" or "dev" """
+    """Returns the release channel, which may be `"stable"` or `"dev"`."""
     ...
 
 
 def executable_path() -> str:
-    """Returns the path to the "sublime_text" executable"""
+    """Returns the path to the "sublime_text" executable."""
     ...
 
 
@@ -198,32 +198,32 @@ def executable_hash() -> Tuple[str, str, str]:
 
 
 def packages_path() -> str:
-    """Returns the path where all the user's loose packages are located"""
+    """Returns the path where all the user's loose packages are located."""
     ...
 
 
 def installed_packages_path() -> str:
-    """Returns the path where all the user's `.sublime-package` files are located"""
+    """Returns the path where all the user's `.sublime-package` files are located."""
     ...
 
 
 def cache_path() -> str:
-    """Returns the path where Sublime Text stores cache files"""
+    """Returns the path where Sublime Text stores cache files."""
     ...
 
 
 def status_message(msg: str) -> None:
-    """Shows a message in the status bar"""
+    """Shows a message in the status bar."""
     ...
 
 
 def error_message(msg: str) -> None:
-    """Displays an error dialog to the user"""
+    """Displays an error dialog to the user."""
     ...
 
 
 def message_dialog(msg: str) -> None:
-    """Displays a message dialog to the user"""
+    """Displays a message dialog to the user."""
     ...
 
 
@@ -236,7 +236,7 @@ def ok_cancel_dialog(msg: str, ok_title: str = "", title: str = "") -> int:
     - `title`: Optional title for the dialog. Note Linux and macOS do not have
                  a title in their dialog.
 
-    Returns `True` if the user presses the `ok` button
+    Returns `True` if the user presses the `ok` button.
     """
     ...
 
@@ -253,7 +253,7 @@ def yes_no_cancel_dialog(msg: str, yes_title: str = "", no_title: str = "", titl
     - `title`: Optional title for the dialog. Note Linux and macOS do not have
                  a title in their dialog.
 
-    Returns `DIALOG_YES`, `DIALOG_NO` or `DIALOG_CANCEL`
+    Returns `DIALOG_YES`, `DIALOG_NO` or `DIALOG_CANCEL`.
     """
     ...
 
@@ -330,14 +330,14 @@ def select_folder_dialog(
 
 
 def run_command(cmd: str, args: Optional[Dict] = None) -> None:
-    """Runs the named `ApplicationCommand` with the (optional) given `args`"""
+    """Runs the named `ApplicationCommand` with the (optional) given `args`."""
     ...
 
 
 def format_command(cmd: str, args: Optional[Dict] = None) -> str:
     """
     Creates a "command string" from a str cmd name, and an optional dict of args.
-    This is used when constructing a command-based `CompletionItem`
+    This is used when constructing a command-based `CompletionItem`.
 
     @version ST(>=4075)
     """
@@ -378,14 +378,14 @@ def get_clipboard(size_limit: int = 16777216) -> str:
 
 
 def set_clipboard(text: str) -> None:
-    """Sets the contents of the clipboard"""
+    """Sets the contents of the clipboard."""
     ...
 
 
 def log_commands(flag: Optional[bool] = None) -> None:
     """
     Controls command logging. If enabled, all commands run from key bindings
-    and the menu will be logged to the console
+    and the menu will be logged to the console.
     """
     ...
 
@@ -401,8 +401,8 @@ def get_log_commands() -> bool:
 
 def log_input(flag: Optional[bool] = None) -> None:
     """
-    Enables or disables input logging. This is useful to find the names of
-    certain keys on the keyboard
+    Enables or disables input logging.
+    This is useful to find the names of certain keys on the keyboard.
     """
     ...
 
@@ -434,8 +434,8 @@ def get_log_fps() -> bool:
 
 def log_result_regex(flag: Optional[bool] = None) -> None:
     """
-    Enables or disables result regex logging. This is useful when trying to
-    debug `file_regex` and `line_regex` in build systems
+    Enables or disables result regex logging.
+    This is useful when trying to debug `file_regex` and `line_regex` in build systems.
     """
     ...
 
@@ -477,8 +477,7 @@ def get_log_build_systems() -> bool:
 
 def log_control_tree(flag: Optional[bool] = None) -> None:
     """
-    When enabled, clicking with `Ctrl`+`Alt`
-    will log the control tree under the mouse to the console.
+    When enabled, clicking with `Ctrl`+`Alt` will log the control tree under the mouse to the console.
 
     @version ST(>=4064)
     """
@@ -495,47 +494,40 @@ def get_log_control_tree() -> bool:
 
 
 def ui_info() -> Dict[str, Any]:
-    """
-    Gets the UI information such as theme/color-scheme palette.
-    """
+    """Gets the UI information such as theme/color-scheme palette."""
     ...
 
 
 def score_selector(scope_name: str, selector: str) -> int:
     """
-    Matches the `selector` against the given scope, returning a score
-    A score of 0 means no match, above 0 means a match. Different selectors may
-    be compared against the same scope: a higher score means the selector is a
-    better match for the scope
+    Matches the `selector` against the given scope, returning a score.
+
+    A score of `0` means no match, above `0` means a match.
+    Different selectors may be compared against the same scope:
+    a higher score means the selector is a better match for the scope.
     """
     ...
 
 
 def load_resource(name: str) -> str:
-    """
-    Loads the given resource. The `name` should be in the format
-    `Packages/Default/Main.sublime-menu`
-    """
+    """Loads the given resource. The `name` should be in the format `Packages/Default/Main.sublime-menu`."""
     ...
 
 
 def load_binary_resource(name: str) -> bytes:
-    """
-    Loads the given resource. The `name` should be in the format
-    `Packages/Default/Main.sublime-menu`
-    """
+    """Loads the given resource. The `name` should be in the format `Packages/Default/Main.sublime-menu`."""
     ...
 
 
 def find_resources(pattern: str) -> List[str]:
-    """Finds resources whose file name matches the given `pattern`"""
+    """Finds resources whose file name matches the given `pattern`."""
     ...
 
 
 def encode_value(val: Any, pretty: bool = ...) -> str:
     """
-    Encode a JSON compatible value into a string representation
-    If `pretty` is set to `True`, the string will include newlines and indentation
+    Encode a JSON compatible value into a string representation.
+    If `pretty` is set to `True`, the string will include newlines and indentation.
     """
     ...
 
@@ -543,17 +535,17 @@ def encode_value(val: Any, pretty: bool = ...) -> str:
 def decode_value(data: str) -> Any:
     """
     Decodes a JSON string into an object.
-    If `data` is invalid, a `ValueError` will be thrown
+    If `data` is invalid, a `ValueError` will be thrown.
     """
     ...
 
 
 def expand_variables(val: ExpandableVar, variables: Dict[str, str]) -> ExpandableVar:
     """
-    Expands any variables in the string `value` using the variables defined in
-    the dictionary `variables`
-    `value` may also be a `list` or `dict`, in which case the structure will be
+    Expands any variables in the string `value` using the variables defined in the dictionary
+    `variables` `value` may also be a `list` or `dict`, in which case the structure will be
     recursively expanded. Strings should use snippet syntax, for example:
+
     ```python
     expand_variables("Hello, ${name}", {"name": "Foo"})
     ```
@@ -564,23 +556,24 @@ def expand_variables(val: ExpandableVar, variables: Dict[str, str]) -> Expandabl
 def load_settings(base_name: str) -> Settings:
     """
     Loads the named settings. The name should include a file name and extension,
-    but not a path The packages will be searched for files matching the
-    `base_name`, and the results will be collated into the settings object
+    but not a path. The packages will be searched for files matching the
+    `base_name`, and the results will be collated into the settings object.
+
     Subsequent calls to `load_settings()` with the `base_name` will return the
-    same object, and not load the settings from disk again
+    same object, and not load the settings from disk again.
     """
     ...
 
 
 def save_settings(base_name: str) -> None:
-    """Flushes any in-memory changes to the named settings object to disk"""
+    """Flushes any in-memory changes to the named settings object to disk."""
     ...
 
 
 def set_timeout(f: Callback0, timeout_ms: float = 0) -> None:
     """
     Schedules a function to be called in the future. Sublime Text will block
-    while the function is running
+    while the function is running.
     """
     ...
 
@@ -589,18 +582,18 @@ def set_timeout_async(f: Callback0, timeout_ms: float = 0) -> None:
     """
     Schedules a function to be called in the future. The function will be
     called in a worker thread, and Sublime Text will not block while the
-    function is running
+    function is running.
     """
     ...
 
 
 def active_window() -> Window:
-    """Returns the most recently used window"""
+    """Returns the most recently used window."""
     ...
 
 
 def windows() -> List[Window]:
-    """Returns a list of all the open windows"""
+    """Returns a list of all the open windows."""
     ...
 
 
@@ -613,7 +606,7 @@ def get_macro() -> List[Dict[str, Any]]:
 
 
 class Window:
-    """This class represents windows and provides an interface of methods to interact with them"""
+    """This class represents windows and provides an interface of methods to interact with them."""
 
     window_id: int
     settings_object: Optional[Settings]
@@ -635,7 +628,7 @@ class Window:
         ...
 
     def id(self) -> int:
-        """Returns a number that uniquely identifies this window"""
+        """Returns a number that uniquely identifies this window."""
         ...
 
     def is_valid(self) -> bool:
@@ -646,15 +639,15 @@ class Window:
         ...
 
     def hwnd(self) -> int:
-        """Platform specific window handle, only returns a meaningful result under Windows"""
+        """Platform specific window handle, only returns a meaningful result under Windows OS."""
         ...
 
     def active_sheet(self) -> Optional[Sheet]:
-        """Returns the currently focused sheet"""
+        """Returns the currently focused sheet."""
         ...
 
     def active_view(self) -> Optional[View]:
-        """Returns the currently edited view"""
+        """Returns the currently edited view."""
         ...
 
     def new_html_sheet(self, name: str, contents: str, flags: int = 0, group: int = -1) -> HtmlSheet:
@@ -678,16 +671,16 @@ class Window:
 
     def run_command(self, cmd: str, args: Optional[Dict] = ...) -> None:
         """
-        Runs the named `WindowCommand` with the (optional) given `args`
+        Runs the named `WindowCommand` with the (optional) given `args`.
         This method is able to run any sort of command, dispatching the
-        command via input focus
+        command via input focus.
         """
         ...
 
     def new_file(self, flags: int = 0, syntax: str = "") -> View:
         """
         Creates a new file, The returned view will be empty, and its
-        `is_loaded()` method will return `True`. Flags must be either `0` or `TRANSIENT`
+        `is_loaded()` method will return `True`. Flags must be either `0` or `TRANSIENT`.
         """
         ...
 
@@ -720,28 +713,28 @@ class Window:
     def find_open_file(self, fname: str) -> Optional[View]:
         """
         Finds the named file in the list of open files, and returns the
-        corresponding `View`, or `None` if no such file is open
+        corresponding `View`, or `None` if no such file is open.
         """
         ...
 
     def num_groups(self) -> int:
-        """Returns the number of view groups in the window"""
+        """Returns the number of view groups in the window."""
         ...
 
     def active_group(self) -> int:
-        """Returns the index of the currently selected group"""
+        """Returns the index of the currently selected group."""
         ...
 
     def focus_group(self, idx: int) -> None:
-        """Makes the given group active"""
+        """Makes the given group active."""
         ...
 
     def focus_sheet(self, sheet: Sheet) -> None:
-        """Switches to the given `sheet`"""
+        """Switches to the given `sheet`."""
         ...
 
     def focus_view(self, view: View) -> None:
-        """Switches to the given `view`"""
+        """Switches to the given `view`."""
         ...
 
     def select_sheets(self, sheets: Iterable[Sheet]) -> None:
@@ -757,32 +750,32 @@ class Window:
 
     def get_sheet_index(self, sheet: Sheet) -> Tuple[int, int]:
         """
-        Returns the group, and index within the group of the `sheet`
-        Returns (-1, -1) if not found
+        Returns the group, and index within the group of the `sheet`.
+        Returns `(-1, -1)` if not found.
         """
         ...
 
     def get_view_index(self, view: View) -> Tuple[int, int]:
         """
-        Returns the group, and index within the group of the `view`
-        Returns (-1, -1) if not found
+        Returns the group, and index within the group of the `view`.
+        Returns `(-1, -1)` if not found.
         """
         ...
 
     def set_sheet_index(self, sheet: Sheet, group: int, idx: int) -> None:
-        """Moves the `sheet` to the given `group` and index"""
+        """Moves the `sheet` to the given `group` and index."""
         ...
 
     def set_view_index(self, view: View, group: int, idx: int) -> None:
-        """Moves the `view` to the given `group` and index"""
+        """Moves the `view` to the given `group` and index."""
         ...
 
     def sheets(self) -> List[Sheet]:
-        """Returns all open sheets in the window"""
+        """Returns all open sheets in the window."""
         ...
 
     def views(self, *, include_transient: bool = False) -> List[View]:
-        """Returns all open views in the window"""
+        """Returns all open views in the window."""
         ...
 
     def selected_sheets(self) -> List[Sheet]:
@@ -792,31 +785,31 @@ class Window:
         ...
 
     def active_sheet_in_group(self, group: int) -> Optional[Sheet]:
-        """Returns the currently focused sheet in the given `group`"""
+        """Returns the currently focused sheet in the given `group`."""
         ...
 
     def active_view_in_group(self, group: int) -> Optional[View]:
-        """Returns the currently edited view in the given `group`"""
+        """Returns the currently edited view in the given `group`."""
         ...
 
     def sheets_in_group(self, group: int) -> List[Sheet]:
-        """Returns all open sheets in the given `group`"""
+        """Returns all open sheets in the given `group`."""
         ...
 
     def views_in_group(self, group: int) -> List[View]:
-        """Returns all open views in the given `group`"""
+        """Returns all open views in the given `group`."""
         ...
 
     def transient_sheet_in_group(self, group: int) -> Optional[Sheet]:
-        """Returns the transient `Sheet` in the given `group` if any"""
+        """Returns the transient `Sheet` in the given `group` if any."""
         ...
 
     def transient_view_in_group(self, group: int) -> Optional[View]:
-        """Returns the transient `View` in the given `group` if any"""
+        """Returns the transient `View` in the given `group` if any."""
         ...
 
     def layout(self) -> Layout:
-        """Returns the current layout"""
+        """Returns the current layout."""
         ...
 
     def get_layout(self) -> Layout:
@@ -826,7 +819,7 @@ class Window:
         ...
 
     def set_layout(self, layout: Layout) -> None:
-        """Changes the tile-based panel layout of view groups"""
+        """Changes the tile-based panel layout of view groups."""
         ...
 
     def create_output_panel(self, name: str, unlisted: bool = False) -> View:
@@ -836,33 +829,32 @@ class Window:
         with the panel argument set to the `name` with an "output." prefix.
 
         The optional `unlisted` parameter is a boolean to control if the
-        output panel should be listed in the panel switcher
+        output panel should be listed in the panel switcher.
         """
         ...
 
     def find_output_panel(self, name: str) -> Optional[View]:
         """
         Returns the view associated with the named output panel, or `None` if
-        the output panel does not exist
+        the output panel does not exist.
         """
         ...
 
     def destroy_output_panel(self, name: str) -> None:
-        """Destroys the named output panel, hiding it if currently open"""
+        """Destroys the named output panel, hiding it if currently open."""
         ...
 
     def active_panel(self) -> Optional[str]:
         """
-        Returns the name of the currently open panel, or `None` if no panel is open
-        Will return built-in panel names (e.g. "console", "find", etc)
-        in addition to output panels
+        Returns the name of the currently open panel, or `None` if no panel is open.
+        Will return built-in panel names (e.g. "console", "find", etc) in addition to output panels.
         """
         ...
 
     def panels(self) -> List[str]:
         """
-        Returns a list of the names of all panels that have not been marked as unlisted
-        Includes certain built-in panels in addition to output panels
+        Returns a list of the names of all panels that have not been marked as unlisted.
+        Includes certain built-in panels in addition to output panels.
         """
         ...
 
@@ -884,8 +876,9 @@ class Window:
         Shows the input panel, to collect a line of input from the user
         `on_done` and `on_change`, if not `None`, should both be functions
         that expect a single string argument
-        `on_cancel` should be `None` or a function that expects no arguments
-        The view used for the input widget is returned
+        `on_cancel` should be `None` or a function that expects no arguments.
+
+        The view used for the input widget is returned.
         """
         ...
 
@@ -917,66 +910,66 @@ class Window:
         ...
 
     def is_sidebar_visible(self) -> bool:
-        """Returns `True` if the sidebar will be shown when contents are available"""
+        """Returns `True` if the sidebar will be shown when contents are available."""
         ...
 
     def set_sidebar_visible(self, flag: bool) -> None:
-        """Sets the sidebar to be shown or hidden when contents are available"""
+        """Sets the sidebar to be shown or hidden when contents are available."""
         ...
 
     def is_minimap_visible(self) -> bool:
-        """Returns `True` if the minimap is enabled"""
+        """Returns `True` if the minimap is enabled."""
         ...
 
     def set_minimap_visible(self, flag: bool) -> None:
-        """Controls the visibility of the minimap"""
+        """Controls the visibility of the minimap."""
         ...
 
     def is_status_bar_visible(self) -> bool:
-        """Returns `True` if the status bar will be shown"""
+        """Returns `True` if the status bar will be shown."""
         ...
 
     def set_status_bar_visible(self, flag: bool) -> None:
-        """Controls the visibility of the status bar"""
+        """Controls the visibility of the status bar."""
         ...
 
     def get_tabs_visible(self) -> bool:
-        """Returns `True` if tabs will be shown for open files"""
+        """Returns `True` if tabs will be shown for open files."""
         ...
 
     def set_tabs_visible(self, flag: bool) -> None:
-        """Controls if tabs will be shown for open files"""
+        """Controls if tabs will be shown for open files."""
         ...
 
     def is_menu_visible(self) -> bool:
-        """Returns `True` if the menu is visible"""
+        """Returns `True` if the menu is visible."""
         ...
 
     def set_menu_visible(self, flag: bool) -> None:
-        """Controls if the menu is visible"""
+        """Controls if the menu is visible."""
         ...
 
     def folders(self) -> List[str]:
-        """Returns a list of the currently open folders"""
+        """Returns a list of the currently open folders."""
         ...
 
     def project_file_name(self) -> str:
-        """Returns name of the currently opened project file, if any"""
+        """Returns name of the currently opened project file, if any."""
         ...
 
     def project_data(self) -> Optional[Dict[str, Any]]:
         """
-        Returns the project data associated with the current window
-        The data is in the same format as the contents of a `.sublime-project` file
+        Returns the project data associated with the current window.
+        The data is in the same format as the contents of a `.sublime-project` file.
         """
         ...
 
     def set_project_data(self, v: Dict[str, Any]) -> None:
         """
-        Updates the project data associated with the current window
+        Updates the project data associated with the current window.
         If the window is associated with a `.sublime-project` file, the project
         file will be updated on disk, otherwise the window will store the data
-        internally
+        internally.
         """
         ...
 
@@ -993,10 +986,7 @@ class Window:
         ...
 
     def template_settings(self) -> Settings:
-        """
-        Per-window settings that are persisted in the session, and duplicated
-        into new windows
-        """
+        """Per-window settings that are persisted in the session, and duplicated into new windows."""
         ...
 
     def symbol_locations(
@@ -1039,7 +1029,7 @@ class Window:
             A unicode character of the kind letter to filter the list by.
 
         :return:
-            A list of sublime.SymbolLocation() objects
+            A list of sublime.SymbolLocation() objects.
         """
         ...
 
@@ -1062,14 +1052,14 @@ class Window:
     def lookup_references_in_index(self, sym: str) -> List[Location]:
         """
         Returns all files and locations where the symbol `sym` is referenced,
-        using the symbol index
+        using the symbol index.
         """
         ...
 
     def lookup_references_in_open_files(self, sym: str) -> List[Location]:
         """
         Returns all files and locations where the symbol `sym` is referenced,
-        searching through open files
+        searching through open files.
         """
         ...
 
@@ -1078,8 +1068,9 @@ class Window:
         Returns a dictionary of strings populated with contextual keys:
         `packages`, `platform`, `file`, `file_path`, `file_name`, `file_base_name`,
         `file_extension`, `folder`, `project`, `project_path`, `project_name`,
-        `project_base_name`, `project_extension`
-        This dict is suitable for passing to `sublime.expand_variables()`
+        `project_base_name`, `project_extension`.
+
+        This dict is suitable for passing to `sublime.expand_variables()`.
         """
         ...
 
@@ -1090,11 +1081,11 @@ class Window:
 
 class Edit:
     """
-    `Edit` objects have no functions, they exist to group buffer modifications
+    `Edit` objects have no functions, they exist to group buffer modifications.
 
     `Edit` objects are passed to `TextCommands`, and can not be created by the
     user. Using an invalid `Edit` object, or an `Edit` object from a different view,
-    will cause the functions that require them to fail
+    will cause the functions that require them to fail.
     """
 
     edit_token: int
@@ -1107,7 +1098,7 @@ class Edit:
 
 
 class Region:
-    """Represents an area of the buffer. Empty regions, where `a == b` are valid"""
+    """Represents an area of the buffer. Empty regions, where `a == b` are valid."""
 
     a: int
     b: int
@@ -1152,40 +1143,40 @@ class Region:
         ...
 
     def empty(self) -> bool:
-        """Returns `True` if `begin() == end()`"""
+        """Returns `True` if `begin() == end()`."""
         ...
 
     def begin(self) -> int:
-        """Returns the minimum of `a` and `b`"""
+        """Returns the minimum of `a` and `b`."""
         ...
 
     def end(self) -> int:
-        """Returns the maximum of `a` and `b`"""
+        """Returns the maximum of `a` and `b`."""
         ...
 
     def size(self) -> int:
-        """Returns the number of characters spanned by the region"""
+        """Returns the number of characters spanned by the region."""
         ...
 
     def contains(self, x: Union[Region, Point]) -> bool:
         """
-        If `x` is a region, returns `True` if it's a subset
-        If `x` is a point, returns `True` if `begin() <= x <= end()`
+        If `x` is a region, returns `True` if it's a subset.
+        If `x` is a point, returns `True` if `begin() <= x <= end()`.
         """
         ...
 
     def cover(self, rhs: Region) -> Region:
-        """Returns a `Region` spanning both this and the given regions"""
+        """Returns a `Region` spanning both this and the given regions."""
         ...
 
     def intersection(self, rhs: Region) -> Region:
-        """Returns the set intersection of the two regions"""
+        """Returns the set intersection of the two regions."""
         ...
 
     def intersects(self, rhs: Region) -> bool:
         """
         Returns `True` if `self == rhs` or both include one or more
-        positions in common
+        positions in common.
         """
         ...
 
@@ -1230,8 +1221,8 @@ class TextChange:
 
 class Selection(Reversible):
     """
-    Maintains a set of Regions, ensuring that none overlap
-    The regions are kept in sorted order
+    Maintains a set of Regions, ensuring that none overlap.
+    The regions are kept in sorted order.
     """
 
     view_id: int
@@ -1270,31 +1261,31 @@ class Selection(Reversible):
         ...
 
     def is_valid(self) -> bool:
-        """Determines if this `Selection` object is still valid"""
+        """Determines if this `Selection` object is still valid."""
         ...
 
     def clear(self) -> None:
-        """Removes all regions"""
+        """Removes all regions."""
         ...
 
     def add(self, x: Union[Region, Point]) -> None:
         """
         Adds the given region or point. It will be merged with any intersecting
-        regions already contained within the set
+        regions already contained within the set.
         """
         ...
 
     def add_all(self, regions: Iterable[Union[Region, Point]]) -> None:
-        """Adds all `regions` in the given list or tuple"""
+        """Adds all `regions` in the given list or tuple."""
         ...
 
     def subtract(self, region: Region) -> None:
-        """Subtracts the `region` from all regions in the set"""
+        """Subtracts the `region` from all regions in the set."""
         ...
 
     def contains(self, region: Region) -> None:
         """
-        Returns `True` if the given `region` is a subset
+        Returns `True` if the given `region` is a subset.
 
         @deprecated use the `in` operator instead
         """
@@ -1302,13 +1293,13 @@ class Selection(Reversible):
 
 
 def make_sheet(sheet_id: int) -> Sheet:
-    """Create a `Sheet` object with the given ID"""
+    """Create a `Sheet` object with the given ID."""
 
 
 class Sheet:
     """
-    Represents a content container, i.e. a tab, within a window
-    Sheets may contain a View, or an image preview
+    Represents a content container, i.e. a tab, within a window.
+    Sheets may contain a `View`, or an image preview.
     """
 
     sheet_id: int
@@ -1326,7 +1317,7 @@ class Sheet:
         ...
 
     def id(self) -> int:
-        """Returns a number that uniquely identifies this sheet"""
+        """Returns a number that uniquely identifies this sheet."""
         ...
 
     def window(self) -> Optional[Window]:
@@ -1339,7 +1330,7 @@ class Sheet:
     def view(self) -> Optional[View]:
         """
         Returns the view contained within the sheet. May be `None` if the
-        sheet is an image preview, or the view has been closed
+        sheet is an image preview, or the view has been closed.
         """
         ...
 
@@ -1353,15 +1344,15 @@ class Sheet:
         ...
 
     def is_semi_transient(self) -> bool:
-        """Determines if this view is semi-transient or not"""
+        """Determines if this view is semi-transient or not."""
         ...
 
     def is_transient(self) -> bool:
-        """Determines if this view is transient or not"""
+        """Determines if this view is transient or not."""
         ...
 
     def group(self) -> int:
-        """The (layout) group that the sheet is contained within"""
+        """The (layout) group that the sheet is contained within."""
         ...
 
     def close(self) -> None:
@@ -1376,7 +1367,7 @@ class TextSheet(Sheet):
         ...
 
     def set_name(self, name: str) -> None:
-        """Sets the name of this `Sheet`"""
+        """Sets the name of this `Sheet`."""
         ...
 
 
@@ -1394,11 +1385,11 @@ class HtmlSheet(Sheet):
         ...
 
     def set_name(self, name: str) -> None:
-        """Sets the name of this `Sheet`"""
+        """Sets the name of this `Sheet`."""
         ...
 
     def set_contents(self, contents: str) -> None:
-        """Sets the content of this `Sheet`"""
+        """Sets the content of this `Sheet`."""
         ...
 
 
@@ -1452,7 +1443,7 @@ class View:
 
     def element(self) -> Optional[str]:
         """
-        Returns None for normal views, for views that comprise part of the UI,
+        Returns `None` for normal views, for views that comprise part of the UI,
         a `str` is returned from the following list:
 
         - `"console:input"`: The console input
@@ -2400,34 +2391,31 @@ class Settings:
 
     def get(self, key: str, default: Optional[Any] = None) -> Any:
         """
-        Returns the named setting, or `default` if it's not defined
-        If not passed, `default` will have a value of `None`
+        Returns the named setting, or `default` if it's not defined.
+        If not passed, `default` will have a value of `None`.
         """
         # The "Any" annotation should be "StValue" but it will cause annoying errors
         # when casting the returned value. So we probably just use "Any"...
         ...
 
     def has(self, key: str) -> bool:
-        """
-        Returns `True` if the named option exists in this set of Settings or
-        one of its parents
-        """
+        """Returns `True` if the named option exists in this set of `Settings` or one of its parents."""
         ...
 
     def set(self, key: str, value: Any) -> None:
-        """Sets the named setting. Only primitive types, lists, and dicts are accepted"""
+        """Sets the named setting. Only primitive types, lists, and dicts are accepted."""
         ...
 
     def erase(self, key: str) -> None:
-        """Removes the named setting. Does not remove it from any parent Settings"""
+        """Removes the named setting. Does not remove it from any parent `Settings`."""
         ...
 
     def add_on_change(self, tag: str, callback: Callback0) -> None:
-        """Register a `callback` to be run whenever a setting in this object is changed"""
+        """Register a `callback` to be run whenever a setting in this object is changed."""
         ...
 
     def clear_on_change(self, tag: str) -> None:
-        """Remove all callbacks registered with the given `tag`"""
+        """Remove all callbacks registered with the given `tag`."""
         ...
 
 
@@ -2492,7 +2480,7 @@ class Phantom:
 class PhantomSet:
     """
     A collection that manages Phantoms and the process of adding them,
-    updating them and removing them from the View
+    updating them and removing them from the View.
     """
 
     view: View
@@ -2589,7 +2577,7 @@ class CompletionList:
 
 class CompletionItem:
     """
-    Represents an available auto-completion item
+    Represents an available auto-completion item.
 
     @version ST(>=4050)
     """
