@@ -691,6 +691,11 @@
                       "default": false,
                       "description": "Disables the “Organize Imports” command."
                     },
+                    "python.pythonPath": {
+                      "type": "string",
+                      "default": "python",
+                      "description": "Path to Python, you can use a custom version of Python."
+                    },
                     "python.venvPath": {
                       "type": "string",
                       "default": "",
