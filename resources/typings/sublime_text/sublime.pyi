@@ -1,5 +1,5 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-# ST version: 4109
+# ST version: 4114
 
 from __future__ import annotations
 
@@ -717,6 +717,14 @@ class Window:
         """
         ...
 
+    def file_history(self) -> List[str]:
+        """
+        Returns a list of paths of recently opened files.
+
+        @version ST(>=4114)
+        """
+        ...
+
     def num_groups(self) -> int:
         """Returns the number of view groups in the window."""
         ...
@@ -1355,8 +1363,8 @@ class Sheet:
         """The (layout) group that the sheet is contained within."""
         ...
 
-    def close(self) -> None:
-        """Closes the sheet"""
+    def close(self, on_close: Optional[Callable[[bool], None]] = lambda did_close: None) -> None:
+        """Closes the sheet."""
         ...
 
 
@@ -1499,11 +1507,16 @@ class View:
         """
         ...
 
-    def close(self) -> bool:
+    def close(self, on_close: Optional[Callable[[bool], None]] = lambda did_close: None) -> bool:
         """Closes this view."""
         ...
 
     def retarget(self, new_fname: str) -> None:
+        """
+        Assigns this view to the file.
+
+        You may want to run a `revert` command to reload the file content after that.
+        """
         ...
 
     def name(self) -> str:
@@ -2298,6 +2311,16 @@ class View:
         """
         ...
 
+    def clear_undo_stack(self) -> None:
+        """
+        Clear the undo stack.
+
+        Cannot be used in a `sublime_plugin.TextCommand`, which will modify the undo stack.
+
+        @version ST(>=4114)
+        """
+        ...
+
 
 def _buffers() -> List[Buffer]:
     """Returns all available Buffer objects"""
@@ -2714,6 +2737,9 @@ class Syntax:
         ...
 
     def __eq__(self, other: Any) -> bool:
+        ...
+
+    def __hash__(self) -> int:
         ...
 
     def __repr__(self) -> str:
