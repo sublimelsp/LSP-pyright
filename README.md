@@ -8,7 +8,7 @@ Python support for Sublime's LSP plugin provided through [microsoft/pyright](htt
 2. Restart Sublime.
 3. (Optional) Configure pyright for your `virtualenv`.
 
-> The [Node.js](https://nodejs.org) is required by this server. If `node` is not in your `$PATH`, this package will suggest to install a local Node.js runtime automatically. If you instead decide to use `node` that is already installed on your system, make sure that it's at least a version 12.
+> The [Node.js](https://nodejs.org) is required by this server. If `node` is not in your `$PATH`, this package will suggest to install a local Node.js runtime automatically. If you instead decide to use `node` that is already installed on your system, make sure that it's at least a version 14.
 
 ## Configuration
 
