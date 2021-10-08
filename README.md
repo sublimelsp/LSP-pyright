@@ -41,7 +41,7 @@ Here are some ways to configure the package and the language server.
 
 | Command | Description |
 |---------|-------------|
-| `LSP-pyright: Create Pyright Configuration File` | Creates a `.pyrightconfig.json` file in the root of the project with basic options. Opens the configuration file if it already exists. |
+| `LSP-pyright: Create Pyright Configuration File` | Creates a `pyrightconfig.json` file in the root of the project with basic options. Opens the configuration file if it already exists. |
 
 ### Virtual environments
 
