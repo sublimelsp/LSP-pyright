@@ -227,7 +227,7 @@ def message_dialog(msg: str) -> None:
     ...
 
 
-def ok_cancel_dialog(msg: str, ok_title: str = "", title: str = "") -> int:
+def ok_cancel_dialog(msg: str, ok_title: str = "", title: str = "") -> bool:
     """
     Show a popup dialog with an "ok" and "cancel" button.
 
@@ -236,7 +236,7 @@ def ok_cancel_dialog(msg: str, ok_title: str = "", title: str = "") -> int:
     - `title`: Optional title for the dialog. Note Linux and macOS do not have
                  a title in their dialog.
 
-    Returns `True` if the user presses the `ok` button.
+    Returns `True` if the user presses the `ok` button, `False` otherwise.
     """
     ...
 
@@ -1795,7 +1795,7 @@ class View:
         ...
 
     def indentation_level(self, pt: Point) -> int:
-        """Returns the indentation level of the point."""
+        """Returns the indentation level of the line which contains the point."""
         ...
 
     def has_non_empty_selection_region(self) -> bool:
