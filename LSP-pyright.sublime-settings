@@ -71,5 +71,6 @@
 		"python.pythonPath": "python",
 		// Path to folder with a list of Virtual Environments.
 		"python.venvPath": "",
+		"python.venv": "",
 	},
 }

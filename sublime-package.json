@@ -711,6 +711,11 @@
                       "type": "string",
                       "default": "",
                       "description": "Path to folder with a list of Virtual Environments."
+                    },
+                    "python.venv": {
+                      "type": "string",
+                      "default": "",
+                      "description": "Name of virtual environment subdirectory within venvPath."
                     }
                   }
                 }
