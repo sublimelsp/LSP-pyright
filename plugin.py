@@ -1,4 +1,4 @@
-from LSP.plugin import DottedDict
+from LSP.plugin import DottedDict, MarkdownLangMap
 from LSP.plugin.core.typing import Any, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
@@ -49,6 +49,9 @@ class LspPyrightPlugin(NpmClientHandler):
         src = "Packages/{}/resources/".format(cls.package_name)
         dest = os.path.join(cls.package_storage(), "resources")
         ResourcePath(src).copytree(dest, exist_ok=True)
+
+    def markdown_language_id_to_st_syntax_map(self) -> MarkdownLangMap:
+        return {"python": (("python", "py"), ("LSP-pyright/pyright",))}
 
     # -------------- #
     # custom methods #
