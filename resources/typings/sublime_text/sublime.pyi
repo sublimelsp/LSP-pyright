@@ -1,5 +1,5 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-# ST version: 4121
+# ST version: 4123
 
 from __future__ import annotations
 
@@ -776,6 +776,33 @@ class Window:
 
     def set_view_index(self, view: View, group: int, idx: int) -> None:
         """Moves the `view` to the given `group` and index."""
+        ...
+
+    def move_sheets_to_group(
+        self,
+        sheets: List[Sheet],
+        group: int,
+        insertion_idx: int = -1,
+        select: bool = True,
+    ) -> bool:
+        """
+        Moves all unique provided sheets to specified group at insertion index provided.
+        If an index is not provided defaults to last index of the destination group.
+
+        @version ST(>=4123)
+
+        :param sheets:
+                A List of Sheet objects
+
+        :param group:
+                An int specifying the destination group
+
+        :param insertion_idx:
+                An int specifying the insertion index
+
+        :param select:
+                A bool specifying whether the moved sheets should be selected
+        """
         ...
 
     def sheets(self) -> List[Sheet]:
@@ -1938,15 +1965,21 @@ class View:
         Scrolls this view to reveal x, which may be a Region or point.
 
         ---
-        - `location`: A point, Region or Selection to scroll this view to.
+        - `x`: A point, Region or Selection to scroll this view to.
         - `show_surrounds`: A bool, scroll this view far enough that surrounding conent is visible also
         - `keep_to_left` (4075): A bool, if this view should be kept to the left, if horizontal scrolling is possible
         - `animate` (4075): A bool, if the scroll should be animated
         """
         ...
 
-    def show_at_center(self, x: Union[Region, Point]) -> None:
-        """Scrolls this view to center on x, which may be a Region or point."""
+    def show_at_center(self, x: Union[Region, Point], animate: bool = True) -> None:
+        """
+        Scrolls this view to center on x, which may be a Region or point.
+
+        ---
+        - `x`: A point, Region to scroll this view to.
+        - `animate` (4123): A bool, if the scroll should be animated
+        """
         ...
 
     def viewport_position(self) -> Vector:
