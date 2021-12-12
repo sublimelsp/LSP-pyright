@@ -1,15 +1,5 @@
 {
 	"command": ["${node_bin}", "${server_path}", "--stdio"],
-	// @see https://github.com/microsoft/pyright
-	// ST3
-	"languages": [
-		{
-			"scopes": ["source.python"],
-			"syntaxes": ["Packages/Python/Python.sublime-syntax"],
-		},
-	],
-	// ST4
-	"selector": "source.python",
 	"schemes": [
 		"file", // regular files
 		"buffer", // in-memory buffers
@@ -72,4 +62,13 @@
 		// Path to folder with a list of Virtual Environments.
 		"python.venvPath": "",
 	},
+	// ST4
+	"selector": "source.python",
+	// ST3
+	"languages": [
+		{
+			"scopes": ["source.python"],
+			"syntaxes": ["Packages/Python/Python.sublime-syntax"],
+		},
+	],
 }
