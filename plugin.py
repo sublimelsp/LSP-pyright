@@ -50,7 +50,8 @@ class LspPyrightPlugin(NpmClientHandler):
         dest = os.path.join(cls.package_storage(), "resources")
         ResourcePath(src).copytree(dest, exist_ok=True)
 
-    def markdown_language_id_to_st_syntax_map(self) -> MarkdownLangMap:
+    @classmethod
+    def markdown_language_id_to_st_syntax_map(cls) -> Optional[MarkdownLangMap]:
         return {"python": (("python", "py"), ("LSP-pyright/pyright",))}
 
     # -------------- #
