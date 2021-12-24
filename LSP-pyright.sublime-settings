@@ -5,12 +5,12 @@
 		"buffer", // in-memory buffers
 		"res", // files in .sublime-package archives
 	],
-	// @see https://github.com/microsoft/pyright/blob/master/docs/configuration.md
+	// @see https://github.com/microsoft/pyright/blob/main/docs/configuration.md
 	"initializationOptions": {
 		// ...
 	},
-	// @see https://github.com/microsoft/pyright/blob/master/docs/settings.md
-	// @see https://github.com/microsoft/pyright/blob/master/packages/vscode-pyright/package.json
+	// @see https://github.com/microsoft/pyright/blob/main/docs/settings.md
+	// @see https://github.com/microsoft/pyright/blob/main/packages/vscode-pyright/package.json
 	"settings": {
 		// Use a predefined setup from this plugin, valid values are:
 		// - "": An empty string does nothing.
@@ -32,7 +32,7 @@
 		// "openFilesOnly" or "workspace"
 		"python.analysis.diagnosticMode": "openFilesOnly",
 		// Allows a user to override the severity levels for individual diagnostics.
-		// @see https://github.com/microsoft/pyright/blob/master/docs/configuration.md#type-check-diagnostics-settings
+		// @see https://github.com/microsoft/pyright/blob/main/docs/configuration.md#type-check-diagnostics-settings
 		"python.analysis.diagnosticSeverityOverrides": {
 			"reportDuplicateImport ": "warning",
 			"reportImplicitStringConcatenation": "warning",
