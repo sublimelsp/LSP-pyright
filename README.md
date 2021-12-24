@@ -35,7 +35,7 @@ Here are some ways to configure the package and the language server.
   }
   ```
 
-- Through a `pyrightconfig.json` configuration file (check [settings documentation](https://github.com/microsoft/pyright/blob/master/docs/configuration.md))
+- Through a `pyrightconfig.json` configuration file (check [settings documentation](https://github.com/microsoft/pyright/blob/main/docs/configuration.md))
 
 ### Provided Command Palette commands
 
@@ -67,4 +67,4 @@ For example, if you have created a virtual environment inside the directory `.ve
 
 Note that the `venv` option is only supported in the `pyrightconfig.json` file. The `venvPath` option can also be specified in your .sublime-project, in case you don't want to hard-code a system-specific path in a shared project.
 
-Please see [Pyright Documentation](https://github.com/microsoft/pyright/blob/master/docs/configuration.md) for more options.
+Please see [Pyright Documentation](https://github.com/microsoft/pyright/blob/main/docs/configuration.md) for more options.
