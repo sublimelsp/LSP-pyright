@@ -52,7 +52,7 @@ class LspPyrightPlugin(NpmClientHandler):
 
     @classmethod
     def markdown_language_id_to_st_syntax_map(cls) -> Optional[MarkdownLangMap]:
-        return {"python": (("python", "py"), ("LSP-pyright/pyright",))}
+        return {"python": (("python", "py"), ("LSP-pyright/syntaxes/pyright",))}
 
     # -------------- #
     # custom methods #

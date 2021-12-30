@@ -1,0 +1,4 @@
+# SYNTAX TEST "pyright.sublime-syntax"
+
+(class) ClassName
+# ^ - invalid

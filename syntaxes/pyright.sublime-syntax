@@ -3,13 +3,16 @@
 name: Python (for LSP)
 scope: source.python.lsp
 hidden: true
+file_extensions:
+  - pyright-syntax-test
 
 extends: Packages/Python/Python.sublime-syntax
 
 contexts:
   main:
     - meta_include_prototype: false
-    - match: ''
+    - include: comments
+    - match: (?=\S)
       push: [statements, lsp-type]
 
   lsp-type:
