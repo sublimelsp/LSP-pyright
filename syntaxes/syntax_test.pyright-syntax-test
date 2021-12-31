@@ -1,4 +1,19 @@
 # SYNTAX TEST "pyright.sublime-syntax"
 
 (class) ClassName
-# ^ - invalid
+# ^^^^ storage.type
+
+(variable) variable_name: int
+# ^^^^^^^ storage.type
+#                       ^ punctuation.separator.annotation
+#                         ^^^ support.type
+
+(method) methodName: (cls: Type[Self@ParentName], key: str, default: Any | None = None) -> Any
+# ^^^^^ storage.type
+#                     ^^^ variable.parameter
+#                                                 ^^^ variable.parameter
+#                                                      ^^^ support.type
+#                                                           ^^^^^^^ variable.parameter
+#                                                                        ^  keyword.operator
+#                                                                               ^ keyword.operator
+#                                                                                       ^^ punctuation.separator

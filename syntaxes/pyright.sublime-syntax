@@ -12,14 +12,18 @@ contexts:
   main:
     - meta_include_prototype: false
     - include: comments
-    - match: (?=\S)
-      push: [statements, lsp-type]
+    - include: lsp-line
+    - include: statements
+
+  lsp-line:
+    - match: (?=^\()
+      push: lsp-type
 
   lsp-type:
     - meta_include_prototype: false
     - match: \(
       scope: punctuation.section.parens.begin.python
-      set: lsp-type-body
+      set: [lsp-statement, lsp-type-body]
     - match: (?=\S)
       pop: true
 
@@ -29,3 +33,15 @@ contexts:
     - match: \)
       scope: punctuation.section.parens.end.python
       pop: true
+
+  lsp-statement:
+    - match: $
+      pop: true
+    # (function) or (method) hover popup
+    - match: (?=:\s*\()
+      set:
+        - match: \(
+          scope: meta.function.parameters.python punctuation.section.parameters.begin.python
+          set: [function-parameters, allow-unpack-operators]
+    # general cases
+    - include: statements
