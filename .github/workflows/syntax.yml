@@ -14,7 +14,7 @@ on:
 
 jobs:
   main:
-    name: Syntax Tests (${{ matrix.build }})
+    name: ${{ matrix.build }}
     strategy:
       matrix:
         include:
@@ -24,8 +24,12 @@ jobs:
             packages: master
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: SublimeText/syntax-test-action@v2
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Syntax Test
+        uses: SublimeText/syntax-test-action@v2
         with:
           build: ${{ matrix.build }}
           default_packages: ${{ matrix.packages }}
