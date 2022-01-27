@@ -38,10 +38,38 @@ contexts:
     - match: $
       pop: true
     # (function) or (method) hover popup
-    - match: (?=:\s*\()
+    - match: (?=:\s*(?:Overload\[)?\()
       set:
-        - match: \(
-          scope: meta.function.parameters.python punctuation.section.parameters.begin.python
-          set: [function-parameters, allow-unpack-operators]
+        - match: (Overload)(\[)
+          captures:
+            1: meta.qualified-name.python meta.generic-name.python
+            2: punctuation.section.sequence.begin.python
+        - include: lsp-function-parameters
     # general cases
     - include: statements
+
+  lsp-function-parameters:
+    - match: \(
+      scope: meta.function.parameters.python punctuation.section.parameters.begin.python
+      set: [lsp-function-overload-ending-bracket, function-parameters, allow-unpack-operators]
+
+  lsp-function-overload-ending-bracket:
+    - match: \]
+      scope: punctuation.section.sequence.end.python
+      pop: true
+    - include: pop-anyway
+
+  function-terminator:
+    # to match the ending bracket for Overload[...]
+    - match: (?=\])
+      pop: true
+    # if ST 4, we can just use "meta_prepend" to replace the followings...
+    # - meta_prepend: true
+    - match: ':'
+      scope: meta.function.python punctuation.section.function.begin.python
+      pop: true
+    - include: line-continuation-or-pop
+
+  pop-anyway:
+    - match: ''
+      pop: true

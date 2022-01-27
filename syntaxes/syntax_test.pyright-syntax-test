@@ -17,3 +17,12 @@
 #                                                                        ^  keyword.operator
 #                                                                               ^ keyword.operator
 #                                                                                       ^^ punctuation.separator
+
+(variable) TemporaryFile: Overload[(mode: Literal['r', 'w'], buffering: int = ...) -> _TemporaryFileWrapper[str]]
+# ^^^^^^^ storage.type
+#                                 ^ punctuation.section.sequence.begin
+#                                                 ^^^ string.quoted.single
+#                                                            ^^^^^^^^^ variable.parameter
+#                                                                           ^ keyword.operator
+#                                                                                  ^^ punctuation.separator
+#                                                                                                               ^ punctuation.section.sequence.end
