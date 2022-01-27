@@ -67,7 +67,7 @@
 	// ST3
 	"languages": [
 		{
-			"scopes": ["source.python"],
+			"scopes": ["source.python - source.python.lsp"],
 			"syntaxes": ["Packages/Python/Python.sublime-syntax"],
 		},
 	],
