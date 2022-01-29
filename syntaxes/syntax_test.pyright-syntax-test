@@ -21,8 +21,25 @@
 (variable) TemporaryFile: Overload[(mode: Literal['r', 'w'], buffering: int = ...) -> _TemporaryFileWrapper[str]]
 # ^^^^^^^ storage.type
 #                                 ^ punctuation.section.sequence.begin
+#                                   ^^^^ variable.parameter
 #                                                 ^^^ string.quoted.single
 #                                                            ^^^^^^^^^ variable.parameter
 #                                                                           ^ keyword.operator
 #                                                                                  ^^ punctuation.separator
 #                                                                                                               ^ punctuation.section.sequence.end
+
+(method) make: ((key: str, default: Any | None = None) -> Any) | ((key: str, default: Any | None = None) -> Any)
+# ^^^^^ storage.type
+#                ^^^ variable.parameter
+#                     ^^^ support.type
+#                          ^^^^^^^ variable.parameter
+#                                       ^  keyword.operator
+#                                              ^ keyword.operator
+#                                                      ^^ punctuation.separator
+#                                                              ^  keyword.operator
+#                                                                  ^^^ variable.parameter
+#                                                                       ^^^ support.type
+#                                                                            ^^^^^^^ variable.parameter
+#                                                                                         ^  keyword.operator
+#                                                                                                ^ keyword.operator
+#                                                                                                        ^^ punctuation.separator
