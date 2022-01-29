@@ -60,10 +60,15 @@ class LspPyrightPlugin(NpmClientHandler):
 
     @classmethod
     def get_dev_environment(cls, settings: DottedDict) -> str:
-        # "dev_environment" has been deprecated, use "pyright.dev_environment" instead
         dev_environment = cls.get_plugin_setting("dev_environment")
         if dev_environment is None:
             dev_environment = settings.get("pyright.dev_environment")
+        else:
+            print(
+                "[LSP-pyright] "
+                + '"dev_environment" setting has been deprecated and will be removed in the future. '
+                + 'Please use "pyright.dev_environment", which is under "settings" instead.'
+            )
 
         return dev_environment
 
