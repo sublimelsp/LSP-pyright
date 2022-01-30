@@ -18,7 +18,7 @@ import sublime
 # ----- #
 
 T = TypeVar("T")
-ExpandableVar = TypeVar("ExpandableVar", None, bool, int, float, str, Dict, List, Tuple)
+ExpandableVar = TypeVar("ExpandableVar", bound=Union[None, bool, int, float, str, Dict, List, Tuple])
 
 Callback0 = Callable[[], Any]
 Callback1 = Callable[[T], Any]
