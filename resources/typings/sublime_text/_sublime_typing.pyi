@@ -18,6 +18,7 @@ import sublime
 # ----- #
 
 T = TypeVar("T")
+AnyCallable = TypeVar("AnyCallable", bound=Callable[..., Any])
 ExpandableVar = TypeVar("ExpandableVar", bound=Union[None, bool, int, float, str, Dict, List, Tuple])
 
 Callback0 = Callable[[], Any]
@@ -26,7 +27,6 @@ Callback1 = Callable[[T], Any]
 Point = int
 Dip = float
 Str = str  # alias in case we have a variable named as "str"
-Value = Union[dict, list, tuple, str, int, float, bool, None]
 
 Completion = Union[str, Sequence[str], Tuple[str, str], sublime.CompletionItem]
 CompletionKind = Tuple[int, str, str]

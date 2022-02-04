@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 # __future__ must be the first import
-from _sublime_typing import Completion, CompletionNormalized, Point
+from _sublime_typing import AnyCallable, Completion, CompletionNormalized, Point
 from importlib.machinery import ModuleSpec
 from types import ModuleType
 from typing import (
@@ -154,7 +154,7 @@ text_change_listeners: Dict[int, List[type]] = {}
 profile: Dict[str, Dict[str, Any]] = {}
 
 
-def add_profiling(event_handler: Callable) -> Callable:
+def add_profiling(event_handler: AnyCallable) -> AnyCallable:
     """
     Decorator to measure blocking event handler methods. Also prevents
     exceptions from interrupting other events handlers.
@@ -168,7 +168,7 @@ def add_profiling(event_handler: Callable) -> Callable:
     ...
 
 
-def trap_exceptions(event_handler: Callable) -> Callable:
+def trap_exceptions(event_handler: AnyCallable) -> AnyCallable:
     """
     Decorator to prevent exceptions from interrupting other events handlers.
 

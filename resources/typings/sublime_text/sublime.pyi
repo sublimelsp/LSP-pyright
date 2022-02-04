@@ -1254,7 +1254,7 @@ class TextChange:
         ...
 
 
-class Selection(Reversible):
+class Selection(Reversible[Region]):
     """
     Maintains a set of Regions, ensuring that none overlap.
     The regions are kept in sorted order.
