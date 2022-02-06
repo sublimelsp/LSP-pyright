@@ -1,11 +1,22 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-SUBLIME_TYPINGS_DIR="$( cd "${SCRIPT_DIR}/../resources/typings/sublime_text" && pwd )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_DIR="${SCRIPT_DIR}/.."
 
-for filename in sublime sublime_plugin _sublime_typing
-do
-    curl -L https://raw.githubusercontent.com/jfcherng-sublime/ST-API-stubs/master/typings/${filename}.pyi --output "$SUBLIME_TYPINGS_DIR/${filename}.pyi"
+SUBLIME_TYPINGS_DIR="${PROJECT_DIR}/resources/typings/sublime_text"
+
+mkdir -p "${SUBLIME_TYPINGS_DIR}"
+
+filenames=(
+    "_sublime_typing.pyi"
+    "sublime.pyi"
+    "sublime_plugin.pyi"
+)
+
+for filename in "${filenames[@]}"; do
+    curl -L \
+        "https://raw.githubusercontent.com/jfcherng-sublime/ST-API-stubs/master/typings/${filename}" \
+        --output "${SUBLIME_TYPINGS_DIR}/${filename}"
 done
 
 echo "Sublime typings updated"
