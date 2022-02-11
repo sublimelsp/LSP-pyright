@@ -1428,6 +1428,18 @@ class HtmlSheet(Sheet):
         ...
 
 
+class ContextStackFrame:
+    context_name: str
+    source_file: str
+    source_location: Tuple[int, int]
+
+    def __init__(self, context_name: str, source_file: str, source_location: Tuple[int, int]) -> None:
+        ...
+
+    def __repr__(self) -> str:
+        ...
+
+
 class View:
     """
     Represents a view into a text buffer. Note that multiple views may refer to
@@ -1752,7 +1764,7 @@ class View:
         """Returns the syntax scope name assigned to the character at the given point"""
         ...
 
-    def context_backtrace(self, pt: Point) -> List[str]:
+    def context_backtrace(self, pt: Point) -> List[ContextStackFrame]:
         """
         Returns a list of the contexts on the stack at the specified point.
 
