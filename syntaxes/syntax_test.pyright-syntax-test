@@ -43,3 +43,14 @@
 #                                                                                         ^  keyword.operator
 #                                                                                                ^ keyword.operator
 #                                                                                                        ^^ punctuation.separator
+
+import os, tempfile
+if os.name != "nt":
+    f = tempfile.NamedTemporaryFile("w")
+# The following case comes  the above code when running under Windows and hover on "NamedTemporaryFile".
+# Notice that it has no leading type information, e.g., "(variable)".
+NamedTemporaryFile: Overload[() -> None, () -> None, (mode: Literal['r', 'w'] = ..., size: int = ...) -> None]
+#                                                     ^^^^ variable.parameter
+#                                                                             ^ keyword.operator.assignment
+#                                                                                    ^^^^ variable.parameter
+#                                                                                              ^ keyword.operator.assignment

@@ -13,19 +13,19 @@ contexts:
     - meta_include_prototype: false
     - include: comments
     - include: lsp-line
-    - include: statements
 
   lsp-line:
+    # consume the leading type. e.g., (function)
     - match: (?=^\()
       push: lsp-type
+    - include: lsp-statement
 
   lsp-type:
     - meta_include_prototype: false
     - match: \(
       scope: punctuation.section.parens.begin.python
-      set: [lsp-statement, lsp-type-body]
-    - match: (?=\S)
-      pop: true
+      set: lsp-type-body
+    - include: pop-else
 
   lsp-type-body:
     - meta_scope: meta.parens.python
@@ -36,28 +36,49 @@ contexts:
 
   lsp-statement:
     - include: pop-end
-    # (function) or (method) hover popup
-    - match: (?=:\s*(?:Overload\[)?\()
+    - match: ({{identifier}})(:)(?=\s*(?:\(|Overload\[))
+      captures:
+        1: meta.qualified-name.python meta.generic-name.python
+        2: punctuation.separator.annotation.variable.python
       set:
         - include: pop-end
-        - match: (Overload)(\[)
-          captures:
-            1: meta.qualified-name.python meta.generic-name.python
-            2: punctuation.section.sequence.begin.python
-        # union of (function) or (method)
-        - match: \((?=\()
-          scope: punctuation.section.parameters.begin.python
-          push: lsp-function-parameters
-        - match: \|
-          scope: keyword.operator.arithmetic.python
+        - match: (?=Overload\[)
+          push: lsp-in-overload-function
+        - match: (?=\(\()
+          push: lsp-in-union-function
+        # normal (function) or (method)
         - include: lsp-function-parameters
     # general cases
     - include: statements
+
+  # overloaded (function) or (method)
+  lsp-in-overload-function:
+    - include: pop-end
+    - match: (Overload)(\[)
+      captures:
+        1: meta.qualified-name.python meta.generic-name.python
+        2: punctuation.section.sequence.begin.python
+      push: lsp-in-overload-function
+    - match: (?=\()
+      push: lsp-function-parameters
+
+  # union of (function) or (method)
+  lsp-in-union-function:
+    - include: pop-end
+    - match: \((?=\()
+      scope: punctuation.section.parameters.begin.python
+      push: lsp-function-parameters
+    - match: \|
+      scope: keyword.operator.arithmetic.python
 
   lsp-function-parameters:
     - match: \(
       scope: meta.function.parameters.python punctuation.section.parameters.begin.python
       set: [function-parameters, allow-unpack-operators]
+
+  # --------- #
+  # overrides #
+  # --------- #
 
   function-terminator:
     # match trailing ending brackets in LSP popup
@@ -67,12 +88,24 @@ contexts:
     - match: \]
       scope: punctuation.section.sequence.end.python
       pop: true
+    # the separator among overloaded function signatures
+    - match: ','
+      scope: punctuation.separator.parameters.python
+      pop: true
     # if ST 4, we can just use "meta_prepend" to replace the followings...
     # - meta_prepend: true
     - match: ':'
       scope: meta.function.python punctuation.section.function.begin.python
       pop: true
     - include: line-continuation-or-pop
+
+  # ------- #
+  # helpers #
+  # ------- #
+
+  pop-else:
+    - match: (?=\S)
+      pop: true
 
   pop-end:
     - match: $
