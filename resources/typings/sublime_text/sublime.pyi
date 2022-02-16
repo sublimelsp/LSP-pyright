@@ -1,5 +1,5 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-# ST version: 4123
+# ST version: 4127
 
 from __future__ import annotations
 
@@ -1429,6 +1429,10 @@ class HtmlSheet(Sheet):
 
 
 class ContextStackFrame:
+    """
+    @version ST(>=4127)
+    """
+
     context_name: str
     source_file: str
     source_location: Tuple[int, int]
