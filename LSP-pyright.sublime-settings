@@ -45,7 +45,7 @@
 			"reportUnusedVariable": "information",
 		},
 		// Specifies the level of logging for the Output panel
-		"python.analysis.logLevel": "information",
+		"python.analysis.logLevel": "Information",
 		// Defines the default rule set for type checking.
 		"python.analysis.typeCheckingMode": "basic",
 		// Paths to look for typeshed modules.
