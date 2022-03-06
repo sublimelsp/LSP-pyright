@@ -7,13 +7,17 @@ from __future__ import annotations
 from _sublime_typing import (
     Callback0,
     Callback1,
+    CommandArgsDict,
     Completion,
     CompletionKind,
     Dip,
     ExpandableVar,
+    ExtractVariablesDict,
+    HasKeysMethod,
     Layout,
     Location,
     Point,
+    ScopeStyleDict,
     Str,
     Vector,
 )
@@ -31,6 +35,7 @@ from typing import (
     Sequence,
     Tuple,
     Union,
+    overload,
 )
 
 # -------- #
@@ -329,12 +334,12 @@ def select_folder_dialog(
     ...
 
 
-def run_command(cmd: str, args: Optional[Dict] = None) -> None:
+def run_command(cmd: str, args: Optional[Dict[str, Any]] = None) -> None:
     """Runs the named `ApplicationCommand` with the (optional) given `args`."""
     ...
 
 
-def format_command(cmd: str, args: Optional[Dict] = None) -> str:
+def format_command(cmd: str, args: Optional[Dict[str, Any]] = None) -> str:
     """
     Creates a "command string" from a str cmd name, and an optional dict of args.
     This is used when constructing a command-based `CompletionItem`.
@@ -344,11 +349,11 @@ def format_command(cmd: str, args: Optional[Dict] = None) -> str:
     ...
 
 
-def html_format_command(cmd: str, args: Optional[Dict] = None) -> str:
+def html_format_command(cmd: str, args: Optional[Dict[str, Any]] = None) -> str:
     ...
 
 
-def command_url(cmd: str, args: Optional[Dict] = None) -> str:
+def command_url(cmd: str, args: Optional[Dict[str, Any]] = None) -> str:
     """
     Creates a `subl:` protocol URL for executing a command in a minihtml link.
 
@@ -597,7 +602,7 @@ def windows() -> List[Window]:
     ...
 
 
-def get_macro() -> List[Dict[str, Any]]:
+def get_macro() -> List[CommandArgsDict]:
     """
     Returns a list of the commands and args that compromise the currently recorded macro.
     Each dict will contain the keys "command" and "args".
@@ -669,7 +674,7 @@ class Window:
         """
         ...
 
-    def run_command(self, cmd: str, args: Optional[Dict] = ...) -> None:
+    def run_command(self, cmd: str, args: Optional[Dict[str, Any]] = ...) -> None:
         """
         Runs the named `WindowCommand` with the (optional) given `args`.
         This method is able to run any sort of command, dispatching the
@@ -1098,7 +1103,7 @@ class Window:
         """
         ...
 
-    def extract_variables(self) -> Dict[str, str]:
+    def extract_variables(self) -> ExtractVariablesDict:
         """
         Returns a dictionary of strings populated with contextual keys:
         `packages`, `platform`, `file`, `file_path`, `file_name`, `file_base_name`,
@@ -1636,7 +1641,7 @@ class View:
         """Returns the number of character in the file."""
         ...
 
-    def begin_edit(self, edit_token: int, cmd: str, args: Optional[Dict] = None) -> Edit:
+    def begin_edit(self, edit_token: int, cmd: str, args: Optional[Dict[str, Any]] = None) -> Edit:
         ...
 
     def end_edit(self, edit: Edit) -> None:
@@ -1692,7 +1697,7 @@ class View:
         """
         ...
 
-    def run_command(self, cmd: str, args: Optional[Dict] = None) -> None:
+    def run_command(self, cmd: str, args: Optional[Dict[str, Any]] = None) -> None:
         """Runs the named `TextCommand` with the (optional) given `args`."""
         ...
 
@@ -1809,7 +1814,7 @@ class View:
         """
         ...
 
-    def style_for_scope(self, scope: str) -> Dict[str, Any]:
+    def style_for_scope(self, scope: str) -> ScopeStyleDict:
         """
         Accepts a string scope name and returns a `dict` of style information, includes the keys:
 
@@ -2452,7 +2457,12 @@ class Settings:
         # when casting the returned value. So we probably just use "Any"...
         ...
 
-    def update(self, paris: Union[Dict, Mapping, Iterable] = (), /, **kwargs: Any) -> None:
+    def update(
+        self,
+        paris: Union[Dict[str, Any], Mapping[str, Any], Iterable[Tuple[str, Any]], HasKeysMethod] = tuple(),
+        /,
+        **kwargs: Any,
+    ) -> None:
         """
         Update the settings from pairs, which may be any of the following:
 
@@ -2508,10 +2518,10 @@ class Phantom:
     - `LAYOUT_BELOW`: Display the phantom in space below the current line,
                     left-aligned with the region.
     - `LAYOUT_BLOCK`: Display the phantom in space below the current line,
-    left-aligned with the beginning of the line.
+       left-aligned with the beginning of the line.
 
     * `on_navigate` is an optional callback that should accept a single string
-    parameter, that is the `href` attribute of the link clicked.
+       parameter, that is the `href` attribute of the link clicked.
     """
 
     region: Region
@@ -2575,7 +2585,7 @@ class PhantomSet:
 
     def update(self, new_phantoms: Sequence[Phantom]) -> None:
         """
-        phantoms should be a list of phantoms.
+        phantoms should be a sequence of phantoms.
 
         The `region` attribute of each existing phantom in the set will be updated.
         New phantoms will be added to the view and phantoms not in phantoms list will be deleted.
@@ -2605,7 +2615,7 @@ class CompletionList:
     completions: List[Completion]
     flags: int
 
-    def __init__(self, completions: Sequence[Completion] = None, flags: int = 0) -> None:
+    def __init__(self, completions: Optional[Sequence[Completion]] = None, flags: int = 0) -> None:
         """
         ---
 
@@ -2713,7 +2723,7 @@ class CompletionItem:
         cls,
         trigger: str,
         command: str,
-        args: Dict = {},
+        args: Dict[str, Any] = {},
         annotation: str = "",
         kind: CompletionKind = KIND_AMBIGUOUS,
         details: str = "",

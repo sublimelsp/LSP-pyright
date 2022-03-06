@@ -1,10 +1,16 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
 
+from __future__ import annotations
+
+# __future__ must be the first import
 from typing import (
     Any,
     Callable,
     Dict,
+    Iterable,
     List,
+    Optional,
+    Protocol,
     Sequence,
     Tuple,
     TypedDict,
@@ -19,7 +25,10 @@ import sublime
 
 T = TypeVar("T")
 AnyCallable = TypeVar("AnyCallable", bound=Callable[..., Any])
-ExpandableVar = TypeVar("ExpandableVar", bound=Union[None, bool, int, float, str, Dict, List, Tuple])
+ExpandableVar = TypeVar(
+    "ExpandableVar",
+    bound=Union[None, bool, int, float, str, Dict[Any, Any], List[Any], Tuple[Any, ...]],
+)
 
 Callback0 = Callable[[], Any]
 Callback1 = Callable[[T], Any]
@@ -50,3 +59,58 @@ class Layout(TypedDict):
     cols: List[float]
     rows: List[float]
     cells: List[List[int]]
+
+
+class EventDict(TypedDict):
+    x: float
+    y: float
+    modifier_keys: EventModifierKeysDict
+
+
+class EventModifierKeysDict(TypedDict, total=False):
+    primary: bool
+    ctrl: bool
+    alt: bool
+    altgr: bool
+    shift: bool
+    super: bool
+
+
+class ExtractVariablesDict(TypedDict):
+    file: str
+    file_base_name: str
+    file_extension: str
+    file_name: str
+    file_path: str
+    folder: str
+    packages: str
+    platform: str
+    project: str
+    project_base_name: str
+    project_extension: str
+    project_name: str
+    project_path: str
+
+
+class ScopeStyleDict(TypedDict, total=False):
+    foreground: str
+    background: str
+    bold: bool
+    italic: bool
+    glow: bool
+    underline: bool
+    stippled_underline: bool
+    squiggly_underline: bool
+    source_line: int
+    source_column: int
+    source_file: str
+
+
+class CommandArgsDict(TypedDict):
+    command: str
+    args: Optional[Dict[str, Any]]
+
+
+class HasKeysMethod(Protocol):
+    def keys(self) -> Iterable[str]:
+        ...

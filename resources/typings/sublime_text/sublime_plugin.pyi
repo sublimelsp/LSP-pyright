@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 # __future__ must be the first import
-from _sublime_typing import AnyCallable, Completion, CompletionNormalized, Point
+from _sublime_typing import AnyCallable, Completion, CompletionNormalized, EventDict, Point
 from importlib.machinery import ModuleSpec
 from types import ModuleType
 from typing import (
@@ -34,8 +34,10 @@ import threading
 # types #
 # ----- #
 
-InputType = TypeVar("InputType")
-ListItem = Union[str, Tuple[str, InputType]]
+InputType = TypeVar(
+    "InputType",
+    bound=Union[str, int, float, Dict[Any, Any], List[Any], Tuple[Any, ...], None],
+)
 
 # -------- #
 # ST codes #
@@ -517,19 +519,23 @@ def on_hover(view_id: int, point: Point, hover_zone: int) -> None:
     ...
 
 
-def on_text_command(view_id: int, name: str, args: Optional[Dict]) -> Tuple[str, Optional[Dict]]:
+def on_text_command(view_id: int, name: str, args: Optional[Dict[str, Any]]) -> Tuple[str, Optional[Dict[str, Any]]]:
     ...
 
 
-def on_window_command(window_id: int, name: str, args: Optional[Dict]) -> Tuple[str, Optional[Dict]]:
+def on_window_command(
+    window_id: int,
+    name: str,
+    args: Optional[Dict[str, Any]],
+) -> Tuple[str, Optional[Dict[str, Any]]]:
     ...
 
 
-def on_post_text_command(view_id: int, name: str, args: Optional[Dict]) -> None:
+def on_post_text_command(view_id: int, name: str, args: Optional[Dict[str, Any]]) -> None:
     ...
 
 
-def on_post_window_command(window_id: int, name: str, args: Optional[Dict]) -> None:
+def on_post_window_command(window_id: int, name: str, args: Optional[Dict[str, Any]]) -> None:
     ...
 
 
@@ -589,7 +595,7 @@ class CommandInputHandler(Generic[InputType]):
         """
         ...
 
-    def next_input(self, args: Dict) -> Optional[CommandInputHandler]:
+    def next_input(self, args: Dict[str, Any]) -> Optional[CommandInputHandler[InputType]]:
         """
         Returns the next input after the user has completed this one.
         May return None to indicate no more input is required,
@@ -609,7 +615,7 @@ class CommandInputHandler(Generic[InputType]):
         """Initial text shown in the text entry box. Empty by default."""
         ...
 
-    def initial_selection(self) -> List[Tuple[List[ListItem], int]]:
+    def initial_selection(self) -> List[Tuple[List[Union[str, Tuple[str, InputType], sublime.ListInputItem]], int]]:
         """A list of 2-element tuplues, defining the initially selected parts of the initial text."""
         ...
 
@@ -637,11 +643,11 @@ class CommandInputHandler(Generic[InputType]):
         ...
 
     @overload
-    def confirm(self, arg: InputType, event: Dict) -> None:
+    def confirm(self, arg: InputType, event: EventDict) -> None:
         """Called when the input is accepted, after the user has pressed enter and the text has been validated."""
         ...
 
-    def create_input_handler_(self, args: Dict) -> Optional[CommandInputHandler]:
+    def create_input_handler_(self, args: Dict[str, Any]) -> Optional[CommandInputHandler[InputType]]:
         ...
 
     def preview_(self, v: str) -> Tuple[str, int]:
@@ -679,7 +685,7 @@ class TextInputHandler(CommandInputHandler[str]):
         """
         ...
 
-    def setup_(self, args: Dict) -> Tuple[list, Dict[str, str]]:
+    def setup_(self, args: Dict[Any, Any]) -> Tuple[List[Any], Dict[str, str]]:
         ...
 
     def description_(self, v: str, text: str) -> str:
@@ -692,7 +698,12 @@ class ListInputHandler(CommandInputHandler[InputType], Generic[InputType]):
     Return a subclass of this from the input() method of a command.
     """
 
-    def list_items(self) -> Union[List[ListItem], Tuple[List[ListItem], int]]:
+    def list_items(
+        self,
+    ) -> Union[
+        List[Union[str, Tuple[str, InputType], sublime.ListInputItem]],
+        Tuple[List[Union[str, Tuple[str, InputType], sublime.ListInputItem]], int],
+    ]:
         """
         The items to show in the list. If returning a list of `(str, value)` tuples,
         then the str will be shown to the user, while the value will be used as the command argument.
@@ -708,7 +719,7 @@ class ListInputHandler(CommandInputHandler[InputType], Generic[InputType]):
         """
         ...
 
-    def setup_(self, args: Dict) -> Tuple[List[Tuple], Dict[str, str]]:
+    def setup_(self, args: Dict[Any, Any]) -> Tuple[List[Tuple[Any, ...]], Dict[str, str]]:
         ...
 
     def description_(self, v: str, text: str) -> str:
@@ -723,7 +734,7 @@ class Command:
         """
         ...
 
-    def is_enabled_(self, args: Dict) -> bool:
+    def is_enabled_(self, args: Dict[str, Any]) -> bool:
         ...
 
     def is_enabled(self) -> bool:
@@ -733,7 +744,7 @@ class Command:
         """
         ...
 
-    def is_visible_(self, args: Dict) -> bool:
+    def is_visible_(self, args: Dict[str, Any]) -> bool:
         ...
 
     def is_visible(self) -> bool:
@@ -743,7 +754,7 @@ class Command:
         """
         ...
 
-    def is_checked_(self, args: Dict) -> bool:
+    def is_checked_(self, args: Dict[str, Any]) -> bool:
         ...
 
     def is_checked(self) -> bool:
@@ -753,7 +764,7 @@ class Command:
         """
         ...
 
-    def description_(self, args: Dict) -> str:
+    def description_(self, args: Dict[str, Any]) -> str:
         ...
 
     def description(self) -> str:
@@ -764,7 +775,7 @@ class Command:
         """
         ...
 
-    def filter_args(self, args: Dict) -> Dict:
+    def filter_args(self, args: Dict[str, Any]) -> Dict[str, Any]:
         """Returns the args after without the "event" entry"""
         ...
 
@@ -776,9 +787,9 @@ class Command:
         """
         ...
 
-    def input(self, args: Dict) -> Optional[CommandInputHandler]:
+    def input(self, args: Dict[str, Any]) -> Optional[CommandInputHandler[Any]]:
         """
-        If this returns something other than None,
+        If this returns something other than `None`,
         the user will be prompted for an input before the command is run in the Command Palette.
         """
         ...
@@ -790,14 +801,14 @@ class Command:
         """
         ...
 
-    def create_input_handler_(self, args: Dict) -> Optional[CommandInputHandler]:
+    def create_input_handler_(self, args: Dict[str, Any]) -> Optional[CommandInputHandler[Any]]:
         ...
 
 
 class ApplicationCommand(Command):
     """ApplicationCommands are instantiated once per application."""
 
-    def run_(self, edit_token: int, args: Dict) -> None:
+    def run_(self, edit_token: int, args: Dict[str, Any]) -> None:
         ...
 
     run: Callable[..., None]
@@ -811,7 +822,7 @@ class WindowCommand(Command):
     def __init__(self, window: sublime.Window) -> None:
         ...
 
-    def run_(self, edit_token: int, args: Dict) -> None:
+    def run_(self, edit_token: int, args: Dict[str, Any]) -> None:
         ...
 
     run: Callable[..., None]
@@ -825,7 +836,7 @@ class TextCommand(Command):
     def __init__(self, view: sublime.View) -> None:
         ...
 
-    def run_(self, edit_token: int, args: Dict) -> None:
+    def run_(self, edit_token: int, args: Dict[str, Any]) -> None:
         ...
 
     run: Callable[..., None]
