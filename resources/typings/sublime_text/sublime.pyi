@@ -7,17 +7,14 @@ from __future__ import annotations
 from _sublime_typing import (
     Callback0,
     Callback1,
-    CommandArgsDict,
     Completion,
     CompletionKind,
     Dip,
     ExpandableVar,
-    ExtractVariablesDict,
     HasKeysMethod,
     Layout,
     Location,
     Point,
-    ScopeStyleDict,
     Str,
     Vector,
 )
@@ -35,7 +32,6 @@ from typing import (
     Sequence,
     Tuple,
     Union,
-    overload,
 )
 
 # -------- #
@@ -602,7 +598,7 @@ def windows() -> List[Window]:
     ...
 
 
-def get_macro() -> List[CommandArgsDict]:
+def get_macro() -> List[Dict[str, Any]]:
     """
     Returns a list of the commands and args that compromise the currently recorded macro.
     Each dict will contain the keys "command" and "args".
@@ -1103,7 +1099,7 @@ class Window:
         """
         ...
 
-    def extract_variables(self) -> ExtractVariablesDict:
+    def extract_variables(self) -> Dict[str, str]:
         """
         Returns a dictionary of strings populated with contextual keys:
         `packages`, `platform`, `file`, `file_path`, `file_name`, `file_base_name`,
@@ -1814,7 +1810,7 @@ class View:
         """
         ...
 
-    def style_for_scope(self, scope: str) -> ScopeStyleDict:
+    def style_for_scope(self, scope: str) -> Dict[str, Any]:
         """
         Accepts a string scope name and returns a `dict` of style information, includes the keys:
 
@@ -2459,7 +2455,7 @@ class Settings:
 
     def update(
         self,
-        paris: Union[Dict[str, Any], Mapping[str, Any], Iterable[Tuple[str, Any]], HasKeysMethod] = tuple(),
+        pairs: Union[Dict[str, Any], Mapping[str, Any], Iterable[Tuple[str, Any]], HasKeysMethod] = tuple(),
         /,
         **kwargs: Any,
     ) -> None:
