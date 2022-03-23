@@ -1,5 +1,5 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-# ST version: 4127
+# ST version: 4130
 
 from __future__ import annotations
 
@@ -7,14 +7,17 @@ from __future__ import annotations
 from _sublime_typing import (
     Callback0,
     Callback1,
+    CommandArgsDict,
     Completion,
     CompletionKind,
     Dip,
     ExpandableVar,
+    ExtractVariablesDict,
     HasKeysMethod,
     Layout,
     Location,
     Point,
+    ScopeStyleDict,
     Str,
     Vector,
 )
@@ -598,7 +601,7 @@ def windows() -> List[Window]:
     ...
 
 
-def get_macro() -> List[Dict[str, Any]]:
+def get_macro() -> List[CommandArgsDict]:
     """
     Returns a list of the commands and args that compromise the currently recorded macro.
     Each dict will contain the keys "command" and "args".
@@ -1099,7 +1102,7 @@ class Window:
         """
         ...
 
-    def extract_variables(self) -> Dict[str, str]:
+    def extract_variables(self) -> ExtractVariablesDict:
         """
         Returns a dictionary of strings populated with contextual keys:
         `packages`, `platform`, `file`, `file_path`, `file_name`, `file_base_name`,
@@ -1753,7 +1756,7 @@ class View:
 
         The returned value is like
         ```python
-        [(Region(0, 6), 'source.python meta.statement...')]
+        [(Region(0, 6), 'source.python meta.statement...'), ...]
         ```
         """
         ...
@@ -1762,6 +1765,14 @@ class View:
         """
         Returns the extent of the syntax scope name assigned to the
         character at the given point.
+        """
+        ...
+
+    def expand_to_scope(self, pt: Point, selector: str) -> Region:
+        """
+        Expand the point to a region by the selector.
+
+        @version ST(>=4130)
         """
         ...
 
@@ -1810,7 +1821,7 @@ class View:
         """
         ...
 
-    def style_for_scope(self, scope: str) -> Dict[str, Any]:
+    def style_for_scope(self, scope: str) -> ScopeStyleDict:
         """
         Accepts a string scope name and returns a `dict` of style information, includes the keys:
 
@@ -1894,22 +1905,39 @@ class View:
         """
         ...
 
-    def find_by_class(self, pt: Point, forward: bool, classes: int, separators: str = "") -> Point:
+    def find_by_class(
+        self,
+        pt: Point,
+        forward: bool,
+        classes: int,
+        separators: str = "",
+        sub_word_separators: str = "",
+    ) -> Point:
         """
         Finds the next location after point that matches the given classes
         If forward is `False`, searches backwards instead of forwards.
         classes is a bitwise OR of the `CLASS_XXX` flags
         `separators` may be passed in, to define what characters should be
         considered to separate words.
+
+        - `sub_word_separators` requires ST >= 4130
         """
         ...
 
-    def expand_by_class(self, x: Union[Region, Point], classes: int, separators: str = "") -> Region:
+    def expand_by_class(
+        self,
+        x: Union[Region, Point],
+        classes: int,
+        separators: str = "",
+        sub_word_separators: str = "",
+    ) -> Region:
         """
         Expands `x` to the left and right, until each side lands on a location
         that matches `classes`. classes is a bitwise OR of the
         `CLASS_XXX` flags. `separators` may be passed in, to define
         what characters should be considered to separate words.
+
+        - `sub_word_separators` requires ST >= 4130
         """
         ...
 
