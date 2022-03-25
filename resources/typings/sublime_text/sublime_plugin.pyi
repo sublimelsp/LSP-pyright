@@ -1,5 +1,5 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-# ST version: 4130
+# ST version: 4131
 
 from __future__ import annotations
 

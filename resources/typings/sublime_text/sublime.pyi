@@ -1,5 +1,5 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-# ST version: 4130
+# ST version: 4131
 
 from __future__ import annotations
 
@@ -1768,7 +1768,7 @@ class View:
         """
         ...
 
-    def expand_to_scope(self, pt: Point, selector: str) -> Region:
+    def expand_to_scope(self, pt: Point, selector: str) -> Optional[Region]:
         """
         Expand the point to a region by the selector.
 
