@@ -1,4 +1,4 @@
-from LSP.plugin import DottedDict, MarkdownLangMap
+from LSP.plugin import DottedDict
 from LSP.plugin.core.typing import Any, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
@@ -6,6 +6,10 @@ import os
 import re
 import sublime
 import sys
+
+
+if int(sublime.version()) >= 4070:
+    from LSP.plugin import MarkdownLangMap
 
 
 def plugin_loaded() -> None:
@@ -51,7 +55,7 @@ class LspPyrightPlugin(NpmClientHandler):
         ResourcePath(src).copytree(dest, exist_ok=True)
 
     @classmethod
-    def markdown_language_id_to_st_syntax_map(cls) -> Optional[MarkdownLangMap]:
+    def markdown_language_id_to_st_syntax_map(cls) -> Optional["MarkdownLangMap"]:
         return {"python": (("python", "py"), ("LSP-pyright/syntaxes/pyright",))}
 
     # -------------- #
