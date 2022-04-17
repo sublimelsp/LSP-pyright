@@ -17,6 +17,7 @@ from typing import (
     Iterator,
     List,
     Optional,
+    Type,
     overload,
     Sequence,
     Set,
@@ -45,18 +46,18 @@ InputType = TypeVar(
 
 api_ready: bool = False
 
-deferred_plugin_loadeds: List[str] = []
+deferred_plugin_loadeds: List[Callable[[], None]] = []
 
-application_command_classes: List[str] = []
-window_command_classes: List[str] = []
-text_command_classes: List[str] = []
+application_command_classes: List[Type] = []
+window_command_classes: List[Type] = []
+text_command_classes: List[Type] = []
 
-view_event_listener_classes: List[str] = []
-view_event_listeners: Dict[int, List[type]] = {}
+view_event_listener_classes: List[Type] = []
+view_event_listeners: Dict[int, List[ViewEventListener]] = {}
 
-all_command_classes: List[List[str]] = [application_command_classes, window_command_classes, text_command_classes]
+all_command_classes: List[List[Type]] = [application_command_classes, window_command_classes, text_command_classes]
 
-all_callbacks: Dict[str, List[Union[type, str]]] = {
+all_callbacks: Dict[str, List[object]] = {
     "on_init": [],
     "on_new": [],
     "on_clone": [],
@@ -110,9 +111,9 @@ all_callbacks: Dict[str, List[Union[type, str]]] = {
     "on_exit": [],
 }
 
-pending_on_activated_async_lock = threading.Lock()
+pending_on_activated_async_lock: threading.Lock = threading.Lock()
 
-pending_on_activated_async_callbacks: Dict[str, List[str]] = {"EventListener": [], "ViewEventListener": []}
+pending_on_activated_async_callbacks: Dict[str, List[Type]] = {"EventListener": [], "ViewEventListener": []}
 
 view_event_listener_excluded_callbacks: Set[str] = {
     "on_clone",
@@ -142,7 +143,7 @@ view_event_listener_excluded_callbacks: Set[str] = {
     "on_window_command",
 }
 
-text_change_listener_classes: List[str] = []
+text_change_listener_classes: List[Type] = []
 text_change_listener_callbacks: Set[str] = {
     "on_text_changed",
     "on_text_changed_async",
@@ -151,7 +152,7 @@ text_change_listener_callbacks: Set[str] = {
     "on_reload",
     "on_reload_async",
 }
-text_change_listeners: Dict[int, List[type]] = {}
+text_change_listeners: Dict[int, List[TextChangeListener]] = {}
 
 profile: Dict[str, Dict[str, Any]] = {}
 
@@ -183,7 +184,7 @@ def trap_exceptions(event_handler: AnyCallable) -> AnyCallable:
     ...
 
 
-def decorate_handler(cls: Any, method_name: str) -> None:
+def decorate_handler(cls: Type, method_name: str) -> None:
     """
     Decorates an event handler method with exception trapping, and in the case
     of blocking calls, profiling.
@@ -217,7 +218,7 @@ def synthesize_on_activated_async() -> None:
     ...
 
 
-def _instantiation_error(cls: Any, e: Exception) -> None:
+def _instantiation_error(cls: Type, e: Exception) -> None:
     ...
 
 
@@ -225,15 +226,15 @@ def notify_application_commands() -> None:
     ...
 
 
-def create_application_commands() -> List[Tuple[object, str]]:
+def create_application_commands() -> List[Tuple[ApplicationCommand, str]]:
     ...
 
 
-def create_window_commands(window_id: int) -> List[Tuple[object, str]]:
+def create_window_commands(window_id: int) -> List[Tuple[WindowCommand, str]]:
     ...
 
 
-def create_text_commands(view_id: int) -> List[Tuple[object, str]]:
+def create_text_commands(view_id: int) -> List[Tuple[TextCommand, str]]:
     ...
 
 
@@ -241,11 +242,11 @@ def on_api_ready() -> None:
     ...
 
 
-def is_view_event_listener_applicable(cls: Any, view: sublime.View) -> bool:
+def is_view_event_listener_applicable(cls: Type[ViewEventListener], view: sublime.View) -> bool:
     ...
 
 
-def create_view_event_listeners(classes: Iterable[object], view: sublime.View) -> None:
+def create_view_event_listeners(classes: Iterable[Type[ViewEventListener]], view: sublime.View) -> None:
     ...
 
 
@@ -268,7 +269,8 @@ def detach_view(view: sublime.View) -> None:
     ...
 
 
-def find_view_event_listener(view: sublime.View, cls: str) -> Optional[object]:
+def find_view_event_listener(view: sublime.View, cls: Type) -> Optional[ViewEventListener]:
+    """Find the view event listener object, whose class is `cls`, for the `view`."""
     ...
 
 
@@ -288,7 +290,7 @@ def plugin_module_for_obj(obj: object) -> str:
     ...
 
 
-def el_callbacks(name: str, listener_only: bool = False) -> Generator[Union[type, str], None, None]:
+def el_callbacks(name: str, listener_only: bool = False) -> Generator[Union[Type, str], None, None]:
     ...
 
 
@@ -296,7 +298,7 @@ def vel_callbacks(
     v: sublime.View,
     name: str,
     listener_only: bool = False,
-) -> Generator[Union[type, str], None, None]:
+) -> Generator[Union[Type, str], None, None]:
     ...
 
 
