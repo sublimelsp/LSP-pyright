@@ -1,6 +1,6 @@
 {
   "private": true,
   "dependencies": {
-    "pyright": "^1.1.238"
+    "pyright": "^1.1.239"
   }
 }
