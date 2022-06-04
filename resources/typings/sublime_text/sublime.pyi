@@ -11,31 +11,15 @@ from _sublime_typing import (
     Completion,
     CompletionKind,
     Dip,
-    ExpandableVar,
-    ExtractVariablesDict,
     HasKeysMethod,
     Layout,
     Location,
     Point,
-    ScopeStyleDict,
     Str,
+    T_ExpandableVar,
     Vector,
 )
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Iterable,
-    Iterator,
-    List,
-    Literal,
-    Mapping,
-    Optional,
-    Reversible,
-    Sequence,
-    Tuple,
-    Union,
-)
+from typing import Any, Callable, Dict, Iterable, Iterator, List, Literal, Mapping, Reversible, Sequence, Tuple
 
 # -------- #
 # ST codes #
@@ -263,9 +247,9 @@ def yes_no_cancel_dialog(msg: str, yes_title: str = "", no_title: str = "", titl
 
 
 def open_dialog(
-    callback: Callable[[Optional[Union[str, Sequence[str]]]], None],
+    callback: Callable[[None | str | Sequence[str]], None],
     file_types: Sequence[Tuple[str, Sequence[str]]] = [],
-    directory: Optional[str] = None,
+    directory: None | str = None,
     multi_select: bool = False,
     allow_folders: bool = False,
 ) -> None:
@@ -289,11 +273,11 @@ def open_dialog(
 
 
 def save_dialog(
-    callback: Callable[[Optional[str]], None],
+    callback: Callable[[None | str], None],
     file_types: Sequence[Tuple[str, Sequence[str]]] = [],
-    directory: Optional[str] = None,
-    name: Optional[str] = None,
-    extension: Optional[str] = None,
+    directory: None | str = None,
+    name: None | str = None,
+    extension: None | str = None,
 ) -> None:
     """
     Presents the user with file dialog for the purpose of saving a file,
@@ -313,8 +297,8 @@ def save_dialog(
 
 
 def select_folder_dialog(
-    callback: Callable[[Optional[Union[str, Sequence[str]]]], None],
-    directory: Optional[str] = None,
+    callback: Callable[[None | str | Sequence[str]], None],
+    directory: None | str = None,
     multi_select: bool = False,
 ) -> None:
     """
@@ -333,12 +317,12 @@ def select_folder_dialog(
     ...
 
 
-def run_command(cmd: str, args: Optional[Dict[str, Any]] = None) -> None:
+def run_command(cmd: str, args: None | Dict[str, Any] = None) -> None:
     """Runs the named `ApplicationCommand` with the (optional) given `args`."""
     ...
 
 
-def format_command(cmd: str, args: Optional[Dict[str, Any]] = None) -> str:
+def format_command(cmd: str, args: None | Dict[str, Any] = None) -> str:
     """
     Creates a "command string" from a str cmd name, and an optional dict of args.
     This is used when constructing a command-based `CompletionItem`.
@@ -348,11 +332,11 @@ def format_command(cmd: str, args: Optional[Dict[str, Any]] = None) -> str:
     ...
 
 
-def html_format_command(cmd: str, args: Optional[Dict[str, Any]] = None) -> str:
+def html_format_command(cmd: str, args: None | Dict[str, Any] = None) -> str:
     ...
 
 
-def command_url(cmd: str, args: Optional[Dict[str, Any]] = None) -> str:
+def command_url(cmd: str, args: None | Dict[str, Any] = None) -> str:
     """
     Creates a `subl:` protocol URL for executing a command in a minihtml link.
 
@@ -386,7 +370,7 @@ def set_clipboard(text: str) -> None:
     ...
 
 
-def log_commands(flag: Optional[bool] = None) -> None:
+def log_commands(flag: None | bool = None) -> None:
     """
     Controls command logging. If enabled, all commands run from key bindings
     and the menu will be logged to the console.
@@ -403,7 +387,7 @@ def get_log_commands() -> bool:
     ...
 
 
-def log_input(flag: Optional[bool] = None) -> None:
+def log_input(flag: None | bool = None) -> None:
     """
     Enables or disables input logging.
     This is useful to find the names of certain keys on the keyboard.
@@ -420,7 +404,7 @@ def get_log_input() -> bool:
     ...
 
 
-def log_fps(flag: Optional[bool] = None) -> None:
+def log_fps(flag: None | bool = None) -> None:
     """
     Enables or disables fps logging.
     """
@@ -436,7 +420,7 @@ def get_log_fps() -> bool:
     ...
 
 
-def log_result_regex(flag: Optional[bool] = None) -> None:
+def log_result_regex(flag: None | bool = None) -> None:
     """
     Enables or disables result regex logging.
     This is useful when trying to debug `file_regex` and `line_regex` in build systems.
@@ -453,7 +437,7 @@ def get_log_result_regex() -> bool:
     ...
 
 
-def log_indexing(flag: Optional[bool] = None) -> None:
+def log_indexing(flag: None | bool = None) -> None:
     ...
 
 
@@ -466,7 +450,7 @@ def get_log_indexing() -> bool:
     ...
 
 
-def log_build_systems(flag: Optional[bool] = None) -> None:
+def log_build_systems(flag: None | bool = None) -> None:
     ...
 
 
@@ -479,7 +463,7 @@ def get_log_build_systems() -> bool:
     ...
 
 
-def log_control_tree(flag: Optional[bool] = None) -> None:
+def log_control_tree(flag: None | bool = None) -> None:
     """
     When enabled, clicking with `Ctrl`+`Alt` will log the control tree under the mouse to the console.
 
@@ -544,7 +528,7 @@ def decode_value(data: str) -> Any:
     ...
 
 
-def expand_variables(val: ExpandableVar, variables: Dict[str, str]) -> ExpandableVar:
+def expand_variables(val: T_ExpandableVar, variables: Dict[str, str]) -> T_ExpandableVar:
     """
     Expands any variables in the string `value` using the variables defined in the dictionary
     `variables` `value` may also be a `list` or `dict`, in which case the structure will be
@@ -613,8 +597,8 @@ class Window:
     """This class represents windows and provides an interface of methods to interact with them."""
 
     window_id: int
-    settings_object: Optional[Settings]
-    template_settings_object: Optional[Settings]
+    settings_object: None | Settings
+    template_settings_object: None | Settings
 
     def __init__(self, id: int) -> None:
         ...
@@ -646,11 +630,11 @@ class Window:
         """Platform specific window handle, only returns a meaningful result under Windows OS."""
         ...
 
-    def active_sheet(self) -> Optional[Sheet]:
+    def active_sheet(self) -> None | Sheet:
         """Returns the currently focused sheet."""
         ...
 
-    def active_view(self) -> Optional[View]:
+    def active_view(self) -> None | View:
         """Returns the currently edited view."""
         ...
 
@@ -673,7 +657,7 @@ class Window:
         """
         ...
 
-    def run_command(self, cmd: str, args: Optional[Dict[str, Any]] = ...) -> None:
+    def run_command(self, cmd: str, args: None | Dict[str, Any] = ...) -> None:
         """
         Runs the named `WindowCommand` with the (optional) given `args`.
         This method is able to run any sort of command, dispatching the
@@ -714,7 +698,7 @@ class Window:
         """
         ...
 
-    def find_open_file(self, fname: str) -> Optional[View]:
+    def find_open_file(self, fname: str) -> None | View:
         """
         Finds the named file in the list of open files, and returns the
         corresponding `View`, or `None` if no such file is open.
@@ -823,11 +807,11 @@ class Window:
     def selected_sheets_in_group(self, group: int) -> List[Sheet]:
         ...
 
-    def active_sheet_in_group(self, group: int) -> Optional[Sheet]:
+    def active_sheet_in_group(self, group: int) -> None | Sheet:
         """Returns the currently focused sheet in the given `group`."""
         ...
 
-    def active_view_in_group(self, group: int) -> Optional[View]:
+    def active_view_in_group(self, group: int) -> None | View:
         """Returns the currently edited view in the given `group`."""
         ...
 
@@ -839,11 +823,11 @@ class Window:
         """Returns all open views in the given `group`."""
         ...
 
-    def transient_sheet_in_group(self, group: int) -> Optional[Sheet]:
+    def transient_sheet_in_group(self, group: int) -> None | Sheet:
         """Returns the transient `Sheet` in the given `group` if any."""
         ...
 
-    def transient_view_in_group(self, group: int) -> Optional[View]:
+    def transient_view_in_group(self, group: int) -> None | View:
         """Returns the transient `View` in the given `group` if any."""
         ...
 
@@ -872,7 +856,7 @@ class Window:
         """
         ...
 
-    def find_output_panel(self, name: str) -> Optional[View]:
+    def find_output_panel(self, name: str) -> None | View:
         """
         Returns the view associated with the named output panel, or `None` if
         the output panel does not exist.
@@ -883,7 +867,7 @@ class Window:
         """Destroys the named output panel, hiding it if currently open."""
         ...
 
-    def active_panel(self) -> Optional[str]:
+    def active_panel(self) -> None | str:
         """
         Returns the name of the currently open panel, or `None` if no panel is open.
         Will return built-in panel names (e.g. "console", "find", etc) in addition to output panels.
@@ -907,9 +891,9 @@ class Window:
         self,
         caption: str,
         initial_text: str,
-        on_done: Optional[Callback1[str]],
-        on_change: Optional[Callback1[str]],
-        on_cancel: Optional[Callback0],
+        on_done: None | Callback1[str],
+        on_change: None | Callback1[str],
+        on_cancel: None | Callback0,
     ) -> View:
         """
         Shows the input panel, to collect a line of input from the user
@@ -923,12 +907,12 @@ class Window:
 
     def show_quick_panel(
         self,
-        items: Sequence[Union[QuickPanelItem, str, Sequence[str]]],
+        items: Sequence[QuickPanelItem | str | Sequence[str]],
         on_select: Callback1[int],
         flags: int = 0,
         selected_index: int = -1,
-        on_highlight: Optional[Callback1[int]] = None,
-        placeholder: Optional[str] = None,
+        on_highlight: None | Callback1[int] = None,
+        placeholder: None | str = None,
     ) -> None:
         """
         Shows a quick panel, to select an item in a list.
@@ -996,7 +980,7 @@ class Window:
         """Returns name of the currently opened project file, if any."""
         ...
 
-    def project_data(self) -> Optional[Dict[str, Any]]:
+    def project_data(self) -> None | Dict[str, Any]:
         """
         Returns the project data associated with the current window.
         The data is in the same format as the contents of a `.sublime-project` file.
@@ -1012,7 +996,7 @@ class Window:
         """
         ...
 
-    def workspace_file_name(self) -> Optional[str]:
+    def workspace_file_name(self) -> None | str:
         """
         Returns the workspace filename of the current `Window` if possible.
 
@@ -1102,12 +1086,23 @@ class Window:
         """
         ...
 
-    def extract_variables(self) -> ExtractVariablesDict:
+    def extract_variables(self) -> Dict[str, str]:
         """
         Returns a dictionary of strings populated with contextual keys:
-        `packages`, `platform`, `file`, `file_path`, `file_name`, `file_base_name`,
-        `file_extension`, `folder`, `project`, `project_path`, `project_name`,
-        `project_base_name`, `project_extension`.
+
+        - `file_base_name`
+        - `file_extension`
+        - `file_name`
+        - `file_path`
+        - `file`
+        - `folder`
+        - `packages`
+        - `platform`
+        - `project_base_name`
+        - `project_extension`.
+        - `project_name`
+        - `project_path`
+        - `project`
 
         This dict is suitable for passing to `sublime.expand_variables()`.
         """
@@ -1143,7 +1138,7 @@ class Region:
     b: int
     xpos: int
 
-    def __init__(self, a: int, b: Optional[int] = None, xpos: int = -1) -> None:
+    def __init__(self, a: int, b: None | int = None, xpos: int = -1) -> None:
         ...
 
     def __iter__(self) -> Iterator[int]:
@@ -1164,7 +1159,7 @@ class Region:
     def __lt__(self, rhs: Region) -> bool:
         ...
 
-    def __contains__(self, v: Union[Region, Point]) -> bool:
+    def __contains__(self, v: Region | Point) -> bool:
         ...
 
     def to_tuple(self) -> Tuple[Point, Point]:
@@ -1197,7 +1192,7 @@ class Region:
         """Returns the number of characters spanned by the region."""
         ...
 
-    def contains(self, x: Union[Region, Point]) -> bool:
+    def contains(self, x: Region | Point) -> bool:
         """
         If `x` is a region, returns `True` if it's a subset.
         If `x` is a point, returns `True` if `begin() <= x <= end()`.
@@ -1307,14 +1302,14 @@ class Selection(Reversible[Region]):
         """Removes all regions."""
         ...
 
-    def add(self, x: Union[Region, Point]) -> None:
+    def add(self, x: Region | Point) -> None:
         """
         Adds the given region or point. It will be merged with any intersecting
         regions already contained within the set.
         """
         ...
 
-    def add_all(self, regions: Iterable[Union[Region, Point]]) -> None:
+    def add_all(self, regions: Iterable[Region | Point]) -> None:
         """Adds all `regions` in the given list or tuple."""
         ...
 
@@ -1359,21 +1354,21 @@ class Sheet:
         """Returns a number that uniquely identifies this sheet."""
         ...
 
-    def window(self) -> Optional[Window]:
+    def window(self) -> None | Window:
         """
         Returns the window containing the sheet.
         May be `None` if the sheet has been closed.
         """
         ...
 
-    def view(self) -> Optional[View]:
+    def view(self) -> None | View:
         """
         Returns the view contained within the sheet. May be `None` if the
         sheet is an image preview, or the view has been closed.
         """
         ...
 
-    def file_name(self) -> Optional[str]:
+    def file_name(self) -> None | str:
         """
         The full name file the file associated with the buffer,
         or None if it doesn't exist on disk.
@@ -1394,7 +1389,7 @@ class Sheet:
         """The (layout) group that the sheet is contained within."""
         ...
 
-    def close(self, on_close: Optional[Callable[[bool], None]] = lambda did_close: None) -> None:
+    def close(self, on_close: None | Callable[[bool], None] = lambda did_close: None) -> None:
         """Closes the sheet."""
         ...
 
@@ -1492,11 +1487,11 @@ class View:
         """Returns the sheet ID of this view or `0` if not part of a sheet."""
         ...
 
-    def sheet(self) -> Optional[Sheet]:
+    def sheet(self) -> None | Sheet:
         """Returns the sheet for this view, if displayed in a sheet."""
         ...
 
-    def element(self) -> Optional[str]:
+    def element(self) -> None | str:
         """
         Returns `None` for normal views, for views that comprise part of the UI,
         a `str` is returned from the following list:
@@ -1536,7 +1531,7 @@ class View:
         """
         ...
 
-    def window(self) -> Optional[Window]:
+    def window(self) -> None | Window:
         """
         Returns a reference to the window containing this view.
         May be `None` if this view has been closed.
@@ -1547,14 +1542,14 @@ class View:
         """Gets a list of all the other views with the same buffer."""
         ...
 
-    def file_name(self) -> Optional[str]:
+    def file_name(self) -> None | str:
         """
         The full name file the file associated with the buffer, or `None` if it
         doesn't exist on disk.
         """
         ...
 
-    def close(self, on_close: Optional[Callable[[bool], None]] = lambda did_close: None) -> bool:
+    def close(self, on_close: None | Callable[[bool], None] = lambda did_close: None) -> bool:
         """Closes this view."""
         ...
 
@@ -1640,7 +1635,7 @@ class View:
         """Returns the number of character in the file."""
         ...
 
-    def begin_edit(self, edit_token: int, cmd: str, args: Optional[Dict[str, Any]] = None) -> Edit:
+    def begin_edit(self, edit_token: int, cmd: str, args: None | Dict[str, Any] = None) -> Edit:
         ...
 
     def end_edit(self, edit: Edit) -> None:
@@ -1696,7 +1691,7 @@ class View:
         """
         ...
 
-    def run_command(self, cmd: str, args: Optional[Dict[str, Any]] = None) -> None:
+    def run_command(self, cmd: str, args: None | Dict[str, Any] = None) -> None:
         """Runs the named `TextCommand` with the (optional) given `args`."""
         ...
 
@@ -1704,7 +1699,7 @@ class View:
         """Returns a reference to the selection"""
         ...
 
-    def substr(self, x: Union[Region, Point]) -> str:
+    def substr(self, x: Region | Point) -> str:
         """
         Returns the content of the given region.
 
@@ -1728,8 +1723,8 @@ class View:
         self,
         pattern: str,
         flags: int = 0,
-        fmt: Optional[str] = None,
-        extractions: Optional[Sequence[str]] = None,
+        fmt: None | str = None,
+        extractions: None | Sequence[str] = None,
     ) -> List[Region]:
         """
         Returns all (non-overlapping) regions matching the regex `pattern`.
@@ -1768,7 +1763,7 @@ class View:
         """
         ...
 
-    def expand_to_scope(self, pt: Point, selector: str) -> Optional[Region]:
+    def expand_to_scope(self, pt: Point, selector: str) -> None | Region:
         """
         Expand the point to a region by the selector.
 
@@ -1821,7 +1816,7 @@ class View:
         """
         ...
 
-    def style_for_scope(self, scope: str) -> ScopeStyleDict:
+    def style_for_scope(self, scope: str) -> Dict[str, str]:
         """
         Accepts a string scope name and returns a `dict` of style information, includes the keys:
 
@@ -1865,7 +1860,7 @@ class View:
         """Splits the region up such that each region returned exists on exactly one line."""
         ...
 
-    def line(self, x: Union[Region, Point]) -> Region:
+    def line(self, x: Region | Point) -> Region:
         """
         If `x` is a region, returns a modified copy of region such that it
         starts at the beginning of a line, and ends at the end of a line
@@ -1875,11 +1870,11 @@ class View:
         """
         ...
 
-    def full_line(self, x: Union[Region, Point]) -> Region:
+    def full_line(self, x: Region | Point) -> Region:
         """As `line()`, but the region includes the trailing newline character, if any."""
         ...
 
-    def word(self, x: Union[Region, Point]) -> Region:
+    def word(self, x: Region | Point) -> Region:
         """
         If `x` is a region, returns a modified copy of it such that it
         starts at the beginning of a word, and ends at the end of a word.
@@ -1926,7 +1921,7 @@ class View:
 
     def expand_by_class(
         self,
-        x: Union[Region, Point],
+        x: Region | Point,
         classes: int,
         separators: str = "",
         sub_word_separators: str = "",
@@ -2001,7 +1996,7 @@ class View:
 
     def show(
         self,
-        x: Union[Selection, Region, Point],
+        x: Selection | Region | Point,
         show_surrounds: bool = True,
         keep_to_left: bool = False,
         animate: bool = True,
@@ -2017,7 +2012,7 @@ class View:
         """
         ...
 
-    def show_at_center(self, x: Union[Region, Point], animate: bool = True) -> None:
+    def show_at_center(self, x: Region | Point, animate: bool = True) -> None:
         """
         Scrolls this view to center on x, which may be a Region or point.
 
@@ -2083,11 +2078,11 @@ class View:
         """Gets folded regions in this view."""
         ...
 
-    def fold(self, x: Union[Region, Sequence[Region]]) -> bool:
+    def fold(self, x: Region | Sequence[Region]) -> bool:
         """Folds the given regions, returning False if they were already folded."""
         ...
 
-    def unfold(self, x: Union[Region, Sequence[Region]]) -> List[Region]:
+    def unfold(self, x: Region | Sequence[Region]) -> List[Region]:
         """Unfolds all text in the region, returning the unfolded regions."""
         ...
 
@@ -2100,8 +2095,8 @@ class View:
         flags: int = 0,
         annotations: Sequence[str] = [],
         annotation_color: str = "",
-        on_navigate: Optional[Callback1[str]] = None,
-        on_close: Optional[Callback0] = None,
+        on_navigate: None | Callback1[str] = None,
+        on_close: None | Callback0 = None,
     ) -> None:
         """
         Add a set of `regions` to this view. If a set of regions already exists
@@ -2158,7 +2153,7 @@ class View:
         region: Region,
         content: str,
         layout: int,
-        on_navigate: Optional[Callback1[str]] = None,
+        on_navigate: None | Callback1[str] = None,
     ) -> int:
         ...
 
@@ -2176,7 +2171,7 @@ class View:
     def query_phantoms(self, pids: Sequence[int]) -> List[Tuple[int, int]]:
         ...
 
-    def assign_syntax(self, syntax: Union[str, Syntax]) -> None:
+    def assign_syntax(self, syntax: str | Syntax) -> None:
         """
         Sets the syntax for this view.
 
@@ -2190,13 +2185,13 @@ class View:
         """
         ...
 
-    def set_syntax_file(self, syntax: Union[str, Syntax]) -> None:
+    def set_syntax_file(self, syntax: str | Syntax) -> None:
         """
         @deprecated Use `assign_syntax()` when possible.
         """
         ...
 
-    def syntax(self) -> Optional[Syntax]:
+    def syntax(self) -> None | Syntax:
         """Get the syntax used by this view. May be `None`."""
         ...
 
@@ -2264,7 +2259,7 @@ class View:
         self,
         delta: int,
         modifying_only: bool = False,
-    ) -> Tuple[Optional[str], Optional[Dict[str, Any]], int]:
+    ) -> Tuple[None | str, None | Dict[str, Any], int]:
         """
         Returns the command name, command arguments, and repeat count for the
         given history entry, as stored in the undo / redo stack.
@@ -2307,8 +2302,8 @@ class View:
         location: int = -1,
         max_width: int = 320,
         max_height: int = 240,
-        on_navigate: Optional[Callback1[str]] = None,
-        on_hide: Optional[Callback0] = None,
+        on_navigate: None | Callback1[str] = None,
+        on_hide: None | Callback0 = None,
     ) -> None:
         """
         Shows a popup displaying HTML content.
@@ -2364,7 +2359,7 @@ class View:
 
     def export_to_html(
         self,
-        regions: Optional[Union[Region, Sequence[Region]]] = None,
+        regions: None | Region | Sequence[Region] = None,
         minihtml: bool = False,
         enclosing_tags: bool = False,
         font_size: bool = True,
@@ -2426,7 +2421,7 @@ class Buffer:
         """Gets the ID of this buffer"""
         ...
 
-    def file_name(self) -> Optional[str]:
+    def file_name(self) -> None | str:
         """Gets the file name of this buffer if any, `None` otherwise"""
         ...
 
@@ -2483,7 +2478,7 @@ class Settings:
 
     def update(
         self,
-        pairs: Union[Dict[str, Any], Mapping[str, Any], Iterable[Tuple[str, Any]], HasKeysMethod] = tuple(),
+        pairs: Dict[str, Any] | Mapping[str, Any] | Iterable[Tuple[str, Any]] | HasKeysMethod = tuple(),
         /,
         **kwargs: Any,
     ) -> None:
@@ -2500,7 +2495,7 @@ class Settings:
         """
         ...
 
-    def get(self, key: str, default: Optional[Any] = None) -> Any:
+    def get(self, key: str, default: None | Any = None) -> Any:
         """
         Returns the named setting, or `default` if it's not defined.
         If not passed, `default` will have a value of `None`.
@@ -2551,7 +2546,7 @@ class Phantom:
     region: Region
     content: str
     layout: int
-    on_navigate: Optional[Callback1[str]]
+    on_navigate: None | Callback1[str]
     id: int
 
     def __init__(
@@ -2559,7 +2554,7 @@ class Phantom:
         region: Region,
         content: str,
         layout: int,
-        on_navigate: Optional[Callback1[str]] = None,
+        on_navigate: None | Callback1[str] = None,
     ) -> None:
         ...
 
@@ -2569,7 +2564,7 @@ class Phantom:
     def __repr__(self) -> str:
         ...
 
-    def to_tuple(self) -> Tuple[Tuple[int, int], str, int, Optional[Callback1[str]]]:
+    def to_tuple(self) -> Tuple[Tuple[int, int], str, int, None | Callback1[str]]:
         """
         Returns a 4-element tuple of:
 
@@ -2635,11 +2630,11 @@ class CompletionList:
     @version ST(>=4050)
     """
 
-    target: Optional[Any]
+    target: None | Any
     completions: List[Completion]
     flags: int
 
-    def __init__(self, completions: Optional[Sequence[Completion]] = None, flags: int = 0) -> None:
+    def __init__(self, completions: None | Sequence[Completion] = None, flags: int = 0) -> None:
         """
         ---
 
@@ -2663,7 +2658,7 @@ class CompletionList:
     def __repr__(self) -> str:
         ...
 
-    def _set_target(self, target: Optional[Any]) -> None:
+    def _set_target(self, target: None | Any) -> None:
         ...
 
     def set_completions(self, completions: Sequence[Completion], flags: int = 0) -> None:
@@ -2778,7 +2773,7 @@ def list_syntaxes() -> List[Syntax]:
     ...
 
 
-def syntax_from_path(path: str) -> Optional[Syntax]:
+def syntax_from_path(path: str) -> None | Syntax:
     """
     Get the syntax for a specific path.
 
@@ -2805,7 +2800,7 @@ def find_syntax_by_scope(scope: str) -> List[Syntax]:
     ...
 
 
-def find_syntax_for_file(path: str, first_line: str = "") -> Optional[Syntax]:
+def find_syntax_for_file(path: str, first_line: str = "") -> None | Syntax:
     """
     Returns the path to the syntax that will be used when opening a file with the name fname.
     The `first_line` of file contents may also be provided if available.
@@ -2836,14 +2831,14 @@ class Syntax:
 
 class QuickPanelItem:
     trigger: str
-    details: Union[str, Sequence[str]]
+    details: str | Sequence[str]
     annotation: str
     kind: CompletionKind
 
     def __init__(
         self,
         trigger: str,
-        details: Union[str, Sequence[str]] = "",
+        details: str | Sequence[str] = "",
         annotation: str = "",
         kind: CompletionKind = KIND_AMBIGUOUS,
     ) -> None:
