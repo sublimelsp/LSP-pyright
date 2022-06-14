@@ -19,7 +19,27 @@ from _sublime_typing import (
     T_ExpandableVar,
     Vector,
 )
-from typing import Any, Callable, Dict, Iterable, Iterator, List, Literal, Mapping, Reversible, Sequence, Tuple
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    Iterable,
+    Iterator,
+    List,
+    Literal,
+    Mapping,
+    Reversible,
+    Sequence,
+    Tuple,
+    TypeVar,
+)
+
+# ----- #
+# types #
+# ----- #
+
+T = TypeVar("T")
 
 # -------- #
 # ST codes #
@@ -2869,9 +2889,9 @@ class SymbolRegion:
         ...
 
 
-class ListInputItem:
+class ListInputItem(Generic[T]):
     text: str
-    value: Any
+    value: T
     details: str
     annotation: str
     kind: CompletionKind
@@ -2879,7 +2899,7 @@ class ListInputItem:
     def __init__(
         self,
         text: str,
-        value: Any,
+        value: T,
         details: str = "",
         annotation: str = "",
         kind: CompletionKind = KIND_AMBIGUOUS,

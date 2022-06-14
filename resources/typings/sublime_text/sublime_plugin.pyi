@@ -33,7 +33,8 @@ import threading
 # types #
 # ----- #
 
-T_InputType = TypeVar("T_InputType", bound=None | str | int | float | Dict[Any, Any] | List[Any] | Tuple[Any, ...])
+InputType = None | str | int | float | Dict[str, Any] | List[Any] | Tuple[Any, ...]
+T_InputType = TypeVar("T_InputType", bound=InputType)
 
 # -------- #
 # ST codes #
@@ -588,7 +589,7 @@ class CommandInputHandler(Generic[T_InputType]):
         """
         ...
 
-    def next_input(self, args: Dict[str, Any]) -> None | CommandInputHandler[T_InputType]:
+    def next_input(self, args: Dict[str, Any]) -> None | CommandInputHandler[InputType]:
         """
         Returns the next input after the user has completed this one.
         May return None to indicate no more input is required,
@@ -608,7 +609,9 @@ class CommandInputHandler(Generic[T_InputType]):
         """Initial text shown in the text entry box. Empty by default."""
         ...
 
-    def initial_selection(self) -> List[Tuple[List[str | Tuple[str, T_InputType] | sublime.ListInputItem], int]]:
+    def initial_selection(
+        self,
+    ) -> List[Tuple[List[str | Tuple[str, T_InputType] | sublime.ListInputItem[T_InputType]], int]]:
         """A list of 2-element tuplues, defining the initially selected parts of the initial text."""
         ...
 
@@ -693,8 +696,8 @@ class ListInputHandler(CommandInputHandler[T_InputType], Generic[T_InputType]):
 
     def list_items(
         self,
-    ) -> List[str | Tuple[str, T_InputType] | sublime.ListInputItem] | Tuple[
-        List[str | Tuple[str, T_InputType] | sublime.ListInputItem], int
+    ) -> List[str | Tuple[str, T_InputType] | sublime.ListInputItem[T_InputType]] | Tuple[
+        List[str | Tuple[str, T_InputType] | sublime.ListInputItem[T_InputType]], int
     ]:
         """
         The items to show in the list. If returning a list of `(str, value)` tuples,
@@ -779,7 +782,7 @@ class Command:
         """
         ...
 
-    def input(self, args: Dict[str, Any]) -> None | CommandInputHandler[Any]:
+    def input(self, args: Dict[str, Any]) -> None | CommandInputHandler[InputType]:
         """
         If this returns something other than `None`,
         the user will be prompted for an input before the command is run in the Command Palette.
@@ -793,7 +796,7 @@ class Command:
         """
         ...
 
-    def create_input_handler_(self, args: Dict[str, Any]) -> None | CommandInputHandler[Any]:
+    def create_input_handler_(self, args: Dict[str, Any]) -> None | CommandInputHandler[InputType]:
         ...
 
 
