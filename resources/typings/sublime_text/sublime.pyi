@@ -707,8 +707,6 @@ class Window:
         - `TRANSIENT`: Open the file as a preview only: it won't have a tab assigned it until modified
         - `FORCE_GROUP`: don't select the file if it's opened in a different group
         - `ADD_TO_SELECTION` (4050): Add the file to the currently selected sheets in this group
-        - `ADD_TO_SELECTION_SEMI_TRANSIENT` (4075): Add the file to the currently selected sheets in this group,
-                                                    as a semi-transient view
         - `SEMI_TRANSIENT`: open the file in semi-transient mode
         - `REPLACE_MRU`: replace the active sheet in the group
         - `CLEAR_TO_RIGHT` (4100): unselect all files to the right of the active sheet
