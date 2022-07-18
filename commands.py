@@ -1,8 +1,8 @@
-from LSP.plugin.core.typing import List
 from os import path
+
 import sublime
 import sublime_plugin
-
+from LSP.plugin.core.typing import List
 
 CONFIGURATION_FILENAME = 'pyrightconfig.json'
 CONFIGURATION_CONTENTS = '''{

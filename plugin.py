@@ -1,12 +1,12 @@
+import os
+import re
+import sys
+
+import sublime
 from LSP.plugin import DottedDict
 from LSP.plugin.core.typing import Any, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
-import os
-import re
-import sublime
-import sys
-
 
 if int(sublime.version()) >= 4070:
     from LSP.plugin import MarkdownLangMap
