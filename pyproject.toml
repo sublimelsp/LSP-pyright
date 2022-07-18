@@ -1,3 +1,19 @@
+[tool.isort]
+line_length = 120
+profile = 'black'
+py_version=38
+skip_glob = [
+  ".venv/**",
+  "br-*/**",
+  "branch-*/**",
+  "libs/**",
+  "resources/**",
+  "stubs/**",
+  "typings/**",
+  "vendor/**",
+  "venv/**",
+]
+
 [tool.black]
 line-length = 120
 target-version = ['py38']
