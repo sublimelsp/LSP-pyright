@@ -447,6 +447,17 @@
                           ],
                           "type": "string"
                         },
+                        "reportTypeCommentUsage": {
+                          "default": "none",
+                          "description": "Diagnostics for usage of deprecated type comments.",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ],
+                          "type": "string"
+                        },
                         "reportTypedDictNotRequiredAccess": {
                           "default": "error",
                           "description": "Diagnostics for an attempt to access a non-required key within a TypedDict without a check for its presence.",
@@ -568,6 +579,17 @@
                           ],
                           "type": "string"
                         },
+                        "reportUnnecessaryContains": {
+                          "default": "none",
+                          "description": "Diagnostics for 'in' operation that is statically determined to be unnecessary. Such operations are sometimes indicative of a programming error.",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ],
+                          "type": "string"
+                        },
                         "reportUnnecessaryIsInstance": {
                           "default": "none",
                           "description": "Diagnostics for 'isinstance' or 'issubclass' calls where the result is statically determined to be always true. Such calls are often indicative of a programming error.",
@@ -670,6 +692,17 @@
                         "reportUnusedCoroutine": {
                           "default": "error",
                           "description": "Diagnostics for call expressions that return a Coroutine and whose results are not consumed.",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ],
+                          "type": "string"
+                        },
+                        "reportUnusedExpression": {
+                          "default": "warning",
+                          "description": "Diagnostics for simple expressions whose value is not used in any way.",
                           "enum": [
                             "none",
                             "information",
@@ -870,6 +903,17 @@
                 "type": "string",
                 "title": "File or directory that should use 'strict' type checking rules",
                 "pattern": "^(.*)$"
+              }
+            },
+            "defineConstant": {
+              "$id": "#/properties/defineConstant",
+              "type": "object",
+              "title": "Identifiers that should be treated as constants",
+              "properties": {
+              },
+              "additionalProperties": {
+                  "type": ["string", "boolean"],
+                  "title": "Value of constant (boolean or string)"
               }
             },
             "typeCheckingMode": {
@@ -1086,6 +1130,12 @@
               "title": "Controls reporting of private variables and functions used outside of the owning class or module and usage of protected members outside of subclasses",
               "default": "none"
             },
+            "reportTypeCommentUsage": {
+              "$id": "#/properties/reportTypeCommentUsage",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of deprecated type comment usage",
+              "default": "none"
+            },
             "reportPrivateImportUsage": {
               "$id": "#/properties/reportPrivateImportUsage",
               "$ref": "#/definitions/diagnostic",
@@ -1212,6 +1262,12 @@
               "title": "Controls reporting the use of '==' or '!=' comparisons that are unnecessary",
               "default": "none"
             },
+            "reportUnnecessaryContains": {
+              "$id": "#/properties/reportUnnecessaryContains",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting the use of 'in' operations that are unnecessary",
+              "default": "none"
+            },
             "reportAssertAlwaysTrue": {
               "$id": "#/properties/reportAssertAlwaysTrue",
               "$ref": "#/definitions/diagnostic",
@@ -1271,6 +1327,12 @@
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of call expressions that returns Coroutine whose results are not consumed",
               "default": "error"
+            },
+            "reportUnusedExpression": {
+              "$id": "#/properties/reportUnusedExpression",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of simple expressions whose value is not used in any way",
+              "default": "warning"
             },
             "reportUnnecessaryTypeIgnoreComment": {
               "$id": "#/properties/reportUnnecessaryTypeIgnoreComment",
