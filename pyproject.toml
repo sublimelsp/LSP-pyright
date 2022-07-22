@@ -24,6 +24,7 @@ exclude = '''
   \.git |
   language-server |
   plugin/libs |
+  resources |
   stubs
 )/
 '''

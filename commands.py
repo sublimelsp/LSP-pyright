@@ -4,25 +4,28 @@ import sublime
 import sublime_plugin
 from LSP.plugin.core.typing import List
 
-CONFIGURATION_FILENAME = 'pyrightconfig.json'
-CONFIGURATION_CONTENTS = '''{
+CONFIGURATION_FILENAME = "pyrightconfig.json"
+CONFIGURATION_CONTENTS = """{
 \t// Install LSP-json to get validation and autocompletion in this file.
 \t"venvPath": ".",
 \t"venv": "myenv",
 }
-'''
+"""
 
 
 class LspPyrightCreateConfiguration(sublime_plugin.WindowCommand):
     def run(self) -> None:
         folders = self.window.folders()
         if len(folders) == 0:
-            sublime.message_dialog('No folders found in the window. Please add a folder first.')
+            sublime.message_dialog("No folders found in the window. Please add a folder first.")
         elif len(folders) == 1:
             self._create_configuration(folders[0])
         else:
-            self.window.show_quick_panel(folders, lambda index: self._on_selected(folders, index),
-                                         placeholder='Select a folder to create the configuration file in')
+            self.window.show_quick_panel(
+                folders,
+                lambda index: self._on_selected(folders, index),
+                placeholder="Select a folder to create the configuration file in",
+            )
 
     def _on_selected(self, folders: List[str], index: int) -> None:
         if index > -1:
@@ -43,4 +46,4 @@ class LspPyrightCreateConfiguration(sublime_plugin.WindowCommand):
             self._on_view_loaded(view)
 
     def _on_view_loaded(self, view: sublime.View) -> None:
-        view.run_command('insert_snippet', {'contents': CONFIGURATION_CONTENTS})
+        view.run_command("insert_snippet", {"contents": CONFIGURATION_CONTENTS})
