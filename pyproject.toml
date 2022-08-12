@@ -16,7 +16,7 @@ skip_glob = [
 
 [tool.pycln]
 all = true
-exclude = '(\.git|\.?venv|\.mypy_cache|br-.*|branch-.*|libs|stubs|typings)/'
+exclude = '(\.git|\.?venv|\.mypy_cache|br-.*|branch-.*|libs|stubs|typings|node_modules)/'
 
 [tool.black]
 line-length = 120
