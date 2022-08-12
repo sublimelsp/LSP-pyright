@@ -1,0 +1,40 @@
+# EditorConfig is awesome: https://EditorConfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[Makefile]
+indent_style = tab
+
+[*.sublime-{settings,commands,keymap,mousemap}]
+indent_style = tab
+indent_size = 4
+
+[*.sublime-{menu,syntax}]
+indent_style = space
+indent_size = 2
+
+[*.json]
+indent_size = 4
+
+[*.md]
+indent_size = 2
+trim_trailing_whitespace = false
+
+[*.py]
+indent_size = 4
+
+[*.{sh,csh,tcsh,zsh,bash,fish}]
+indent_size = 4
+
+[*.{yml,yaml,toml,neon}]
+indent_style = space
+indent_size = 2
+
+[sublime-package.json]
+indent_size = 2
