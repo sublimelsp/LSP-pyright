@@ -5,10 +5,7 @@
 		"buffer", // in-memory buffers
 		"res", // files in .sublime-package archives
 	],
-	// @see https://github.com/microsoft/pyright/blob/main/docs/configuration.md
-	"initializationOptions": {
-		// ...
-	},
+	"initializationOptions": {},
 	// @see https://github.com/microsoft/pyright/blob/main/docs/settings.md
 	// @see https://github.com/microsoft/pyright/blob/main/packages/vscode-pyright/package.json
 	"settings": {
