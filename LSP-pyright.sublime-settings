@@ -53,8 +53,8 @@
 		"pyright.disableLanguageServices": false,
 		// Disables the "Organize Imports" command.
 		"pyright.disableOrganizeImports": false,
-		// Path to Python, you can use a custom version of Python.
-		"python.pythonPath": "python",
+		// Path to Python. Leave empty to attempt automatic resolution.
+		"python.pythonPath": "",
 		// Path to folder with a list of Virtual Environments.
 		"python.venvPath": "",
 	},

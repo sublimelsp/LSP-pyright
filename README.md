@@ -46,7 +46,10 @@ Here are some ways to configure the package and the language server.
 
 ### Virtual environments
 
-If your project needs to run and be validated within a virtual environment, the `pyrightconfig.json` file must be present at the root of your project.
+The plugin attempts to resolve the virtual environment automatically from well-known environment variables and workspace files.
+This behavior can be disabled by explicitly setting the python interpreter in the `python.pythonPath` setting.
+
+If you want to overwrite the virtual environment, the `pyrightconfig.json` file must be present at the root of your project.
 
 This configuration file, at a minimum, should define where your Python virtualenvs are located, as well as the name of the one to use for your project:
 
