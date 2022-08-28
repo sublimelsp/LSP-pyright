@@ -164,19 +164,10 @@ class LspPyrightPlugin(NpmClientHandler):
                     pythonPath = subprocess.check_output(command, cwd=workspace_folder).decode("UTF-8").strip()
                     return pythonPath if post_processing is None else post_processing(pythonPath)
                 except FileNotFoundError:
-                    print(
-                        "LSP: " + cls.name() + ": WARN: " + config_file + " detected but " + command[0] + " not found"
-                    )
+                    print("{}: WARN: {} detected but {} not found".format(cls.name(), config_file, command[0]))
                 except subprocess.CalledProcessError:
-                    print(
-                        "LSP: "
-                        + cls.name()
-                        + ": WARN: "
-                        + config_file
-                        + " detected but "
-                        + command
-                        + " exited with non-zero exit status"
-                    )
+                    print("{}: WARN: {} detected but {} exited with non-zero exit status".format(
+                        cls.name(), config_file, command))
 
         # virtual environment as subfolder in project
         for file in os.listdir(workspace_folder):
