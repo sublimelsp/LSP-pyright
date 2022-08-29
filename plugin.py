@@ -153,7 +153,7 @@ class LspPyrightPlugin(NpmClientHandler):
         if sublime.platform() == "windows":
             # do not create a window for the process
             startupinfo = subprocess.STARTUPINFO()  # type: ignore
-            startupinfo.wShowWindow = subprocess.SW_HIDE
+            startupinfo.wShowWindow = subprocess.SW_HIDE  # type: ignore
             startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW  # type: ignore
         else:
             startupinfo = None  # type: ignore
