@@ -138,14 +138,6 @@ class LspPyrightPlugin(NpmClientHandler):
         if pythonPath:
             return pythonPath
 
-        virtual_env = os.getenv("VIRTUAL_ENV")
-        if virtual_env is not None:
-            return binary_from_python_path(virtual_env)
-
-        conda_prefix = os.getenv("CONDA_PREFIX")
-        if conda_prefix is not None:
-            return binary_from_python_path(conda_prefix)
-
         if not len(workspace_folders):
             return None
         workspace_folder = workspace_folders[0].path
