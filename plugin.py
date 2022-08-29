@@ -161,11 +161,9 @@ class LspPyrightPlugin(NpmClientHandler):
             full_config_file_path = os.path.join(workspace_folder, config_file)
             if os.path.isfile(full_config_file_path):
                 try:
-                    python_path = (
-                        subprocess.check_output(command, cwd=workspace_folder, startupinfo=startupinfo)
-                        .decode("UTF-8")
-                        .strip()
-                    )
+                    python_path = subprocess.check_output(
+                        command, cwd=workspace_folder, startupinfo=startupinfo, universal_newlines=True
+                    ).strip()
                     return post_processing(python_path) if post_processing else python_path
                 except FileNotFoundError:
                     print("{}: WARN: {} detected but {} not found".format(cls.name(), config_file, command[0]))
