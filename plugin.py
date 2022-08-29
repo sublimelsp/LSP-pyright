@@ -1,5 +1,6 @@
 import os
 import re
+import shlex
 import subprocess
 import sys
 
@@ -7,7 +8,7 @@ import sublime
 from LSP.plugin import DottedDict
 from LSP.plugin.core.protocol import WorkspaceFolder
 from LSP.plugin.core.types import ClientConfig
-from LSP.plugin.core.typing import Any, List, Optional, Tuple, cast
+from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
@@ -57,9 +58,9 @@ class LspPyrightPlugin(NpmClientHandler):
         workspace_folders: List[WorkspaceFolder],
         configuration: ClientConfig,
     ) -> Optional[str]:
-        pythonPath = cls.resolve_python_path_from_venv(configuration.settings, workspace_folders) or "python"
-        print("LSP: " + cls.name() + ': Using python path "' + pythonPath + '"')
-        configuration.settings.set("python.pythonPath", pythonPath)
+        python_path = cls.resolve_python_path_from_venv(configuration.settings, workspace_folders) or "python"
+        print(cls.name() + ': Using python path "' + python_path + '"')
+        configuration.settings.set("python.pythonPath", python_path)
         return None
 
     @classmethod
@@ -134,11 +135,11 @@ class LspPyrightPlugin(NpmClientHandler):
 
             return binary_path if os.path.isfile(binary_path) else None
 
-        pythonPath = settings.get("python.pythonPath")
-        if pythonPath:
-            return pythonPath
+        python_path = settings.get("python.pythonPath")
+        if python_path:
+            return python_path
 
-        if not len(workspace_folders):
+        if not workspace_folders:
             return None
         workspace_folder = workspace_folders[0].path
 
@@ -147,19 +148,33 @@ class LspPyrightPlugin(NpmClientHandler):
             ("Pipfile", ["pipenv", "--py"], None),
             ("poetry.lock", ["poetry", "env", "info", "-p"], binary_from_python_path),
             (".python-version", ["pyenv", "which", "python"], None),
-        ]
+        ]  # type: List[Tuple[str, List[str], Optional[Callable[[str], Optional[str]]]]]
+
+        if sublime.platform() == "windows":
+            # do not create a window for the process
+            startupinfo = subprocess.STARTUPINFO()  # type: ignore
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW  # type: ignore
+        else:
+            startupinfo = None  # type: ignore
 
         for config_file, command, post_processing in venv_config_files:
             full_config_file_path = os.path.join(workspace_folder, config_file)
             if os.path.isfile(full_config_file_path):
                 try:
-                    pythonPath = subprocess.check_output(command, cwd=workspace_folder).decode("UTF-8").strip()
-                    return pythonPath if post_processing is None else post_processing(pythonPath)
+                    python_path = (
+                        subprocess.check_output(command, cwd=workspace_folder, startupinfo=startupinfo)
+                        .decode("UTF-8")
+                        .strip()
+                    )
+                    return post_processing(python_path) if post_processing else python_path
                 except FileNotFoundError:
                     print("{}: WARN: {} detected but {} not found".format(cls.name(), config_file, command[0]))
                 except subprocess.CalledProcessError:
-                    print("{}: WARN: {} detected but {} exited with non-zero exit status".format(
-                        cls.name(), config_file, command))
+                    print(
+                        "{}: WARN: {} detected but {} exited with non-zero exit status".format(
+                            cls.name(), config_file, " ".join(map(shlex.quote, command))
+                        )
+                    )
 
         # virtual environment as subfolder in project
         for file in os.listdir(workspace_folder):
