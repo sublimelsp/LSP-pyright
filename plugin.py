@@ -1,10 +1,14 @@
 import os
 import re
+import shlex
+import subprocess
 import sys
 
 import sublime
 from LSP.plugin import DottedDict
-from LSP.plugin.core.typing import Any, List, Optional, Tuple, cast
+from LSP.plugin.core.protocol import WorkspaceFolder
+from LSP.plugin.core.types import ClientConfig
+from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
@@ -45,6 +49,19 @@ class LspPyrightPlugin(NpmClientHandler):
             extraPaths = settings.get("python.analysis.extraPaths") or []  # type: List[str]
             extraPaths.extend(self.find_package_dependency_dirs(py_ver))
             settings.set("python.analysis.extraPaths", extraPaths)
+
+    @classmethod
+    def on_pre_start(
+        cls,
+        window: sublime.Window,
+        initiating_view: sublime.View,
+        workspace_folders: List[WorkspaceFolder],
+        configuration: ClientConfig,
+    ) -> Optional[str]:
+        python_path = cls.resolve_python_path_from_venv(configuration.settings, workspace_folders) or "python"
+        print('{}: Using python path "{}"'.format(cls.name(), python_path))
+        configuration.settings.set("python.pythonPath", python_path)
+        return None
 
     @classmethod
     def install_or_update(cls) -> None:
@@ -99,3 +116,70 @@ class LspPyrightPlugin(NpmClientHandler):
         dep_dirs.insert(0, os.path.join(self.package_storage(), "resources", "typings", "sublime_text"))
 
         return [path for path in dep_dirs if os.path.isdir(path)]
+
+    @classmethod
+    def resolve_python_path_from_venv(
+        cls, settings: DottedDict, workspace_folders: List[WorkspaceFolder]
+    ) -> Optional[str]:
+        """
+        Resolves the python binary path depending on environment variables and files in the workspace.
+
+        See https://github.com/fannheyward/coc-pyright/blob/d58a468b1d7479a1b56906e386f44b997181e307/src/configSettings.ts#L47.  # noqa: E501
+        """
+
+        def binary_from_python_path(path: str) -> Optional[str]:
+            if sublime.platform() == "windows":
+                binary_path = os.path.join(path, "Scripts", "python.exe")
+            else:
+                binary_path = os.path.join(path, "bin", "python")
+
+            return binary_path if os.path.isfile(binary_path) else None
+
+        python_path = settings.get("python.pythonPath")
+        if python_path:
+            return python_path
+
+        if not workspace_folders:
+            return None
+        workspace_folder = workspace_folders[0].path
+
+        # Config file, venv resolution command, post-processing
+        venv_config_files = [
+            ("Pipfile", ["pipenv", "--py"], None),
+            ("poetry.lock", ["poetry", "env", "info", "-p"], binary_from_python_path),
+            (".python-version", ["pyenv", "which", "python"], None),
+        ]  # type: List[Tuple[str, List[str], Optional[Callable[[str], Optional[str]]]]]
+
+        if sublime.platform() == "windows":
+            # do not create a window for the process
+            startupinfo = subprocess.STARTUPINFO()  # type: ignore
+            startupinfo.wShowWindow = subprocess.SW_HIDE  # type: ignore
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW  # type: ignore
+        else:
+            startupinfo = None  # type: ignore
+
+        for config_file, command, post_processing in venv_config_files:
+            full_config_file_path = os.path.join(workspace_folder, config_file)
+            if os.path.isfile(full_config_file_path):
+                try:
+                    python_path = subprocess.check_output(
+                        command, cwd=workspace_folder, startupinfo=startupinfo, universal_newlines=True
+                    ).strip()
+                    return post_processing(python_path) if post_processing else python_path
+                except FileNotFoundError:
+                    print("{}: WARN: {} detected but {} not found".format(cls.name(), config_file, command[0]))
+                except subprocess.CalledProcessError:
+                    print(
+                        "{}: WARN: {} detected but {} exited with non-zero exit status".format(
+                            cls.name(), config_file, " ".join(map(shlex.quote, command))
+                        )
+                    )
+
+        # virtual environment as subfolder in project
+        for file in os.listdir(workspace_folder):
+            maybe_venv_path = os.path.join(workspace_folder, file)
+            if os.path.isfile(os.path.join(maybe_venv_path, "pyvenv.cfg")):
+                # found a venv
+                return binary_from_python_path(maybe_venv_path)
+
+        return None
