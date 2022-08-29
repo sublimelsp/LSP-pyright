@@ -59,7 +59,7 @@ class LspPyrightPlugin(NpmClientHandler):
         configuration: ClientConfig,
     ) -> Optional[str]:
         python_path = cls.resolve_python_path_from_venv(configuration.settings, workspace_folders) or "python"
-        print(cls.name() + ': Using python path "' + python_path + '"')
+        print('{}: Using python path "{}"'.format(cls.name(), python_path))
         configuration.settings.set("python.pythonPath", python_path)
         return None
 
