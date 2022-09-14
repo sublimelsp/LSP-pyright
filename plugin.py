@@ -179,7 +179,8 @@ class LspPyrightPlugin(NpmClientHandler):
         for file in os.listdir(workspace_folder):
             maybe_venv_path = os.path.join(workspace_folder, file)
             if os.path.isfile(os.path.join(maybe_venv_path, "pyvenv.cfg")):
-                # found a venv
-                return binary_from_python_path(maybe_venv_path)
+                binary = binary_from_python_path(maybe_venv_path)
+                if binary is not None:
+                    return binary  # found a venv
 
         return None
