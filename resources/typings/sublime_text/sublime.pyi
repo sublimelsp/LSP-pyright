@@ -1,24 +1,8 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-# ST version: 4131
+# ST version: 4136
 
 from __future__ import annotations
 
-# __future__ must be the first import
-from _sublime_typing import (
-    Callback0,
-    Callback1,
-    CommandArgsDict,
-    Completion,
-    CompletionKind,
-    Dip,
-    HasKeysMethod,
-    Layout,
-    Location,
-    Point,
-    Str,
-    T_ExpandableVar,
-    Vector,
-)
 from typing import (
     Any,
     Callable,
@@ -33,6 +17,22 @@ from typing import (
     Sequence,
     Tuple,
     TypeVar,
+)
+
+from _sublime_types import (
+    Callback0,
+    Callback1,
+    CommandArgsDict,
+    Completion,
+    CompletionKind,
+    Dip,
+    HasKeysMethod,
+    Layout,
+    Location,
+    Point,
+    Str,
+    T_ExpandableVar,
+    Vector,
 )
 
 # ----- #
@@ -847,6 +847,10 @@ class Window:
 
     def transient_view_in_group(self, group: int) -> None | View:
         """Returns the transient `View` in the given `group` if any."""
+        ...
+
+    def promote_sheet(self, sheet: Sheet) -> None:
+        """Promote the `sheet` parameter if semi-transient or transient."""
         ...
 
     def layout(self) -> Layout:

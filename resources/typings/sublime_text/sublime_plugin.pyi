@@ -1,10 +1,12 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-# ST version: 4131
+# ST version: 4136
 
 from __future__ import annotations
 
-# __future__ must be the first import
-from _sublime_typing import AnyCallable, T_AnyCallable, Completion, CompletionNormalized, EventDict, Point
+import importlib.abc
+import io
+import os
+import threading
 from importlib.machinery import ModuleSpec
 from types import ModuleType
 from typing import (
@@ -16,18 +18,16 @@ from typing import (
     Iterable,
     Iterator,
     List,
-    Type,
-    overload,
     Sequence,
     Set,
     Tuple,
+    Type,
     TypeVar,
+    overload,
 )
-import importlib.abc
-import io
-import os
+
 import sublime
-import threading
+from _sublime_types import AnyCallable, Completion, CompletionNormalized, EventDict, Point, T_AnyCallable
 
 # ----- #
 # types #
@@ -513,7 +513,11 @@ def on_hover(view_id: int, point: Point, hover_zone: int) -> None:
     ...
 
 
-def on_text_command(view_id: int, name: str, args: None | Dict[str, Any]) -> Tuple[str, None | Dict[str, Any]]:
+def on_text_command(
+    view_id: int,
+    name: str,
+    args: None | Dict[str, Any],
+) -> None | Tuple[str, None | Dict[str, Any]]:
     ...
 
 
@@ -521,7 +525,7 @@ def on_window_command(
     window_id: int,
     name: str,
     args: None | Dict[str, Any],
-) -> Tuple[str, None | Dict[str, Any]]:
+) -> None | Tuple[str, None | Dict[str, Any]]:
     ...
 
 

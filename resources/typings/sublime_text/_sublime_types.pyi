@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-# __future__ must be the first import
 from typing import Any, Callable, Dict, Iterable, List, Protocol, Sequence, Tuple, TypedDict, TypeVar
+
 import sublime
 
 # ----- #
