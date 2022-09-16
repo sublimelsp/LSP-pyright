@@ -8,7 +8,7 @@ SUBLIME_TYPINGS_DIR="${PROJECT_DIR}/resources/typings/sublime_text"
 mkdir -p "${SUBLIME_TYPINGS_DIR}"
 
 filenames=(
-    "_sublime_typing.pyi"
+    "_sublime_types.pyi"
     "sublime.pyi"
     "sublime_plugin.pyi"
 )
