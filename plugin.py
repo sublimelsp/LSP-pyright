@@ -5,9 +5,7 @@ import subprocess
 import sys
 
 import sublime
-from LSP.plugin import DottedDict
-from LSP.plugin.core.protocol import WorkspaceFolder
-from LSP.plugin.core.types import ClientConfig
+from LSP.plugin import ClientConfig, DottedDict, WorkspaceFolder
 from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
