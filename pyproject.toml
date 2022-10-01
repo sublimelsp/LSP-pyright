@@ -30,3 +30,6 @@ exclude = '''
   stubs
 )/
 '''
+
+[tool.pyright]
+pythonVersion = '3.11'
