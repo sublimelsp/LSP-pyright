@@ -36,7 +36,7 @@ contexts:
 
   lsp-statement:
     - include: pop-end
-    - match: ({{identifier}})(:)(?=\s*(?:\(|Overload\[))
+    - match: ({{identifier}})(:?)(?=\s*(?:\(|Overload\[))
       captures:
         1: meta.qualified-name.python meta.generic-name.python
         2: punctuation.separator.annotation.variable.python

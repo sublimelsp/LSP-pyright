@@ -3,6 +3,22 @@
 (class) ClassName
 # ^^^^ storage.type
 
+(class) ClassName((key: str, default: Any | None = None) -> Any) | ((key: str, default: Any | None = None) -> Any)
+# ^^^^ storage.type
+#                  ^^^ variable.parameter
+#                       ^^^ support.type
+#                            ^^^^^^^ variable.parameter
+#                                         ^  keyword.operator
+#                                                ^ keyword.operator
+#                                                        ^^ punctuation.separator
+#                                                                ^  keyword.operator
+#                                                                    ^^^ variable.parameter
+#                                                                         ^^^ support.type
+#                                                                              ^^^^^^^ variable.parameter
+#                                                                                           ^  keyword.operator
+#                                                                                                  ^ keyword.operator
+#                                                                                                          ^^ punctuation.separator
+
 (variable) variable_name: int
 # ^^^^^^^ storage.type
 #                       ^ punctuation.separator.annotation
