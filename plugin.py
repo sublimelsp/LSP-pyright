@@ -28,8 +28,12 @@ class LspPyrightPlugin(NpmClientHandler):
     server_binary_path = os.path.join(server_directory, "node_modules", "pyright", "langserver.index.js")
 
     @classmethod
-    def minimum_node_version(cls) -> Tuple[int, int, int]:
-        return (14, 0, 0)
+    def required_node_version(cls) -> str:
+        """
+        Testing playground at https://semver.npmjs.com
+        And `0.0.0` means "no restrictions".
+        """
+        return ">14"
 
     def on_settings_changed(self, settings: DottedDict) -> None:
         super().on_settings_changed(settings)
