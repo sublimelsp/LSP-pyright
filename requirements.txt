@@ -2,7 +2,7 @@
 --index https://pypi.python.org/simple/
 
 black
-flake8
+flake8==5.*
 isort
 mypy
 pycln
