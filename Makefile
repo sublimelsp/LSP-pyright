@@ -5,12 +5,11 @@ all: fix
 check:
 	# mypy -p plugin
 	flake8 .
-	pycln --config pyproject.toml --check .
 	black --check --diff .
 	isort --check --diff .
 
 .PHONY: fix
 fix:
-	pycln --config pyproject.toml .
+	autoflake --in-place .
 	black .
 	isort .
