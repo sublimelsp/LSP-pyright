@@ -6,11 +6,14 @@ import sys
 
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, WorkspaceFolder
-from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
+from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
-if int(sublime.version()) >= 4070:
+SUBLIME_VERSION = int(sublime.version())
+SUBLIME_PACKAGES_PATH = sublime.packages_path()
+
+if SUBLIME_VERSION >= 4070:
     from LSP.plugin import MarkdownLangMap
 
 
@@ -41,11 +44,25 @@ class LspPyrightPlugin(NpmClientHandler):
         dev_environment = self.get_dev_environment(settings)
 
         if dev_environment in ("sublime_text", "sublime_text_33", "sublime_text_38"):
-            if dev_environment == "sublime_text":
-                # the Python version this plugin runs on
-                py_ver = cast(Tuple[int, int], tuple(sys.version_info[:2]))
-            else:
-                py_ver = (3, 8) if dev_environment == "sublime_text_38" else (3, 3)
+            py_ver = (3, 3)
+            if dev_environment == "sublime_text" and SUBLIME_VERSION >= 4050:
+                session = self.weaksession()
+                if session:
+                    workspace_folders = session.get_workspace_folders()
+                    if workspace_folders:
+                        if workspace_folders[0].path == os.path.join(SUBLIME_PACKAGES_PATH, "User"):
+                            py_ver = (3, 8)
+                        else:
+                            python_version_file = os.path.join(workspace_folders[0].path, ".python-version")
+                            if os.path.isfile(python_version_file):
+                                try:
+                                    with open(python_version_file, "r") as file:
+                                        if file.read().strip() == "3.8":
+                                            py_ver = (3, 8)
+                                except OSError:
+                                    pass
+            elif dev_environment == "sublime_text_38":
+                py_ver = (3, 8)
 
             # add package dependencies into "python.analysis.extraPaths"
             extraPaths = settings.get("python.analysis.extraPaths") or []  # type: List[str]
@@ -110,12 +127,12 @@ class LspPyrightPlugin(NpmClientHandler):
 
         # move the "Packages/" to the last
         # @see https://github.com/sublimelsp/LSP-pyright/pull/26#discussion_r520747708
-        packages_path = sublime.packages_path()
-        dep_dirs.remove(packages_path)
-        dep_dirs.append(packages_path)
+        dep_dirs.remove(SUBLIME_PACKAGES_PATH)
+        dep_dirs.append(SUBLIME_PACKAGES_PATH)
 
-        # sublime stubs - add as first
-        dep_dirs.insert(0, os.path.join(self.package_storage(), "resources", "typings", "sublime_text"))
+        if py_ver == (3, 3):
+            # sublime stubs - add as first
+            dep_dirs.insert(0, os.path.join(self.package_storage(), "resources", "typings", "sublime_text"))
 
         return [path for path in dep_dirs if os.path.isdir(path)]
 
