@@ -46,7 +46,7 @@ class LspPyrightPlugin(NpmClientHandler):
         Testing playground at https://semver.npmjs.com
         And `0.0.0` means "no restrictions".
         """
-        return ">14"
+        return ">=14"
 
     def on_settings_changed(self, settings: DottedDict) -> None:
         super().on_settings_changed(settings)
