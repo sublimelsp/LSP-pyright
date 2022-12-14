@@ -7,6 +7,14 @@
         ],
         "schema": {
           "$id": "sublime://settings/LSP-pyright",
+          "allOf": [
+            {
+              "$ref": "sublime://settings/LSP-plugin-base"
+            },
+            {
+              "$ref": "sublime://settings/LSP-pyright#/definitions/PluginConfig"
+            }
+          ],
           "definitions": {
             "PluginConfig": {
               "properties": {
@@ -431,6 +439,17 @@
                           ],
                           "type": "string"
                         },
+                        "reportShadowedImports": {
+                          "default": "none",
+                          "description": "Diagnostics for files that are overriding a module in the stdlib.",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ],
+                          "type": "string"
+                        },
                         "reportTypeCommentUsage": {
                           "default": "none",
                           "description": "Diagnostics for usage of deprecated type comments.",
@@ -466,7 +485,7 @@
                         },
                         "reportUndefinedVariable": {
                           "default": "error",
-                          "description": "Diagnostics for a missing or misnamed \u201cself\u201d parameter in instance methods and \u201ccls\u201d parameter in class methods. Instance methods in metaclasses (classes that derive from \u201ctype\u201d) are allowed to use \u201ccls\u201d for instance methods.",
+                          "description": "Diagnostics for undefined variables.",
                           "enum": [
                             "none",
                             "information",
@@ -803,16 +822,7 @@
                 }
               }
             }
-          },
-          "type": "object",
-          "allOf": [
-            {
-              "$ref": "sublime://settings/LSP-plugin-base"
-            },
-            {
-              "$ref": "sublime://settings/LSP-pyright#/definitions/PluginConfig"
-            }
-          ]
+          }
         }
       },
       {
@@ -951,6 +961,12 @@
               "type": "boolean",
               "title": "Infer strict types for dictionary expressions",
               "default": false
+            },
+            "analyzeUnannotatedFunctions": {
+              "$id": "#/properties/analyzeUnannotatedFunctions",
+              "type": "boolean",
+              "title": "Analyze and report diagnostics for functions that have no annotations",
+              "default": true
             },
             "strictParameterNoneValue": {
               "$id": "#/properties/strictParameterNoneValue",
@@ -1328,6 +1344,12 @@
               "$id": "#/properties/reportMatchNotExhaustive",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of 'match' statements that do not exhaustively match all possible values",
+              "default": "none"
+            },
+            "reportShadowedImports": {
+              "$id": "#/properties/reportShadowedImports",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of shadowed imports of stdlib modules",
               "default": "none"
             },
             "extraPaths": {
