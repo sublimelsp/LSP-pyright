@@ -613,6 +613,24 @@ def get_macro() -> List[CommandArgsDict]:
     ...
 
 
+def project_history() -> List[str]:
+    """
+    Returns paths of recently opened `.sublime-project` / `.sublime-workspace` files.
+
+    @version ST(>=4145)
+    """
+    ...
+
+
+def folder_history() -> List[str]:
+    """
+    Returns paths of recently opened folders.
+
+    @version ST(>=4145)
+    """
+    ...
+
+
 class Window:
     """This class represents windows and provides an interface of methods to interact with them."""
 
@@ -2457,7 +2475,6 @@ class Buffer:
 
 
 class Settings:
-
     settings_id: int
 
     def __init__(self, id: int) -> None:

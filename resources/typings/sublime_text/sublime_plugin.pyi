@@ -700,9 +700,10 @@ class ListInputHandler(CommandInputHandler[T_InputType], Generic[T_InputType]):
 
     def list_items(
         self,
-    ) -> List[str | Tuple[str, T_InputType] | sublime.ListInputItem[T_InputType]] | Tuple[
-        List[str | Tuple[str, T_InputType] | sublime.ListInputItem[T_InputType]], int
-    ]:
+    ) -> (
+        List[str | Tuple[str, T_InputType] | sublime.ListInputItem[T_InputType]]
+        | Tuple[List[str | Tuple[str, T_InputType] | sublime.ListInputItem[T_InputType]], int]
+    ):
         """
         The items to show in the list. If returning a list of `(str, value)` tuples,
         then the str will be shown to the user, while the value will be used as the command argument.
