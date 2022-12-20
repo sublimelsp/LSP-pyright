@@ -102,7 +102,8 @@ class LspPyrightPlugin(NpmClientHandler):
         content = re.sub("```\n---", "```\n\n---", content)
         # Add markup for some common field name conventions in function docstring
         content = re.sub(
-            r"\n:param[ ]+([\w\\]+):", lambda m: "\n__Param:__ `{}`".format(m.group(1).replace("\\_", "_")), content)
+            r"\n:param[ ]+([\w\\]+):", lambda m: "\n__Param:__ `{}`".format(m.group(1).replace("\\_", "_")), content
+        )
         content = re.sub(r"\n:raises[ ]+(\w+):", r"\n__Raises:__ `\1`", content)
         content = re.sub(r"\n:returns?:", r"\n__Returns:__", content)
         return content
