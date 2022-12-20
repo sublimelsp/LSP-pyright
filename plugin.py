@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 import sublime
-from LSP.plugin import ClientConfig, DottedDict, WorkspaceFolder
+from LSP.plugin import ClientConfig, DottedDict, Response, WorkspaceFolder
 from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
@@ -86,9 +86,26 @@ class LspPyrightPlugin(NpmClientHandler):
     def markdown_language_id_to_st_syntax_map(cls) -> Optional["MarkdownLangMap"]:
         return {"python": (("python", "py"), ("LSP-pyright/syntaxes/pyright",))}
 
+    def on_server_response_async(self, method: str, response: Response) -> None:
+        if method == "textDocument/hover" and isinstance(response.result, dict):
+            contents = response.result.get("contents")
+            if not isinstance(contents, dict) or not contents.get("kind") == "markdown":
+                return
+            response.result["contents"]["value"] = self.patch_markdown_content(contents["value"])
+
     # -------------- #
     # custom methods #
     # -------------- #
+
+    def patch_markdown_content(self, content: str) -> str:
+        # Add another linebreak before horizontal rule following fenced code block
+        content = re.sub("```\n---", "```\n\n---", content)
+        # Add markup for some common field name conventions in function docstring
+        content = re.sub(
+            r"\n:param[ ]+([\w\\]+):", lambda m: "\n__Param:__ `{}`".format(m.group(1).replace("\\_", "_")), content)
+        content = re.sub(r"\n:raises[ ]+(\w+):", r"\n__Raises:__ `\1`", content)
+        content = re.sub(r"\n:returns?:", r"\n__Returns:__", content)
+        return content
 
     def detect_st_py_ver(self, dev_environment: str) -> Tuple[int, int]:
         default = (3, 3)
