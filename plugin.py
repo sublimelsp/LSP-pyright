@@ -102,10 +102,12 @@ class LspPyrightPlugin(NpmClientHandler):
         content = re.sub("```\n---", "```\n\n---", content)
         # Add markup for some common field name conventions in function docstring
         content = re.sub(
-            r"\n:param[ ]+([\w\\]+):", lambda m: "\n__Param:__ `{}`".format(m.group(1).replace("\\_", "_")), content
+            r"\n:(\w+)[ ]+([\w\\]+):", lambda m: "\n__{}:__ `{}`".format(
+                m.group(1).title(), m.group(2).replace("\\_", "_")
+            ), content
         )
-        content = re.sub(r"\n:raises[ ]+(\w+):", r"\n__Raises:__ `\1`", content)
         content = re.sub(r"\n:returns?:", r"\n__Returns:__", content)
+        content = re.sub(r"\n:rtype:", r"\n__Returntype:__", content)
         return content
 
     def detect_st_py_ver(self, dev_environment: str) -> Tuple[int, int]:
