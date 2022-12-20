@@ -98,7 +98,6 @@ class LspPyrightPlugin(NpmClientHandler):
                 return
             response.result["documentation"]["value"] = self.patch_markdown_content(documentation["value"])
 
-
     # -------------- #
     # custom methods #
     # -------------- #
@@ -108,9 +107,9 @@ class LspPyrightPlugin(NpmClientHandler):
         content = re.sub("```\n---", "```\n\n---", content)
         # Add markup for some common field name conventions in function docstring
         content = re.sub(
-            r"\n:(\w+)[ ]+([\w\\]+):", lambda m: "\n__{}:__ `{}`".format(
-                m.group(1).title(), m.group(2).replace("\\_", "_")
-            ), content
+            r"\n:(\w+)[ ]+([\w\\]+):",
+            lambda m: "\n__{}:__ `{}`".format(m.group(1).title(), m.group(2).replace("\\_", "_")),
+            content,
         )
         content = re.sub(r"\n:returns?:", r"\n__Returns:__", content)
         content = re.sub(r"\n:rtype:", r"\n__Returntype:__", content)
