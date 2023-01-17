@@ -786,14 +786,19 @@
                       "type": "string"
                     },
                     "python.analysis.typeCheckingMode": {
-                      "default": "basic",
-                      "description": "Defines the default rule set for type checking.",
+                      "type": "string",
+                      "default": "off",
                       "enum": [
                         "off",
                         "basic",
                         "strict"
                       ],
-                      "type": "string"
+                      "description": "Defines the default rule set for type checking.",
+                      "enumDescriptions": [
+                        "Surfaces diagnostics for invalid syntax, unresolved imports, undefined variables.",
+                        "All \"off\" rules + basic type checking rules.",
+                        "All \"off\" rules + all type checking rules."
+                      ]
                     },
                     "python.analysis.typeshedPaths": {
                       "default": [],
