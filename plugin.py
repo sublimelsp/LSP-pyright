@@ -143,7 +143,7 @@ class LspPyrightPlugin(NpmClientHandler):
         return default
 
     @classmethod
-    def get_plugin_setting(cls, key: str, default: Optional[Any] = None) -> Any:
+    def get_plugin_setting(cls, key: str, default: Any = None) -> Any:
         return sublime.load_settings(cls.package_name + ".sublime-settings").get(key, default)
 
     def find_package_dependency_dirs(self, py_ver: Tuple[int, int] = (3, 3)) -> List[str]:
