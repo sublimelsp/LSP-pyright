@@ -89,14 +89,15 @@ class LspPyrightPlugin(NpmClientHandler):
     def on_server_response_async(self, method: str, response: Response) -> None:
         if method == "textDocument/hover" and isinstance(response.result, dict):
             contents = response.result.get("contents")
-            if not isinstance(contents, dict) or not contents.get("kind") == "markdown":
-                return
-            response.result["contents"]["value"] = self.patch_markdown_content(contents["value"])
-        elif method == "completionItem/resolve" and isinstance(response.result, dict):
+            if isinstance(contents, dict) and contents.get("kind") == "markdown":
+                response.result["contents"]["value"] = self.patch_markdown_content(contents["value"])
+            return
+
+        if method == "completionItem/resolve" and isinstance(response.result, dict):
             documentation = response.result.get("documentation")
-            if not isinstance(documentation, dict) or not documentation.get("kind") == "markdown":
-                return
-            response.result["documentation"]["value"] = self.patch_markdown_content(documentation["value"])
+            if isinstance(documentation, dict) and documentation.get("kind") == "markdown":
+                response.result["documentation"]["value"] = self.patch_markdown_content(documentation["value"])
+            return
 
     # -------------- #
     # custom methods #
