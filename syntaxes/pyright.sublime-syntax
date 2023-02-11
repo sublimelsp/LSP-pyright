@@ -36,6 +36,7 @@ contexts:
 
   lsp-statement:
     - include: pop-end
+    - include: lsp-classes-instantiate
     - match: ({{identifier}})(:?)(?=\s*(?:\(|Overload\[))
       captures:
         1: meta.qualified-name.python meta.generic-name.python
@@ -46,10 +47,24 @@ contexts:
           push: lsp-in-overload-function
         - match: (?=\(\()
           push: lsp-in-union-function
-        # normal (function) or (method)
-        - include: lsp-function-parameters
     # general cases
     - include: statements
+
+  # when hover on `Bar` in `foo = Bar()`
+  lsp-classes-instantiate:
+    - match: '^\s*(class)\b'
+      captures:
+        1: keyword.declaration.class.python
+      push:
+        - meta_scope: meta.class.python
+        - include: line-continuation-or-pop
+        - match: '(?={{identifier}})'
+          push:
+            - meta_content_scope: entity.name.class.python
+            - include: entity-name-class
+            - match: ''
+              pop: true
+        - include: lsp-function-parameters
 
   # overloaded (function) or (method)
   lsp-in-overload-function:
@@ -79,6 +94,30 @@ contexts:
   # --------- #
   # overrides #
   # --------- #
+
+  functions:
+    # only the following line is modified to allow function definition not at BOL
+    - match: '\b(?:(async)\s+)?(def)\b'
+      captures:
+        1: keyword.declaration.async.python
+        2: keyword.declaration.function.python
+      push:
+        - meta_scope: meta.function.python
+        - include: line-continuation-or-pop
+        - match: ':'
+          scope: punctuation.section.function.begin.python
+          pop: true
+        - match: '(?={{identifier}})'
+          push:
+            - meta_content_scope: entity.name.function.python
+            - include: entity-name-function
+            - match: ''
+              pop: true
+        - match: '(?=\()'
+          set:
+            - match: \(
+              scope: meta.function.parameters.python punctuation.section.parameters.begin.python
+              set: [function-parameters, allow-unpack-operators]
 
   function-terminator:
     # match trailing ending brackets in LSP popup

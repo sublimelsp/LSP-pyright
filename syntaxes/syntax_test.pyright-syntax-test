@@ -3,36 +3,45 @@
 (class) ClassName
 # ^^^^ storage.type
 
-(class) ClassName((key: str, default: Any | None = None) -> Any) | ((key: str, default: Any | None = None) -> Any)
-# ^^^^ storage.type
-#                  ^^^ variable.parameter
-#                       ^^^ support.type
-#                            ^^^^^^^ variable.parameter
-#                                         ^  keyword.operator
-#                                                ^ keyword.operator
-#                                                        ^^ punctuation.separator
-#                                                                ^  keyword.operator
-#                                                                    ^^^ variable.parameter
-#                                                                         ^^^ support.type
-#                                                                              ^^^^^^^ variable.parameter
-#                                                                                           ^  keyword.operator
-#                                                                                                  ^ keyword.operator
-#                                                                                                          ^^ punctuation.separator
+class ClassName(foo: int, *args: Any, **kwargs: Any)
+# ^^^ keyword.declaration.class
+#     ^^^^^^^^^ entity.name.class
+#               ^^^ variable.parameter
+#                  ^ punctuation.separator.annotation
+#                    ^^^ support.type
+#                         ^ keyword.operator.unpacking.sequence
+#                          ^^^^ variable.parameter
+#                              ^ punctuation.separator.annotation
+#                                ^^^ meta.generic-name
+#                                   ^ punctuation.separator
+#                                     ^^ keyword.operator.unpacking.mapping
+#                                       ^^^^^^ variable.parameter
+#                                               ^^^ meta.generic-name
+
+(method) def functionName(cls: Type[Self@ParentName], key: str, default: Any | None = None) -> Any
+# ^^^^^ storage.type
+#                         ^^^ variable.parameter
+#                                                     ^^^ variable.parameter
+#                                                          ^^^ support.type
+#                                                               ^^^^^^^ variable.parameter
+#                                                                            ^  keyword.operator
+#                                                                                   ^ keyword.operator
+#                                                                                           ^^ punctuation.separator
+
+(method) def methodName(cls: Type[Self@ParentName], key: str, default: Any | None = None) -> Any
+# ^^^^^ storage.type
+#                       ^^^ variable.parameter
+#                                                   ^^^ variable.parameter
+#                                                        ^^^ support.type
+#                                                             ^^^^^^^ variable.parameter
+#                                                                          ^  keyword.operator
+#                                                                                 ^ keyword.operator
+#                                                                                         ^^ punctuation.separator
 
 (variable) variable_name: int
 # ^^^^^^^ storage.type
 #                       ^ punctuation.separator.annotation
 #                         ^^^ support.type
-
-(method) methodName: (cls: Type[Self@ParentName], key: str, default: Any | None = None) -> Any
-# ^^^^^ storage.type
-#                     ^^^ variable.parameter
-#                                                 ^^^ variable.parameter
-#                                                      ^^^ support.type
-#                                                           ^^^^^^^ variable.parameter
-#                                                                        ^  keyword.operator
-#                                                                               ^ keyword.operator
-#                                                                                       ^^ punctuation.separator
 
 (variable) TemporaryFile: Overload[(mode: Literal['r', 'w'], buffering: int = ...) -> _TemporaryFileWrapper[str]]
 # ^^^^^^^ storage.type
@@ -43,22 +52,6 @@
 #                                                                           ^ keyword.operator
 #                                                                                  ^^ punctuation.separator
 #                                                                                                               ^ punctuation.section.sequence.end
-
-(method) make: ((key: str, default: Any | None = None) -> Any) | ((key: str, default: Any | None = None) -> Any)
-# ^^^^^ storage.type
-#                ^^^ variable.parameter
-#                     ^^^ support.type
-#                          ^^^^^^^ variable.parameter
-#                                       ^  keyword.operator
-#                                              ^ keyword.operator
-#                                                      ^^ punctuation.separator
-#                                                              ^  keyword.operator
-#                                                                  ^^^ variable.parameter
-#                                                                       ^^^ support.type
-#                                                                            ^^^^^^^ variable.parameter
-#                                                                                         ^  keyword.operator
-#                                                                                                ^ keyword.operator
-#                                                                                                        ^^ punctuation.separator
 
 import os, tempfile
 if os.name != "nt":
