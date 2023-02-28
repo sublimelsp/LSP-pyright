@@ -6,7 +6,7 @@ hidden: true
 file_extensions:
   - pyright-syntax-test
 
-extends: Packages/Python/Python.sublime-syntax
+extends: Packages/LSP-pyright/syntaxes/Python.sublime-syntax
 
 contexts:
   main:
