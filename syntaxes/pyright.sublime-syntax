@@ -43,30 +43,39 @@ contexts:
 ###[ PYRIGHT TYPE ANNOTATIONS ]###############################################
 
   lsp-type-annotations:
-    - match: (?=Overload\[)
-      push: lsp-in-overload-function
     - match: (?=\(\()
-      push: lsp-in-union-function
-
-  # overloaded (function) or (method)
-  lsp-in-overload-function:
-    - match: (Overload)(\[)
-      captures:
-        1: meta.generic-name.python
-        2: punctuation.section.sequence.begin.python
-      push: lsp-in-overload-function
-    - match: (?=\()
-      push: function-parameter-list
-    - include: eol-pop
+      push: lsp-union-function
+    - include: lsp-type-signatures
 
   # union of (function) or (method)
-  lsp-in-union-function:
+  lsp-union-function:
     - match: \((?=\()
       scope: punctuation.section.parameters.begin.python
       push: function-parameter-list
     - match: \|
       scope: keyword.operator.arithmetic.python
     - include: eol-pop
+
+  lsp-type-signatures:
+    - match: (?={{path}}\s*\[)
+      push:
+        - lsp-type-list
+        - qualified-name-content
+
+  lsp-type-list:
+    - match: \[
+      scope: punctuation.section.sequence.begin.python
+      set: lsp-type-list-body
+
+  lsp-type-list-body:
+    - meta_scope: meta.sequence.list.python
+    - match: \]
+      scope: punctuation.section.sequence.end.python
+      set: after-expression
+    - match: (?=\()
+      push: function-parameter-list
+    - include: lsp-type-signatures
+    - include: expression-in-a-group
 
 ###[ PYTHON CLASS DEFINITION OVERRIDES ]######################################
 
@@ -129,14 +138,23 @@ contexts:
         2: keyword.declaration.function.python
       push: function-definition-name
 
+  function-definition-name:
+    - meta_prepend: true
+    # colon without function parameter list denotes extended function signature
+    - match: '{{colon}}'
+      scope: meta.function.python punctuation.section.function.begin.python
+      set: lsp-function-signature
+
+  lsp-function-signature:
+    - meta_content_scope: meta.function.annotation.signature.python
+    - include: function-definition-end
+    - include: lsp-type-annotations
+    - include: expression-in-a-statement
+
   function-definition-end:
     - meta_prepend: true
     # match trailing ending brackets in LSP popup
-    - match: \)
-      scope: punctuation.section.parameters.end.python
-      pop: 1
-    - match: \]
-      scope: punctuation.section.sequence.end.python
+    - match: (?=[])])
       pop: 1
     # the separator among overloaded function signatures
     - match: ','
