@@ -86,7 +86,7 @@ class ClassName(foo: int, /, *args: Any, **kwargs: Any)
 #                                                                                                  ^ punctuation.section.parameters.end.python
 #                                                                                                    ^^ punctuation.separator.annotation.return.python
 #                                                                                                       ^^^^^^^^ meta.path.python meta.generic-name.python
-#                                                                                                               ^ punctuation.separator.parameters.python
+#                                                                                                               ^ punctuation.separator.sequence.python
 #                                                                                                                 ^^^^ meta.path.python meta.generic-name.python
 #                                                                                                                     ^ punctuation.section.sequence.begin.python
 #                                                                                                                      ^^^^^^ meta.path.python meta.generic-name.python

@@ -156,12 +156,8 @@ contexts:
 
   function-definition-end:
     - meta_prepend: true
-    # match trailing ending brackets in LSP popup
-    - match: (?=[])])
-      pop: 1
-    # the separator among overloaded function signatures
-    - match: ','
-      scope: punctuation.separator.parameters.python
+    # additional conditions which terminate a function signature
+    - match: (?=[,)\]])
       pop: 1
 
 ###[ PROTOTYPES ]#############################################################
