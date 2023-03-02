@@ -103,6 +103,9 @@ contexts:
     - match: ','
       scope: punctuation.separator.parameters.python
       push: allow-unpack-operators
+    - match: /
+      scope: storage.modifier.positional-args-only.python
+      push: function-parameter-expect-comma
     - match: '{{assignment_operator}}'
       scope: keyword.operator.assignment.python
       set: class-definition-parameter-default-value

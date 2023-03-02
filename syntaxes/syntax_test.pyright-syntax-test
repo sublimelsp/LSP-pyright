@@ -3,30 +3,33 @@
 (class) ClassName
 # ^^^^ storage.type
 
-class ClassName(foo: int, *args: Any, **kwargs: Any)
+class ClassName(foo: int, /, *args: Any, **kwargs: Any)
 # ^^^ keyword.declaration.class
 #     ^^^^^^^^^ entity.name.class
 #               ^^^ variable.parameter
 #                  ^ punctuation.separator.annotation
 #                    ^^^ support.type
-#                         ^ keyword.operator.unpacking.sequence
-#                          ^^^^ variable.parameter
-#                              ^ punctuation.separator.annotation
-#                                ^^^ meta.generic-name
-#                                   ^ punctuation.separator
-#                                     ^^ keyword.operator.unpacking.mapping
-#                                       ^^^^^^ variable.parameter
-#                                               ^^^ meta.generic-name
+#                         ^ storage.modifier.positional-args-only
+#                            ^ keyword.operator.unpacking.sequence
+#                             ^^^^ variable.parameter
+#                                 ^ punctuation.separator.annotation
+#                                   ^^^ meta.generic-name
+#                                      ^ punctuation.separator
+#                                        ^^ keyword.operator.unpacking.mapping
+#                                          ^^^^^^ variable.parameter
+#                                                  ^^^ meta.generic-name
 
-(method) def functionName(cls: Type[Self@ParentName], key: str, default: Any | None = None) -> Any
+(method) def functionName(cls: Type[Self@ParentName], /, key: str, default: Any | None = None) -> Any
 # ^^^^^ storage.type
 #                         ^^^ variable.parameter
-#                                                     ^^^ variable.parameter
-#                                                          ^^^ support.type
-#                                                               ^^^^^^^ variable.parameter
-#                                                                            ^  keyword.operator
-#                                                                                   ^ keyword.operator
-#                                                                                           ^^ punctuation.separator
+#                                                     ^ storage.modifier.positional-args-only
+#                                                        ^^^ variable.parameter
+#                                                             ^^^ support.type
+#                                                                  ^^^^^^^ variable.parameter
+#                                                                               ^  keyword.operator
+#                                                                                      ^ keyword.operator
+#                                                                                              ^^ punctuation.separator
+
 
 (method) def methodName(cls: Type[Self@ParentName], key: str, default: Any | None = None) -> Any
 # ^^^^^ storage.type
