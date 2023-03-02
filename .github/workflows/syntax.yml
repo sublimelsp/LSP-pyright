@@ -18,9 +18,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - build: 3211
-            packages: st3
-          - build: 4126
+          - build: 4143
             packages: master
     runs-on: ubuntu-latest
     steps:
