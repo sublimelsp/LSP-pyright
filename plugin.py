@@ -114,6 +114,7 @@ class LspPyrightPlugin(NpmClientHandler):
         )
         content = re.sub(r"\n:returns?:", r"\n__Returns:__", content)
         content = re.sub(r"\n:rtype:", r"\n__Returntype:__", content)
+        content = re.sub(r"\n:deprecated:", r"\n⚠️ __Deprecated:__", content)
         return content
 
     def detect_st_py_ver(self, dev_environment: str) -> Tuple[int, int]:
