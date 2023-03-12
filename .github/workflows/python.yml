@@ -6,7 +6,8 @@ name: Python
 on:
   push:
     branches:
-      - '**'
+      - master
+      - st3
     paths:
       - '.github/workflows/python.yml'
       - '**.py'
@@ -14,7 +15,8 @@ on:
       - 'Makefile'
   pull_request:
     branches:
-      - '**'
+      - master
+      - st3
     paths:
       - '.github/workflows/python.yml'
       - '**.py'
