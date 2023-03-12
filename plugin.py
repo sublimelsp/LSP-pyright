@@ -7,7 +7,7 @@ import sys
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
-from LSP.plugin.core.typing import Any, Callable, cast, List, Optional, Tuple
+from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
