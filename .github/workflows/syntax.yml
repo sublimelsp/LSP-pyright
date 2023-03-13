@@ -2,11 +2,17 @@ name: Syntax Tests
 
 on:
   push:
+    branches:
+      - master
+      - st3
     paths:
       - '.github/workflows/syntax.yml'
       - '**.sublime-syntax'
       - '**/syntax_test*'
   pull_request:
+    branches:
+      - master
+      - st3
     paths:
       - '.github/workflows/syntax.yml'
       - '**.sublime-syntax'

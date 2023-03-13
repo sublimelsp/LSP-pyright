@@ -6,7 +6,8 @@ import sys
 
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, Response, WorkspaceFolder
-from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple
+from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
+from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
@@ -88,15 +89,27 @@ class LspPyrightPlugin(NpmClientHandler):
 
     def on_server_response_async(self, method: str, response: Response) -> None:
         if method == "textDocument/hover" and isinstance(response.result, dict):
-            contents = response.result.get("contents")
+            hover = cast(Hover, response.result)
+            contents = hover.get("contents")
             if isinstance(contents, dict) and contents.get("kind") == "markdown":
-                response.result["contents"]["value"] = self.patch_markdown_content(contents["value"])
+                contents["value"] = self.patch_markdown_content(contents["value"])
             return
-
         if method == "completionItem/resolve" and isinstance(response.result, dict):
-            documentation = response.result.get("documentation")
+            completion = cast(CompletionItem, response.result)
+            documentation = completion.get("documentation")
             if isinstance(documentation, dict) and documentation.get("kind") == "markdown":
-                response.result["documentation"]["value"] = self.patch_markdown_content(documentation["value"])
+                documentation["value"] = self.patch_markdown_content(documentation["value"])
+            return
+        if method == "textDocument/signatureHelp" and isinstance(response.result, dict):
+            signature_help = cast(SignatureHelp, response.result)
+            for signature in signature_help["signatures"]:
+                documentation = signature.get("documentation")
+                if isinstance(documentation, dict) and documentation.get("kind") == "markdown":
+                    documentation["value"] = self.patch_markdown_content(documentation["value"])
+                for parameter in signature.get("parameters") or []:
+                    documentation = parameter.get("documentation")
+                    if isinstance(documentation, dict) and documentation.get("kind") == "markdown":
+                        documentation["value"] = self.patch_markdown_content(documentation["value"])
             return
 
     # -------------- #
