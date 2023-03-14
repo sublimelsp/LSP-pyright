@@ -1,6 +1,7 @@
 import os
 import re
 import shlex
+import shutil
 import subprocess
 import sys
 
@@ -70,7 +71,7 @@ class LspPyrightPlugin(NpmClientHandler):
         workspace_folders: List[WorkspaceFolder],
         configuration: ClientConfig,
     ) -> Optional[str]:
-        python_path = cls.resolve_python_path_from_venv(configuration.settings, workspace_folders) or "python"
+        python_path = cls.python_path(configuration.settings, workspace_folders)
         print('{}: Using python path "{}"'.format(cls.name(), python_path))
         configuration.settings.set("python.pythonPath", python_path)
         return None
@@ -185,9 +186,29 @@ class LspPyrightPlugin(NpmClientHandler):
         return [path for path in dep_dirs if os.path.isdir(path)]
 
     @classmethod
-    def resolve_python_path_from_venv(
-        cls, settings: DottedDict, workspace_folders: List[WorkspaceFolder]
-    ) -> Optional[str]:
+    def python_path(cls, settings: DottedDict, workspace_folders: List[WorkspaceFolder]) -> str:
+        python_path = settings.get("python.pythonPath")
+        if python_path:
+            return python_path
+
+        if workspace_folders:
+            workspace_folder = os.path.abspath(workspace_folders[0].path)
+
+            while True:
+                python_path = cls.python_path_from_venv(workspace_folder)
+                if python_path:
+                    return python_path
+
+                parent = os.path.dirname(workspace_folder)
+                if workspace_folder != parent:
+                    workspace_folder = parent
+                else:
+                    break
+
+        return shutil.which("python") or "python"
+
+    @classmethod
+    def python_path_from_venv(cls, workspace_folder: str) -> Optional[str]:
         """
         Resolves the python binary path depending on environment variables and files in the workspace.
 
@@ -201,14 +222,6 @@ class LspPyrightPlugin(NpmClientHandler):
                 binary_path = os.path.join(path, "bin", "python")
 
             return binary_path if os.path.isfile(binary_path) else None
-
-        python_path = settings.get("python.pythonPath")
-        if python_path:
-            return python_path
-
-        if not workspace_folders:
-            return None
-        workspace_folder = workspace_folders[0].path
 
         # Config file, venv resolution command, post-processing
         venv_config_files = [
