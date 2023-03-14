@@ -186,7 +186,7 @@ class LspPyrightPlugin(NpmClientHandler):
         return [path for path in dep_dirs if os.path.isdir(path)]
 
     @classmethod
-    def python_path(cls, settings: DottedDict, workspace_folders: List[WorkspaceFolder]) -> Optional[str]:
+    def python_path(cls, settings: DottedDict, workspace_folders: List[WorkspaceFolder]) -> str:
         python_path = settings.get("python.pythonPath")
         if python_path:
             return python_path
@@ -205,7 +205,7 @@ class LspPyrightPlugin(NpmClientHandler):
                 else:
                     break
 
-        return shutil.which("python")
+        return shutil.which("python") or "python"
 
     @classmethod
     def python_path_from_venv(cls, workspace_folder: str) -> Optional[str]:
