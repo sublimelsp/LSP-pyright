@@ -3,30 +3,33 @@
 (class) ClassName
 # ^^^^ storage.type
 
-class ClassName(foo: int, *args: Any, **kwargs: Any)
+class ClassName(foo: int, /, *args: Any, **kwargs: Any)
 # ^^^ keyword.declaration.class
 #     ^^^^^^^^^ entity.name.class
 #               ^^^ variable.parameter
 #                  ^ punctuation.separator.annotation
 #                    ^^^ support.type
-#                         ^ keyword.operator.unpacking.sequence
-#                          ^^^^ variable.parameter
-#                              ^ punctuation.separator.annotation
-#                                ^^^ meta.generic-name
-#                                   ^ punctuation.separator
-#                                     ^^ keyword.operator.unpacking.mapping
-#                                       ^^^^^^ variable.parameter
-#                                               ^^^ meta.generic-name
+#                         ^ storage.modifier.positional-args-only
+#                            ^ keyword.operator.unpacking.sequence
+#                             ^^^^ variable.parameter
+#                                 ^ punctuation.separator.annotation
+#                                   ^^^ meta.generic-name
+#                                      ^ punctuation.separator
+#                                        ^^ keyword.operator.unpacking.mapping
+#                                          ^^^^^^ variable.parameter
+#                                                  ^^^ meta.generic-name
 
-(method) def functionName(cls: Type[Self@ParentName], key: str, default: Any | None = None) -> Any
+(method) def functionName(cls: Type[Self@ParentName], /, key: str, default: Any | None = None) -> Any
 # ^^^^^ storage.type
 #                         ^^^ variable.parameter
-#                                                     ^^^ variable.parameter
-#                                                          ^^^ support.type
-#                                                               ^^^^^^^ variable.parameter
-#                                                                            ^  keyword.operator
-#                                                                                   ^ keyword.operator
-#                                                                                           ^^ punctuation.separator
+#                                                     ^ storage.modifier.positional-args-only
+#                                                        ^^^ variable.parameter
+#                                                             ^^^ support.type
+#                                                                  ^^^^^^^ variable.parameter
+#                                                                               ^  keyword.operator
+#                                                                                      ^ keyword.operator
+#                                                                                              ^^ punctuation.separator
+
 
 (method) def methodName(cls: Type[Self@ParentName], key: str, default: Any | None = None) -> Any
 # ^^^^^ storage.type
@@ -38,6 +41,59 @@ class ClassName(foo: int, *args: Any, **kwargs: Any)
 #                                                                                 ^ keyword.operator
 #                                                                                         ^^ punctuation.separator
 
+(function) def fail: _WithException[(reason: str = "", pytrace: bool = True, msg: str | None = None) -> NoReturn, Type[Failed]]
+#^^^^^^^^ storage.type.python
+#          ^^^^^^^^^ meta.function.python
+#                    ^^^^^^^^^^^^^^ meta.function.annotation.signature.python - meta.item-access
+#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.annotation.signature.python meta.sequence.list.python
+#                                   ^^^^^^^ meta.function.parameters.python
+#                                          ^^^^^^ meta.function.parameters.annotation.python
+#                                                ^^^^ meta.function.parameters.default-value.python
+#                                                    ^^^^^^^^^ meta.function.parameters.python
+#                                                             ^^^^^^^ meta.function.parameters.annotation.python
+#                                                                    ^^^^^^ meta.function.parameters.default-value.python
+#                                                                          ^^^^^ meta.function.parameters.python
+#                                                                               ^^^^^^^^^^^^^ meta.function.parameters.annotation.python
+#                                                                                            ^^^^^^ meta.function.parameters.default-value.python
+#                                                                                                  ^ meta.function.parameters.python
+#                                                                                                   ^ meta.function.python
+#                                                                                                    ^^^^^^^^^^^ meta.function.annotation.return.python
+#                                                                                                                     ^^^^^^^^ meta.sequence.list.python
+#          ^^^ keyword.declaration.function.python
+#              ^^^^ entity.name.function.python
+#                    ^^^^^^^^^^^^^^ meta.path.python meta.generic-name.python
+#                                  ^ punctuation.section.sequence.begin.python
+#                                   ^ punctuation.section.parameters.begin.python
+#                                    ^^^^^^ variable.parameter.python
+#                                          ^ punctuation.separator.annotation.parameter.python
+#                                            ^^^ meta.path.python support.type.python
+#                                                ^ keyword.operator.assignment.python
+#                                                  ^^ meta.string.python string.quoted.double.python
+#                                                    ^ punctuation.separator.parameters.python
+#                                                      ^^^^^^^ variable.parameter.python
+#                                                             ^ punctuation.separator.annotation.parameter.python
+#                                                               ^^^^ meta.path.python support.type.python
+#                                                                    ^ keyword.operator.assignment.python
+#                                                                      ^^^^ constant.language.boolean.python
+#                                                                          ^ punctuation.separator.parameters.python
+#                                                                            ^^^ variable.parameter.python
+#                                                                               ^ punctuation.separator.annotation.parameter.python
+#                                                                                 ^^^ meta.path.python support.type.python
+#                                                                                     ^ keyword.operator.arithmetic.python
+#                                                                                       ^^^^ constant.language.null.python
+#                                                                                            ^ keyword.operator.assignment.python
+#                                                                                              ^^^^ constant.language.null.python
+#                                                                                                  ^ punctuation.section.parameters.end.python
+#                                                                                                    ^^ punctuation.separator.annotation.return.python
+#                                                                                                       ^^^^^^^^ meta.path.python meta.generic-name.python
+#                                                                                                               ^ punctuation.separator.sequence.python
+#                                                                                                                 ^^^^ meta.path.python meta.generic-name.python
+#                                                                                                                     ^ punctuation.section.sequence.begin.python
+#                                                                                                                      ^^^^^^ meta.path.python meta.generic-name.python
+#                                                                                                                            ^ punctuation.section.sequence.end.python
+#                                                                                                                             ^ punctuation.section.sequence.end.python
+#
+
 (variable) variable_name: int
 # ^^^^^^^ storage.type
 #                       ^ punctuation.separator.annotation
@@ -45,6 +101,11 @@ class ClassName(foo: int, *args: Any, **kwargs: Any)
 
 (variable) TemporaryFile: Overload[(mode: Literal['r', 'w'], buffering: int = ...) -> _TemporaryFileWrapper[str]]
 # ^^^^^^^ storage.type
+#          ^^^^^^^^^^^^^ meta.path.python meta.generic-name.python
+#                       ^^^^^^^^^^ meta.variable.annotation.python
+#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.variable.annotation.python meta.sequence.list.python
+#                       ^ punctuation.separator.annotation.variable.python
+#                         ^^^^^^^^ meta.path.python meta.generic-name.python
 #                                 ^ punctuation.section.sequence.begin
 #                                   ^^^^ variable.parameter
 #                                                 ^^^ string.quoted.single

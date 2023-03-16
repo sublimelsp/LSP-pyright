@@ -2,150 +2,166 @@
 ---
 name: Python (for LSP)
 scope: source.python.lsp
+version: 2
 hidden: true
+
+extends: Packages/Python/Python.sublime-syntax
+
 file_extensions:
   - pyright-syntax-test
 
-extends: Packages/LSP-pyright/syntaxes/Python.sublime-syntax
-
 contexts:
   main:
-    - meta_include_prototype: false
-    - include: comments
-    - include: lsp-line
+    - include: lsp-type
+    - include: statements
 
-  lsp-line:
-    # consume the leading type. e.g., (function)
-    - match: (?=^\()
-      push: lsp-type
-    - include: lsp-statement
+###[ PYTHON TYPE ANNOTATIONS ]################################################
+
+  function-parameter-annotation:
+    - meta_prepend: true
+    - include: lsp-type-annotations
+
+  variable-annotation:
+    - meta_prepend: true
+    - include: lsp-type-annotations
+
+###[ PYRIGHT TYPE TAGS ]######################################################
 
   lsp-type:
-    - meta_include_prototype: false
-    - match: \(
+    # consume the leading type. e.g., (function)
+    - match: ^\(
       scope: punctuation.section.parens.begin.python
-      set: lsp-type-body
-    - include: pop-else
+      push: lsp-type-body
 
   lsp-type-body:
     - meta_scope: meta.parens.python
     - meta_content_scope: storage.type.python
     - match: \)
       scope: punctuation.section.parens.end.python
-      pop: true
+      pop: 1
 
-  lsp-statement:
-    - include: pop-end
-    - include: lsp-classes-instantiate
-    - match: ({{identifier}})(:?)(?=\s*(?:\(|Overload\[))
-      captures:
-        1: meta.qualified-name.python meta.generic-name.python
-        2: punctuation.separator.annotation.variable.python
-      set:
-        - include: pop-end
-        - match: (?=Overload\[)
-          push: lsp-in-overload-function
-        - match: (?=\(\()
-          push: lsp-in-union-function
-    # general cases
-    - include: statements
+###[ PYRIGHT TYPE ANNOTATIONS ]###############################################
 
-  # when hover on `Bar` in `foo = Bar()`
-  lsp-classes-instantiate:
-    - match: '^\s*(class)\b'
-      captures:
-        1: keyword.declaration.class.python
-      push:
-        - meta_scope: meta.class.python
-        - include: line-continuation-or-pop
-        - match: '(?={{identifier}})'
-          push:
-            - meta_content_scope: entity.name.class.python
-            - include: entity-name-class
-            - match: ''
-              pop: true
-        - include: lsp-function-parameters
-
-  # overloaded (function) or (method)
-  lsp-in-overload-function:
-    - include: pop-end
-    - match: (Overload)(\[)
-      captures:
-        1: meta.qualified-name.python meta.generic-name.python
-        2: punctuation.section.sequence.begin.python
-      push: lsp-in-overload-function
-    - match: (?=\()
-      push: lsp-function-parameters
+  lsp-type-annotations:
+    - match: (?=\(\()
+      push: lsp-union-function
+    - include: lsp-type-signatures
 
   # union of (function) or (method)
-  lsp-in-union-function:
-    - include: pop-end
+  lsp-union-function:
     - match: \((?=\()
       scope: punctuation.section.parameters.begin.python
-      push: lsp-function-parameters
+      push: function-parameter-list
     - match: \|
       scope: keyword.operator.arithmetic.python
+    - include: eol-pop
 
-  lsp-function-parameters:
+  lsp-type-signatures:
+    - match: (?={{path}}\s*\[)
+      push:
+        - lsp-type-list
+        - qualified-name-content
+
+  lsp-type-list:
+    - match: \[
+      scope: punctuation.section.sequence.begin.python
+      set: lsp-type-list-body
+
+  lsp-type-list-body:
+    - meta_scope: meta.sequence.list.python
+    - match: \]
+      scope: punctuation.section.sequence.end.python
+      set: after-expression
+    - match: (?=\()
+      push: function-parameter-list
+    - include: lsp-type-signatures
+    - include: expression-in-a-group
+
+###[ PYTHON CLASS DEFINITION OVERRIDES ]######################################
+
+  class-definition-base-list:
+    # Python's class definitions look like:
+    #
+    #   `class Name(BaseClass1, BaseClass2)`
+    #
+    # pyright's class instantiation signatures however look like function definitions:
+    #
+    #   `class Name(var1: type1, var2: type2)`
+    #
+    - meta_include_prototype: false
     - match: \(
-      scope: meta.function.parameters.python punctuation.section.parameters.begin.python
-      set: [function-parameters, allow-unpack-operators]
+      scope: meta.class.parameters.python punctuation.section.parameters.begin.python
+      set:
+        - class-definition-base-list-body
+        - allow-unpack-operators
 
-  # --------- #
-  # overrides #
-  # --------- #
+  class-definition-base-list-body:
+    - meta_content_scope: meta.class.parameters.python
+    - match: \)
+      scope: meta.class.parameters.python punctuation.section.parameters.end.python
+      pop: 1
+    - match: ','
+      scope: punctuation.separator.parameters.python
+      push: allow-unpack-operators
+    - match: /
+      scope: storage.modifier.positional-args-only.python
+      push: function-parameter-expect-comma
+    - match: '{{assignment_operator}}'
+      scope: keyword.operator.assignment.python
+      set: class-definition-parameter-default-value
+    - match: '{{colon}}'
+      scope: punctuation.separator.annotation.parameter.python
+      set: class-definition-parameter-annotation
+    - include: parameter-names
+    - include: line-continuations
+    - include: illegal-assignment-expressions
 
-  functions:
-    # only the following line is modified to allow function definition not at BOL
-    - match: '\b(?:(async)\s+)?(def)\b'
+  class-definition-parameter-annotation:
+    - meta_scope: meta.class.parameters.annotation.python
+    - match: (?=[,)=])
+      set: class-definition-base-list-body
+    - match: None\b
+      scope: constant.language.null.python
+    - include: expression-in-a-group
+
+  class-definition-parameter-default-value:
+    - meta_scope: meta.class.parameters.default-value.python
+    - match: (?=[,)])
+      set: class-definition-base-list-body
+    - include: expression-in-a-group
+
+###[ PYTHON FUNCTION DEFINITION OVERRIDES ]###################################
+
+  function-definitions:
+    # make sure to highlight `def` after pyright's `(function)` tag.
+    - match: (?:(async)\s+)?(def)\b
+      scope: meta.function.python
       captures:
         1: keyword.declaration.async.python
         2: keyword.declaration.function.python
-      push:
-        - meta_scope: meta.function.python
-        - include: line-continuation-or-pop
-        - match: ':'
-          scope: punctuation.section.function.begin.python
-          pop: true
-        - match: '(?={{identifier}})'
-          push:
-            - meta_content_scope: entity.name.function.python
-            - include: entity-name-function
-            - match: ''
-              pop: true
-        - match: '(?=\()'
-          set:
-            - match: \(
-              scope: meta.function.parameters.python punctuation.section.parameters.begin.python
-              set: [function-parameters, allow-unpack-operators]
+      push: function-definition-name
 
-  function-terminator:
-    # match trailing ending brackets in LSP popup
-    - match: \)
-      scope: punctuation.section.parameters.end.python
-      pop: true
-    - match: \]
-      scope: punctuation.section.sequence.end.python
-      pop: true
-    # the separator among overloaded function signatures
-    - match: ','
-      scope: punctuation.separator.parameters.python
-      pop: true
-    # if ST 4, we can just use "meta_prepend" to replace the followings...
-    # - meta_prepend: true
-    - match: ':'
+  function-definition-name:
+    - meta_prepend: true
+    # colon without function parameter list denotes extended function signature
+    - match: '{{colon}}'
       scope: meta.function.python punctuation.section.function.begin.python
-      pop: true
-    - include: line-continuation-or-pop
+      set: lsp-function-signature
 
-  # ------- #
-  # helpers #
-  # ------- #
+  lsp-function-signature:
+    - meta_content_scope: meta.function.annotation.signature.python
+    - include: function-definition-end
+    - include: lsp-type-annotations
+    - include: expression-in-a-statement
 
-  pop-else:
-    - match: (?=\S)
-      pop: true
+  function-definition-end:
+    - meta_prepend: true
+    # additional conditions which terminate a function signature
+    - match: (?=[,)\]])
+      pop: 1
 
-  pop-end:
+###[ PROTOTYPES ]#############################################################
+
+  eol-pop:
     - match: $
-      pop: true
+      pop: 1
