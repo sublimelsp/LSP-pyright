@@ -124,3 +124,59 @@ NamedTemporaryFile: Overload[() -> None, () -> None, (mode: Literal['r', 'w'] = 
 #                                                                             ^ keyword.operator.assignment
 #                                                                                    ^^^^ variable.parameter
 #                                                                                              ^ keyword.operator.assignment
+
+def foo(callback: ((arg: _T@foo) -> bool) | ((_T@foo) -> int) | None = None) -> (_T@foo | None)
+#       ^^^^^^^^ meta.function.parameters.python
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.function.parameters.annotation.python
+#                 ^ meta.group.python - meta.group meta.function
+#                  ^^^^ meta.group.python meta.function.parameters.python
+#                      ^^^^^^^^ meta.group.python meta.function.parameters.annotation.python
+#                              ^ meta.group.python meta.function.parameters.python
+#                               ^ meta.group.python meta.function.python
+#                                ^^^^^^^ meta.group.python meta.function.annotation.return.python
+#                                       ^ meta.group.python -  meta.group meta.function
+#                                           ^ meta.group.python - meta.group meta.function
+#                                            ^^^^^^^^ meta.group.python meta.function.parameters.python
+#                                                    ^ meta.group.python meta.function.python
+#                                                     ^^^^^^ meta.group.python meta.function.annotation.return.python
+#                                                           ^ meta.group.python - meta.group meta.function
+#                                                                    ^^^^^^ meta.function.parameters.default-value.python
+#                                                                          ^ meta.function.parameters.python
+#                                                                           ^ meta.function.python
+#                                                                            ^^^ meta.function.annotation.return.python - meta.group
+#                                                                               ^^^^^^^^^^^^^^^ meta.function.annotation.return.python meta.group.python
+#               ^ punctuation.separator.annotation.parameter.python
+#                 ^ punctuation.section.group.begin.python
+#                  ^ punctuation.section.parameters.begin.python
+#                   ^^^ variable.parameter.python
+#                      ^ punctuation.separator.annotation.parameter.python
+#                        ^^ meta.path.python meta.generic-name.python
+#                          ^ keyword.operator.arithmetic.python
+#                           ^^^ meta.path.python meta.generic-name.python
+#                              ^ punctuation.section.parameters.end.python
+#                                ^^ punctuation.separator.annotation.return.python
+#                                   ^^^^ meta.path.python support.type.python
+#                                       ^ punctuation.section.group.end.python
+#                                         ^ keyword.operator.arithmetic.python
+#                                           ^ punctuation.section.group.begin.python
+#                                            ^ punctuation.section.parameters.begin.python
+#                                             ^^ meta.path.python meta.generic-name.python
+#                                               ^ keyword.operator.arithmetic.python
+#                                                ^^^ meta.path.python meta.generic-name.python
+#                                                   ^ punctuation.section.parameters.end.python
+#                                                     ^^ punctuation.separator.annotation.return.python
+#                                                        ^^^ meta.path.python support.type.python
+#                                                           ^ punctuation.section.group.end.python
+#                                                             ^ keyword.operator.arithmetic.python
+#                                                               ^^^^ constant.language.null.python
+#                                                                    ^ keyword.operator.assignment.python
+#                                                                      ^^^^ constant.language.null.python
+#                                                                          ^ punctuation.section.parameters.end.python
+#                                                                            ^^ punctuation.separator.annotation.return.python
+#                                                                               ^ punctuation.section.group.begin.python
+#                                                                                ^^ meta.path.python meta.generic-name.python
+#                                                                                  ^ keyword.operator.arithmetic.python
+#                                                                                   ^^^ meta.path.python meta.generic-name.python
+#                                                                                       ^ keyword.operator.arithmetic.python
+#                                                                                         ^^^^ constant.language.null.python
+#                                                                                             ^ punctuation.section.group.end.python

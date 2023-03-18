@@ -43,18 +43,77 @@ contexts:
 ###[ PYRIGHT TYPE ANNOTATIONS ]###############################################
 
   lsp-type-annotations:
-    - match: (?=\(\()
-      push: lsp-union-function
+    - include: lsp-type-parens
     - include: lsp-type-signatures
 
-  # union of (function) or (method)
-  lsp-union-function:
-    - match: \((?=\()
-      scope: punctuation.section.parameters.begin.python
-      push: function-parameter-list
-    - match: \|
-      scope: keyword.operator.arithmetic.python
-    - include: eol-pop
+  lsp-type-parens:
+    - match: (?=\()
+      branch_point: lsp-type-parens
+      branch:
+        - lsp-type-function
+        - lsp-type-group
+
+  lsp-type-function:
+    - match: \(
+      scope: meta.function.parameters.python punctuation.section.parameters.begin.python
+      set: lsp-type-function-parameter-list
+    - include: immediately-pop
+
+  lsp-type-function-parameter-list:
+    - meta_content_scope: meta.function.parameters.python
+    - match: \)
+      scope: meta.function.parameters.python punctuation.section.parameters.end.python
+      set: lsp-type-function-return-type
+    - match: '{{colon}}'
+      scope: punctuation.separator.annotation.parameter.python
+      set: lsp-type-function-parameter-annotation
+    - match: '{{identifier}}(?={{colon}})'
+      scope: variable.parameter.python
+    - include: function-parameter-annotation
+    - include: lsp-type-parameter-common
+
+  lsp-type-function-parameter-annotation:
+    - meta_scope: meta.function.parameters.annotation.python
+    - match: (?=[,)=])
+      set: lsp-type-function-parameter-list
+    - match: None\b
+      scope: constant.language.null.python
+    - include: expression-in-a-group
+
+  lsp-type-parameter-common:
+    - match: ','
+      scope: punctuation.separator.parameters.python
+      push: allow-unpack-operators
+    - match: /
+      scope: storage.modifier.positional-args-only.python
+      push: function-parameter-expect-comma
+    - match: '{{assignment_operator}}'
+      scope: keyword.operator.assignment.python
+      set: function-parameter-default-value
+    - include: line-continuations
+    - include: illegal-assignment-expressions
+
+  lsp-type-function-return-type:
+    - meta_content_scope: meta.function.python
+    - match: ->
+      scope: meta.function.annotation.return.python punctuation.separator.annotation.return.python
+      set: function-return-type
+    - match: (?=\S)
+      fail: lsp-type-parens
+
+  lsp-type-group:
+    - match: \(
+      scope: punctuation.section.group.begin.python
+      set: lsp-type-group-body
+    - include: immediately-pop
+
+  lsp-type-group-body:
+    - meta_scope: meta.group.python
+    - match: \)
+      scope: punctuation.section.group.end.python
+      set: after-expression
+    - include: lsp-type-annotations
+    - include: expression-in-a-group
 
   lsp-type-signatures:
     - match: (?={{path}}\s*\[)
@@ -72,9 +131,7 @@ contexts:
     - match: \]
       scope: punctuation.section.sequence.end.python
       set: after-expression
-    - match: (?=\()
-      push: function-parameter-list
-    - include: lsp-type-signatures
+    - include: lsp-type-annotations
     - include: expression-in-a-group
 
 ###[ PYTHON CLASS DEFINITION OVERRIDES ]######################################
@@ -99,22 +156,12 @@ contexts:
     - meta_content_scope: meta.class.parameters.python
     - match: \)
       scope: meta.class.parameters.python punctuation.section.parameters.end.python
-      pop: 1
-    - match: ','
-      scope: punctuation.separator.parameters.python
-      push: allow-unpack-operators
-    - match: /
-      scope: storage.modifier.positional-args-only.python
-      push: function-parameter-expect-comma
-    - match: '{{assignment_operator}}'
-      scope: keyword.operator.assignment.python
-      set: class-definition-parameter-default-value
+      set: after-expression
     - match: '{{colon}}'
       scope: punctuation.separator.annotation.parameter.python
       set: class-definition-parameter-annotation
     - include: parameter-names
-    - include: line-continuations
-    - include: illegal-assignment-expressions
+    - include: lsp-type-parameter-common
 
   class-definition-parameter-annotation:
     - meta_scope: meta.class.parameters.annotation.python
