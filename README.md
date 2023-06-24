@@ -36,7 +36,7 @@ Here are some ways to configure the package and the language server.
   }
   ```
 
-- Through a `pyrightconfig.json` configuration file (check [settings documentation](https://github.com/microsoft/pyright/blob/main/docs/configuration.md))
+- Various options can only be configured through a `pyrightconfig.json` configuration file (check [Pyright configuration](https://github.com/microsoft/pyright/blob/main/docs/configuration.md) for more info)
 
 ### Provided Command Palette commands
 
