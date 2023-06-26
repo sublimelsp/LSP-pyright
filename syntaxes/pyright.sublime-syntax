@@ -5,7 +5,7 @@ scope: source.python.lsp
 version: 2
 hidden: true
 
-extends: Packages/Python/Python.sublime-syntax
+extends: Python.sublime-syntax
 
 file_extensions:
   - pyright-syntax-test
@@ -13,17 +13,37 @@ file_extensions:
 contexts:
   main:
     - include: lsp-type
-    - include: statements
+    - include: class-definitions
+    - include: function-definitions
+    - include: assignment-statements
+    - include: qualified-name
+    - include: comments
 
 ###[ PYTHON TYPE ANNOTATIONS ]################################################
 
-  function-parameter-annotation:
-    - meta_prepend: true
-    - include: lsp-type-annotations
+  function-parameter-annotation-content:
+    - include: type-hint-expressions
 
-  variable-annotation:
+  function-return-type-content:
+    - include: type-hint-expressions
+
+  variable-annotation-content:
+    - include: type-hint-expressions
+
+  type-hint-expressions:
     - meta_prepend: true
-    - include: lsp-type-annotations
+    - match: (?=\()
+      branch_point: lsp-type-parens
+      branch:
+        - lsp-type-function
+        - lsp-type-group
+
+  type-separators:
+    - meta_prepend: true
+    - match: \@
+      scope: punctuation.accessor.python
+    - match: \|
+      scope: keyword.operator.logical.union.python
 
 ###[ PYRIGHT TYPE TAGS ]######################################################
 
@@ -42,43 +62,37 @@ contexts:
 
 ###[ PYRIGHT TYPE ANNOTATIONS ]###############################################
 
-  lsp-type-annotations:
-    - include: lsp-type-parens
-    - include: lsp-type-signatures
-
-  lsp-type-parens:
-    - match: (?=\()
-      branch_point: lsp-type-parens
-      branch:
-        - lsp-type-function
-        - lsp-type-group
-
   lsp-type-function:
     - match: \(
       scope: meta.function.parameters.python punctuation.section.parameters.begin.python
-      set: lsp-type-function-parameter-list
+      set: lsp-type-function-parameter-list-body
     - include: immediately-pop
 
-  lsp-type-function-parameter-list:
+  lsp-type-function-parameter-list-body:
     - meta_content_scope: meta.function.parameters.python
     - match: \)
       scope: meta.function.parameters.python punctuation.section.parameters.end.python
       set: lsp-type-function-return-type
     - match: '{{colon}}'
-      scope: punctuation.separator.annotation.parameter.python
+      scope: punctuation.separator.annotation.python
       set: lsp-type-function-parameter-annotation
     - match: '{{identifier}}(?={{colon}})'
       scope: variable.parameter.python
-    - include: function-parameter-annotation
     - include: lsp-type-parameter-common
+    - include: type-hint-expressions
 
   lsp-type-function-parameter-annotation:
     - meta_scope: meta.function.parameters.annotation.python
-    - match: (?=[,)=])
-      set: lsp-type-function-parameter-list
-    - match: None\b
-      scope: constant.language.null.python
-    - include: expression-in-a-group
+    - include: lsp-type-function-parameter-list-continue
+    - include: line-continuations
+    - match: (?=\S)
+      set: lsp-type-function-parameter-annotation-body
+
+  lsp-type-function-parameter-annotation-body:
+    - meta_scope: meta.function.parameters.annotation.python meta.type.python
+    - include: lsp-type-function-parameter-list-continue
+    - include: line-continuations
+    - include: type-hint-expressions
 
   lsp-type-parameter-common:
     - match: ','
@@ -89,17 +103,41 @@ contexts:
       push: function-parameter-expect-comma
     - match: '{{assignment_operator}}'
       scope: keyword.operator.assignment.python
-      set: function-parameter-default-value
+      set: lsp-type-function-parameter-default-value
     - include: line-continuations
-    - include: illegal-assignment-expressions
+
+  lsp-type-function-parameter-default-value:
+    - meta_scope: meta.function.parameters.default-value.python
+    - include: lsp-type-function-parameter-list-continue
+    - include: expression-in-a-group
+
+  lsp-type-function-parameter-list-continue:
+    - match: (?=[,)=])
+      set: lsp-type-function-parameter-list-body
 
   lsp-type-function-return-type:
     - meta_content_scope: meta.function.python
     - match: ->
-      scope: meta.function.annotation.return.python punctuation.separator.annotation.return.python
-      set: function-return-type
+      scope: punctuation.separator.return-type.python
+      set: lsp-type-function-return-type-begin
     - match: (?=\S)
       fail: lsp-type-parens
+
+  lsp-type-function-return-type-begin:
+    - meta_scope: meta.function.return-type.python
+    - match: (?=\S)
+      set: lsp-type-function-return-type-body
+    - include: eol-pop
+
+  lsp-type-function-return-type-body:
+    - meta_scope: meta.function.return-type.python meta.type.python
+    - include: lsp-type-function-return-type-end
+    - include: type-hint-expressions
+
+  lsp-type-function-return-type-end:
+    - include: line-continuations
+    - match: (?=\s*[\n#),:;=\]}])
+      pop: 1
 
   lsp-type-group:
     - match: \(
@@ -112,27 +150,8 @@ contexts:
     - match: \)
       scope: punctuation.section.group.end.python
       set: after-expression
-    - include: lsp-type-annotations
-    - include: expression-in-a-group
-
-  lsp-type-signatures:
-    - match: (?={{path}}\s*\[)
-      push:
-        - lsp-type-list
-        - qualified-name-content
-
-  lsp-type-list:
-    - match: \[
-      scope: punctuation.section.sequence.begin.python
-      set: lsp-type-list-body
-
-  lsp-type-list-body:
-    - meta_scope: meta.sequence.list.python
-    - match: \]
-      scope: punctuation.section.sequence.end.python
-      set: after-expression
-    - include: lsp-type-annotations
-    - include: expression-in-a-group
+    - include: line-continuations
+    - include: type-hint-expressions
 
 ###[ PYTHON CLASS DEFINITION OVERRIDES ]######################################
 
@@ -158,24 +177,31 @@ contexts:
       scope: meta.class.parameters.python punctuation.section.parameters.end.python
       set: after-expression
     - match: '{{colon}}'
-      scope: punctuation.separator.annotation.parameter.python
+      scope: punctuation.separator.annotation.python
       set: class-definition-parameter-annotation
     - include: parameter-names
     - include: lsp-type-parameter-common
 
   class-definition-parameter-annotation:
     - meta_scope: meta.class.parameters.annotation.python
-    - match: (?=[,)=])
-      set: class-definition-base-list-body
-    - match: None\b
-      scope: constant.language.null.python
-    - include: expression-in-a-group
+    - match: (?=\S)
+      set: class-definition-parameter-annotation-body
+
+  class-definition-parameter-annotation-body:
+    - meta_scope: meta.class.parameters.annotation.python
+    - meta_content_scope: meta.type.python
+    - include: class-definition-base-list-continue
+    - include: line-continuations
+    - include: type-hint-expressions
 
   class-definition-parameter-default-value:
     - meta_scope: meta.class.parameters.default-value.python
-    - match: (?=[,)])
-      set: class-definition-base-list-body
+    - include: class-definition-base-list-continue
     - include: expression-in-a-group
+
+  class-definition-base-list-continue:
+    - match: (?=[,)=])
+      set: class-definition-base-list-body
 
 ###[ PYTHON FUNCTION DEFINITION OVERRIDES ]###################################
 
@@ -196,16 +222,14 @@ contexts:
       set: lsp-function-signature
 
   lsp-function-signature:
-    - meta_content_scope: meta.function.annotation.signature.python
-    - include: function-definition-end
-    - include: lsp-type-annotations
-    - include: expression-in-a-statement
+    - meta_content_scope: meta.function.signature.python
+    - match: (?=\S)
+      set: lsp-function-signature-body
 
-  function-definition-end:
-    - meta_prepend: true
-    # additional conditions which terminate a function signature
-    - match: (?=[,)\]])
-      pop: 1
+  lsp-function-signature-body:
+    - meta_content_scope: meta.function.signature.python meta.type.python
+    - include: lsp-type-function-return-type-end
+    - include: type-hint-expressions
 
 ###[ PROTOTYPES ]#############################################################
 
