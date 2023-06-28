@@ -13,11 +13,7 @@ file_extensions:
 contexts:
   main:
     - include: lsp-type
-    - include: class-definitions
-    - include: function-definitions
-    - include: assignment-statements
-    - include: qualified-name
-    - include: comments
+    - include: statements
 
 ###[ PYTHON TYPE ANNOTATIONS ]################################################
 
@@ -230,9 +226,3 @@ contexts:
     - meta_content_scope: meta.function.signature.python meta.type.python
     - include: lsp-type-function-return-type-end
     - include: type-hint-expressions
-
-###[ PROTOTYPES ]#############################################################
-
-  eol-pop:
-    - match: $
-      pop: 1
