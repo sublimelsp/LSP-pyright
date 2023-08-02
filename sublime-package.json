@@ -73,9 +73,7 @@
                       "type": "string"
                     },
                     "python.analysis.diagnosticSeverityOverrides": {
-                      "default": {},
                       "description": "Allows a user to override the severity levels for individual diagnostics.",
-                      "additionalProperties": false,
                       "properties": {
                         "reportAssertAlwaysTrue": {
                           "default": "warning",
@@ -102,6 +100,17 @@
                         "reportConstantRedefinition": {
                           "default": "none",
                           "description": "Diagnostics for attempts to redefine variables whose names are all-caps with underscores and numerals.",
+                          "enum": [
+                            "none",
+                            "information",
+                            "warning",
+                            "error"
+                          ],
+                          "type": "string"
+                        },
+                        "reportDeprecated": {
+                          "default": "none",
+                          "description": "Diagnostics for use of deprecated classes or functions.",
                           "enum": [
                             "none",
                             "information",
@@ -798,19 +807,14 @@
                       "type": "string"
                     },
                     "python.analysis.typeCheckingMode": {
-                      "type": "string",
-                      "default": "off",
+                      "default": "basic",
+                      "description": "Defines the default rule set for type checking.",
                       "enum": [
                         "off",
                         "basic",
                         "strict"
                       ],
-                      "description": "Defines the default rule set for type checking.",
-                      "enumDescriptions": [
-                        "Surfaces diagnostics for invalid syntax, unresolved imports, undefined variables.",
-                        "All \"off\" rules + basic type checking rules.",
-                        "All \"off\" rules + all type checking rules."
-                      ]
+                      "type": "string"
                     },
                     "python.analysis.typeshedPaths": {
                       "default": [],
