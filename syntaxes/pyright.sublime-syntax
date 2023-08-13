@@ -5,7 +5,7 @@ scope: source.python.lsp
 version: 2
 hidden: true
 
-extends: Python.sublime-syntax
+extends: Packages/LSP-pyright/syntaxes/Python.sublime-syntax
 
 file_extensions:
   - pyright-syntax-test
