@@ -71,6 +71,8 @@ class LspPyrightPlugin(NpmClientHandler):
         workspace_folders: List[WorkspaceFolder],
         configuration: ClientConfig,
     ) -> Optional[str]:
+        super().on_pre_start(window, initiating_view, workspace_folders, configuration)
+
         python_path = cls.python_path(configuration.settings, workspace_folders)
         print('{}: Using python path "{}"'.format(cls.name(), python_path))
         configuration.settings.set("python.pythonPath", python_path)
