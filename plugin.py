@@ -207,7 +207,7 @@ class LspPyrightPlugin(NpmClientHandler):
                 else:
                     break
 
-        return shutil.which("python") or "python"
+        return shutil.which("python") or shutil.which("python3") or ""
 
     @classmethod
     def python_path_from_venv(cls, workspace_folder: str) -> Optional[str]:
