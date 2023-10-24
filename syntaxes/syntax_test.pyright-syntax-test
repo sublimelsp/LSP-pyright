@@ -2,6 +2,7 @@
 
 (class) ClassName
 # ^^^^ storage.type
+#       ^^^^^^^^^ entity.name.class
 
 class ClassName(foo: int, /, *args: Any, **kwargs: Any)
 # ^^^ keyword.declaration.class

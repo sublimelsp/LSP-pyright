@@ -44,6 +44,13 @@ contexts:
 ###[ PYRIGHT TYPE TAGS ]######################################################
 
   lsp-type:
+    # this happens when you hover on the "Foo" of "class Foo:"
+    - match: ^(\()(class)(\))\s+(.*)
+      captures:
+        1: punctuation.section.parens.begin.python
+        2: storage.type.python
+        3: punctuation.section.parens.end.python
+        4: entity.name.class.python # use a more specific scope to the class name
     # consume the leading type. e.g., (function)
     - match: ^\(
       scope: punctuation.section.parens.begin.python
