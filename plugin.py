@@ -8,7 +8,7 @@ import sys
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
-from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
+from LSP.plugin.core.typing import Any, Callable, Iterable, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
@@ -35,6 +35,12 @@ def get_default_startupinfo() -> Any:
         STARTUPINFO.wShowWindow = subprocess.SW_HIDE  # type: ignore
         return STARTUPINFO
     return None
+
+
+def command_to_str(command: Iterable[str]) -> str:
+    if isinstance(command, str):
+        return command
+    return " ".join(map(shlex.quote, command))
 
 
 class LspPyrightPlugin(NpmClientHandler):
@@ -245,13 +251,13 @@ class LspPyrightPlugin(NpmClientHandler):
                 except PermissionError:
                     print(
                         "{}: WARN: {} detected but encountered permission error: {}".format(
-                            cls.name(), config_file, command
+                            cls.name(), config_file, command_to_str(command)
                         )
                     )
                 except subprocess.CalledProcessError:
                     print(
-                        "{}: WARN: {} detected but {} exited with non-zero exit status".format(
-                            cls.name(), config_file, " ".join(map(shlex.quote, command))
+                        "{}: WARN: {} detected but exited with non-zero exit status: {}".format(
+                            cls.name(), config_file, command_to_str(command)
                         )
                     )
 
