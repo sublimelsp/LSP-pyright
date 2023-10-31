@@ -242,6 +242,12 @@ class LspPyrightPlugin(NpmClientHandler):
                     return post_processing(python_path) if post_processing else python_path
                 except FileNotFoundError:
                     print("{}: WARN: {} detected but {} not found".format(cls.name(), config_file, command[0]))
+                except PermissionError:
+                    print(
+                        "{}: WARN: {} detected but encountered permission error: {}".format(
+                            cls.name(), config_file, command
+                        )
+                    )
                 except subprocess.CalledProcessError:
                     print(
                         "{}: WARN: {} detected but {} exited with non-zero exit status".format(
