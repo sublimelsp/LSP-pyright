@@ -243,7 +243,11 @@ class LspPyrightPlugin(NpmClientHandler):
             if os.path.isfile(full_config_file_path):
                 try:
                     python_path = subprocess.check_output(
-                        command, cwd=workspace_folder, startupinfo=get_default_startupinfo(), universal_newlines=True
+                        command,
+                        cwd=workspace_folder,
+                        shell=True,
+                        startupinfo=get_default_startupinfo(),
+                        universal_newlines=True,
                     ).strip()
                     return post_processing(python_path) if post_processing else python_path
                 except FileNotFoundError:
