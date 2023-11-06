@@ -233,10 +233,10 @@ class LspPyrightPlugin(NpmClientHandler):
 
         # Config file, venv resolution command, post-processing
         venv_config_files = [
-            ("Pipfile", ["pipenv", "--py"], None),
-            ("poetry.lock", ["poetry", "env", "info", "-p"], binary_from_python_path),
-            (".python-version", ["pyenv", "which", "python"], None),
-        ]  # type: List[Tuple[str, List[str], Optional[Callable[[str], Optional[str]]]]]
+            ("Pipfile", "pipenv --py", None),
+            ("poetry.lock", "poetry env info -p", binary_from_python_path),
+            (".python-version", "pyenv which python", None),
+        ]  # type: List[Tuple[str, str, Optional[Callable[[str], Optional[str]]]]]
 
         for config_file, command, post_processing in venv_config_files:
             full_config_file_path = os.path.join(workspace_folder, config_file)
