@@ -73,7 +73,7 @@ class LspPyrightPlugin(NpmClientHandler):
         super().on_pre_start(window, initiating_view, workspace_folders, configuration)
 
         python_path = cls.python_path(configuration.settings, workspace_folders)
-        print('{}: Using python path "{}"'.format(cls.name(), python_path))
+        print('{}: INFO: Using python path "{}"'.format(cls.name(), python_path))
         configuration.settings.set("python.pythonPath", python_path)
         return None
 
@@ -252,7 +252,7 @@ class LspPyrightPlugin(NpmClientHandler):
             except PermissionError as e:
                 print("{}: WARN: subprocess failed with permission error: {}".format(cls.name(), e))
             except subprocess.CalledProcessError as e:
-                print("{}: WARN: subprocess failed: {}".format(cls.name(), e.output))
+                print("{}: WARN: subprocess failed: {}".format(cls.name(), str(e.output).strip())
 
         # virtual environment as subfolder in project
         for file in os.listdir(workspace_folder):
