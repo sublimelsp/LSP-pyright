@@ -1,6 +1,5 @@
 import os
 import re
-import shlex
 import shutil
 import subprocess
 import sys
@@ -35,12 +34,6 @@ def get_default_startupinfo() -> Any:
         STARTUPINFO.wShowWindow = subprocess.SW_HIDE  # type: ignore
         return STARTUPINFO
     return None
-
-
-def command_to_str(command: Iterable[str]) -> str:
-    if isinstance(command, str):
-        return command
-    return " ".join(map(shlex.quote, command))
 
 
 class LspPyrightPlugin(NpmClientHandler):
@@ -233,37 +226,32 @@ class LspPyrightPlugin(NpmClientHandler):
 
         # Config file, venv resolution command, post-processing
         venv_config_files = [
+            (".python-version", "pyenv which python", None),
             ("Pipfile", "pipenv --py", None),
             ("poetry.lock", "poetry env info -p", binary_from_python_path),
-            (".python-version", "pyenv which python", None),
         ]  # type: List[Tuple[str, str, Optional[Callable[[str], Optional[str]]]]]
 
         for config_file, command, post_processing in venv_config_files:
             full_config_file_path = os.path.join(workspace_folder, config_file)
-            if os.path.isfile(full_config_file_path):
-                try:
-                    python_path = subprocess.check_output(
-                        command,
-                        cwd=workspace_folder,
-                        shell=True,
-                        startupinfo=get_default_startupinfo(),
-                        universal_newlines=True,
-                    ).strip()
-                    return post_processing(python_path) if post_processing else python_path
-                except FileNotFoundError:
-                    print("{}: WARN: {} detected but {} not found".format(cls.name(), config_file, command[0]))
-                except PermissionError:
-                    print(
-                        "{}: WARN: {} detected but encountered permission error: {}".format(
-                            cls.name(), config_file, command_to_str(command)
-                        )
-                    )
-                except subprocess.CalledProcessError:
-                    print(
-                        "{}: WARN: {} detected but exited with non-zero exit status: {}".format(
-                            cls.name(), config_file, command_to_str(command)
-                        )
-                    )
+            if not os.path.isfile(full_config_file_path):
+                continue
+            print("{}: INFO: {} detected. Run subprocess command: {}".format(cls.name(), config_file, command))
+            try:
+                python_path = subprocess.check_output(
+                    command,
+                    cwd=workspace_folder,
+                    shell=True,
+                    startupinfo=get_default_startupinfo(),
+                    stderr=subprocess.STDOUT,
+                    universal_newlines=True,
+                ).strip()
+                return post_processing(python_path) if post_processing else python_path
+            except FileNotFoundError:
+                print("{}: WARN: subprocess failed with file not found: {}".format(cls.name(), command[0]))
+            except PermissionError as e:
+                print("{}: WARN: subprocess failed with permission error: {}".format(cls.name(), e))
+            except subprocess.CalledProcessError as e:
+                print("{}: WARN: subprocess failed: {}".format(cls.name(), e.output))
 
         # virtual environment as subfolder in project
         for file in os.listdir(workspace_folder):
