@@ -7,7 +7,7 @@ import sys
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
-from LSP.plugin.core.typing import Any, Callable, Iterable, List, Optional, Tuple, cast
+from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
@@ -226,6 +226,7 @@ class LspPyrightPlugin(NpmClientHandler):
 
         # Config file, venv resolution command, post-processing
         venv_config_files = [
+            (".pdm-python", "pdm info --python", None),
             (".python-version", "pyenv which python", None),
             ("Pipfile", "pipenv --py", None),
             ("poetry.lock", "poetry env info -p", binary_from_python_path),
