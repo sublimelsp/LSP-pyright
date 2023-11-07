@@ -1,9 +1,10 @@
 [tool.isort]
 line_length = 120
 profile = 'black'
-py_version=38
+py_version = 38
 skip_glob = [
   ".venv/**",
+  ".venv-*/**",
   "br-*/**",
   "branch-*/**",
   "libs/**",
@@ -12,22 +13,29 @@ skip_glob = [
   "typings/**",
   "vendor/**",
   "venv/**",
+  "venv-*/**",
 ]
 
-[tool.pycln]
-all = true
-exclude = '(\.git|\.?venv|\.mypy_cache|br-.*|branch-.*|libs|stubs|typings|node_modules)/'
+[tool.autoflake]
+quiet = true
+recursive = true
+remove-all-unused-imports = true
+exclude = '\.git,\.?venv(-.*)?,\.mypy_cache,br-.*,branch-.*,libs,stubs,tests/files,typings'
 
 [tool.black]
+preview = true # use latest feature
 line-length = 120
 target-version = ['py38']
 exclude = '''
 /(
   \.git |
+  \.venv(-.*)? |
   language-server |
   plugin/libs |
   resources |
-  stubs
+  stubs |
+  typings |
+  _resources
 )/
 '''
 
