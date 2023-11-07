@@ -252,7 +252,7 @@ class LspPyrightPlugin(NpmClientHandler):
             except PermissionError as e:
                 print("{}: WARN: subprocess failed with permission error: {}".format(cls.name(), e))
             except subprocess.CalledProcessError as e:
-                print("{}: WARN: subprocess failed: {}".format(cls.name(), str(e.output).strip())
+                print("{}: WARN: subprocess failed: {}".format(cls.name(), str(e.output).strip()))
 
         # virtual environment as subfolder in project
         for file in os.listdir(workspace_folder):
