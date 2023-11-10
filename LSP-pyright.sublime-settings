@@ -2,7 +2,7 @@
 	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	"schemes": [
 		"file", // regular files
-		"buffer", // in-memory buffers
+		// "buffer", // in-memory buffers
 		"res", // files in .sublime-package archives
 	],
 	// @see https://github.com/microsoft/pyright/blob/main/docs/settings.md
