@@ -7,7 +7,7 @@ import sys
 
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, Response, WorkspaceFolder
-from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
+from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
@@ -54,8 +54,8 @@ class LspPyrightPlugin(NpmClientHandler):
         dev_environment = settings.get("pyright.dev_environment")
         extraPaths = settings.get("python.analysis.extraPaths") or []  # type: List[str]
 
-        if dev_environment in {"sublime_text", "sublime_text_33", "sublime_text_38"}:
-            py_ver = self.detect_st_py_ver(dev_environment)
+        if dev_environment in {"sublime_text", "sublime_text_33"}:
+            py_ver = (3, 3)  # there is only py33 on ST 3
             # add package dependencies into "python.analysis.extraPaths"
             extraPaths.extend(self.find_package_dependency_dirs(py_ver))
 
@@ -128,34 +128,6 @@ class LspPyrightPlugin(NpmClientHandler):
         content = re.sub(r"\n:rtype:", r"\n__Returntype:__", content)
         content = re.sub(r"\n:deprecated:", r"\n⚠️ __Deprecated:__", content)
         return content
-
-    def detect_st_py_ver(self, dev_environment: str) -> Tuple[int, int]:
-        st_packages_path = sublime.packages_path()
-        default = (3, 3)
-
-        if dev_environment == "sublime_text_33":
-            return (3, 3)
-        if dev_environment == "sublime_text_38":
-            return (3, 8)
-
-        if dev_environment == "sublime_text":
-            session = self.weaksession()
-            if not session:
-                return default
-            workspace_folders = session.get_workspace_folders()
-            if not workspace_folders:
-                return default
-            if workspace_folders[0].path == os.path.join(st_packages_path, "User"):
-                return (3, 8)
-            python_version_file = os.path.join(workspace_folders[0].path, ".python-version")
-            try:
-                with open(python_version_file, "r") as file:
-                    if file.read().strip() == "3.8":
-                        return (3, 8)
-            except Exception:
-                pass
-
-        return default
 
     @classmethod
     def get_plugin_setting(cls, key: str, default: Any = None) -> Any:

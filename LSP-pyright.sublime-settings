@@ -10,12 +10,8 @@
 	"settings": {
 		// Use a predefined setup from this plugin, valid values are:
 		// - "": An empty string does nothing.
-		// - "sublime_text": Suitable for people who are developing ST Python plugins.
-		//                   The Python version which the developed plugin runs on will be used.
-		//                   `sys.path` from plugin_host will be added into "python.analysis.extraPaths"
-		//                   so ST package dependecies can be resolved by the LSP server.
-		// - "sublime_text_33": Similar to "sublime_text" but Python 3.3 forced.
-		// - "sublime_text_38": Similar to "sublime_text" but Python 3.8 forced.
+		// - "sublime_text": Suitable for people who are developing ST python 3.3 plugins. `sys.path` from the plugin_host will be added into "python.analysis.extraPaths" so that ST package dependencies can be resolved by the LSP server.
+		// - "sublime_text_33": The same with using "sublime_text".
 		"pyright.dev_environment": "",
 		// Offer auto-import completions.
 		"python.analysis.autoImportCompletions": true,
