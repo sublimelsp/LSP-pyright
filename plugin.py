@@ -12,7 +12,6 @@ from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
 ST_VERSION = int(sublime.version())
-ST_PACKAGES_PATH = sublime.packages_path()
 
 if ST_VERSION >= 4070:
     from LSP.plugin import MarkdownLangMap
@@ -131,6 +130,7 @@ class LspPyrightPlugin(NpmClientHandler):
         return content
 
     def detect_st_py_ver(self, dev_environment: str) -> Tuple[int, int]:
+        st_packages_path = sublime.packages_path()
         default = (3, 3)
 
         if dev_environment == "sublime_text_33":
@@ -145,7 +145,7 @@ class LspPyrightPlugin(NpmClientHandler):
             workspace_folders = session.get_workspace_folders()
             if not workspace_folders:
                 return default
-            if workspace_folders[0].path == os.path.join(ST_PACKAGES_PATH, "User"):
+            if workspace_folders[0].path == os.path.join(st_packages_path, "User"):
                 return (3, 8)
             python_version_file = os.path.join(workspace_folders[0].path, ".python-version")
             try:
@@ -162,6 +162,7 @@ class LspPyrightPlugin(NpmClientHandler):
         return sublime.load_settings(cls.package_name + ".sublime-settings").get(key, default)
 
     def find_package_dependency_dirs(self, py_ver: Tuple[int, int] = (3, 3)) -> List[str]:
+        st_packages_path = sublime.packages_path()
         dep_dirs = sys.path.copy()
 
         # replace paths for target Python version
@@ -172,8 +173,8 @@ class LspPyrightPlugin(NpmClientHandler):
 
         # move the "Packages/" to the last
         # @see https://github.com/sublimelsp/LSP-pyright/pull/26#discussion_r520747708
-        dep_dirs.remove(ST_PACKAGES_PATH)
-        dep_dirs.append(ST_PACKAGES_PATH)
+        dep_dirs.remove(st_packages_path)
+        dep_dirs.append(st_packages_path)
 
         if py_ver == (3, 3):
             # sublime stubs - add as first
