@@ -501,7 +501,7 @@
               "$id": "#/properties/enableExperimentalFeatures",
               "type": "boolean",
               "title": "Enable the use of experimental features that are not part of the Python typing spec",
-              "default": true
+              "default": false
             },
             "enableTypeIgnoreComments": {
               "$id": "#/properties/enableTypeIgnoreComments",
@@ -513,7 +513,7 @@
               "$id": "#/properties/deprecateTypingAliases",
               "type": "boolean",
               "title": "Treat typing-specific aliases to standard types as deprecated",
-              "default": true
+              "default": false
             },
             "reportGeneralTypeIssues": {
               "$id": "#/properties/reportGeneralTypeIssues",
@@ -549,7 +549,7 @@
               "$id": "#/properties/reportMissingTypeStubs",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of imports that cannot be resolved to type stub files",
-              "default": "none"
+              "default": "warning"
             },
             "reportImportCycles": {
               "$id": "#/properties/reportImportCycles",
@@ -591,7 +591,7 @@
               "$id": "#/properties/reportWildcardImportFromLibrary",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of wlidcard import from external library",
-              "default": "none"
+              "default": "warning"
             },
             "reportOptionalSubscript": {
               "$id": "#/properties/reportOptionalSubscript",
