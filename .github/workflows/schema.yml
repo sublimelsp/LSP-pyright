@@ -1,0 +1,41 @@
+name: Update schema in Dependabot PR
+
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  pull-requests: write
+  repository-projects: write
+
+jobs:
+  update_schema:
+    name: Run schema update
+    runs-on: ubuntu-latest
+
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Update schema
+        run: |
+          make update-schema
+
+      - name: Check for modified files
+        id: git-check
+        run: echo ::set-output name=modified::$(if [ -n "$(git status --porcelain)" ]; then echo "true"; else echo "false"; fi)
+
+      - name: Update changes in the PR
+        if: steps.git-check.outputs.modified == 'true'
+        run:  |
+          git config --global user.name 'workflow'
+          git config --global user.email 'worklow@workflow.com'
+          git add -A
+          git commit -m '[automated commit] update schema'
+          git push
