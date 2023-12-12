@@ -7,7 +7,7 @@ DIRNAME = os.path.dirname(os.path.abspath(__file__))
 PYRIGHTCONFIG_SCHEMA_ID = 'sublime://pyrightconfig'
 PYRIGHT_CONFIGURATION_SCHEMA_URL = 'https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json'  # noqa: E501
 SUBLIME_PACKAGE_JSON_PATH = os.path.join(DIRNAME, '..', 'sublime-package.json')
-# Keys that are in the schema for pyrighconfig.json but should not raise a comment when not present in LSP schema.
+# Keys that are in the pyrightconfig.json schema but should not raise a comment when not present in the LSP schema.
 IGNORED_PYRIGHTCONFIG_KEYS = [
     'defineConstant',
     'exclude',
