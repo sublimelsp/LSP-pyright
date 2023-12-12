@@ -1,5 +1,5 @@
-from json import dump, load
-from typing import Any, Dict, Optional
+from json import dump, dumps, load
+from typing import Any, Dict, List, Optional, Tuple
 from urllib.request import urlopen
 import os
 
@@ -26,19 +26,31 @@ JSON = Dict[str, Any]
 
 
 def main() -> None:
-    pyrightconfig_schema_json = None
-    sublime_package_json = None
+    pyrightconfig_schema_json, sublime_package_schema_json = read_sublime_package_json()
+    before = dumps(sublime_package_schema_json)
+    new_schema_keys = update_schema(sublime_package_schema_json, pyrightconfig_schema_json)
+    after = dumps(sublime_package_schema_json)
+    if before != after:
+        with open(SUBLIME_PACKAGE_JSON_PATH, 'w', encoding='utf-8') as f:
+            dump(sublime_package_schema_json, f, indent=2)
+        print('sublime-package.json schema updated.')
+    else:
+        print('No updates done to sublime-package.json.')
+    if new_schema_keys:
+        print('\nThe following new keys were found in the latest pyrightconfig.json schema: {}\n\n'.format(
+            '\n - '.join(new_schema_keys)))
+        print('Ensure that those are added to the sublime-package.json manually, if relevant.')
+
+
+def read_sublime_package_json() -> Tuple[JSON, JSON]:
     with urlopen(PYRIGHT_CONFIGURATION_SCHEMA_URL) as response:
         pyrightconfig_schema_json = load(response)
     with open(SUBLIME_PACKAGE_JSON_PATH, 'r', encoding='utf-8') as f:
-        sublime_package_json = load(f)
-    update_schema(sublime_package_json, pyrightconfig_schema_json)
-    with open(SUBLIME_PACKAGE_JSON_PATH, 'w', encoding='utf-8') as f:
-        dump(sublime_package_json, f, indent=2)
-    print('sublime-package.json file updated! If there are any changes then make sure to also update the LSP part of the configuration.')  # noqa: E501
+        sublime_package_schema_json = load(f)
+    return (pyrightconfig_schema_json, sublime_package_schema_json)
 
 
-def update_schema(sublime_package_json: JSON, pyrightconfig_schema_json: JSON) -> None:
+def update_schema(sublime_package_json: JSON, pyrightconfig_schema_json: JSON) -> List[str]:
     pyrightconfig_contribution: Optional[JSON] = None
     lsp_pyright_contribution: Optional[JSON] = None
     for contribution in sublime_package_json['contributions']['settings']:
@@ -72,11 +84,13 @@ def update_schema(sublime_package_json: JSON, pyrightconfig_schema_json: JSON) -
     # then it might have to be added manually.
     all_settings_keys = list(map(lambda k: k.split('.').pop(), settings_properties.keys()))
     all_overrides_keys = settings_properties['python.analysis.diagnosticSeverityOverrides']['properties'].keys()
+    new_schema_keys = []
     for pyrightconfig_key in pyrightconfig_properties.keys():
         if pyrightconfig_key not in all_settings_keys \
                 and pyrightconfig_key not in all_overrides_keys \
                 and pyrightconfig_key not in IGNORED_PYRIGHTCONFIG_KEYS:
-            print(pyrightconfig_key)
+            new_schema_keys.append(pyrightconfig_key)
+    return new_schema_keys
 
 
 def update_property_ref(property_key: str, property_schema: JSON, pyrightconfig_properties: JSON) -> None:

@@ -24,8 +24,9 @@ jobs:
           python-version: 3.11
 
       - name: Update schema
+        id: update-schema
         run: |
-          make update-schema
+          echo "::set-output name=UPDATE_OUTPUT::$(make update-schema)"
 
       - name: Check for modified files
         id: git-check
@@ -39,3 +40,21 @@ jobs:
           git add -A
           git commit -m '[automated commit] update schema'
           git push
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Build output
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            schema-update output:
+            ${{ steps.update-schema.outputs.UPDATE_OUTPUT }}
+          edit-mode: replace
