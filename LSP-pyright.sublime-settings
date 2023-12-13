@@ -43,9 +43,8 @@
 		// Specifies the level of logging for the Output panel
 		"python.analysis.logLevel": "Information",
 		// Defines the default rule set for type checking.
-		"python.analysis.typeCheckingMode": "basic",
+		"python.analysis.typeCheckingMode": "standard",
 		// Paths to look for typeshed modules.
-		// Hmm... doesn't seem to work on my side. May track https://github.com/microsoft/pylance-release/issues/29
 		"python.analysis.typeshedPaths": [],
 		// Use library implementations to extract type information when type stub is not present.
 		"python.analysis.useLibraryCodeForTypes": true,
@@ -58,13 +57,5 @@
 		// Path to folder with a list of Virtual Environments.
 		"python.venvPath": "",
 	},
-	// ST4
 	"selector": "source.python",
-	// ST3
-	"languages": [
-		{
-			"scopes": ["source.python - source.python.lsp"],
-			"syntaxes": ["Packages/Python/Python.sublime-syntax"],
-		},
-	],
 }

@@ -21,7 +21,6 @@
                 "settings": {
                   "additionalProperties": false,
                   "properties": {
-                    // lsp
                     "pyright.dev_environment": {
                       "default": "",
                       "description": "Enables the pre-defined environment setup for specific developing needs.",
@@ -38,8 +37,6 @@
                         "Similar to \"sublime_text\" but Python 3.8 forced."
                       ]
                     },
-                    // pyright
-                    // @see https://github.com/microsoft/pyright/blob/main/packages/vscode-pyright/package.json
                     "pyright.disableLanguageServices": {
                       "default": false,
                       "description": "Disables type completion, definitions, and references.",
@@ -75,720 +72,230 @@
                     "python.analysis.diagnosticSeverityOverrides": {
                       "description": "Allows a user to override the severity levels for individual diagnostics.",
                       "properties": {
+                        "analyzeUnannotatedFunctions": {
+                          "$ref": "sublime://pyrightconfig#/properties/analyzeUnannotatedFunctions"
+                        },
+                        "deprecateTypingAliases": {
+                          "$ref": "sublime://pyrightconfig#/properties/deprecateTypingAliases"
+                        },
+                        "disableBytesTypePromotions": {
+                          "$ref": "sublime://pyrightconfig#/properties/disableBytesTypePromotions"
+                        },
+                        "enableExperimentalFeatures": {
+                          "$ref": "sublime://pyrightconfig#/properties/enableExperimentalFeatures"
+                        },
+                        "enableTypeIgnoreComments": {
+                          "$ref": "sublime://pyrightconfig#/properties/enableTypeIgnoreComments"
+                        },
                         "reportAssertAlwaysTrue": {
-                          "default": "warning",
-                          "description": "Diagnostics for 'assert' statement that will provably always assert. This can be indicative of a programming error.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportAssertAlwaysTrue"
                         },
                         "reportCallInDefaultInitializer": {
-                          "default": "none",
-                          "description": "Diagnostics for function calls within a default value initialization expression. Such calls can mask expensive operations that are performed at module initialization time.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportCallInDefaultInitializer"
                         },
                         "reportConstantRedefinition": {
-                          "default": "none",
-                          "description": "Diagnostics for attempts to redefine variables whose names are all-caps with underscores and numerals.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportConstantRedefinition"
                         },
                         "reportDeprecated": {
-                          "default": "none",
-                          "description": "Diagnostics for use of deprecated classes or functions.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportDeprecated"
                         },
                         "reportDuplicateImport": {
-                          "default": "none",
-                          "description": "Diagnostics for an imported symbol or module that is imported more than once.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportDuplicateImport"
                         },
                         "reportFunctionMemberAccess": {
-                          "default": "none",
-                          "description": "Diagnostics for member accesses on functions.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportFunctionMemberAccess"
                         },
                         "reportGeneralTypeIssues": {
-                          "default": "error",
-                          "description": "Diagnostics for general type inconsistencies, unsupported operations, argument/parameter mismatches, etc. Covers all of the basic type-checking rules not covered by other rules. Does not include syntax errors.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportGeneralTypeIssues"
                         },
                         "reportImplicitOverride": {
-                          "default": "none",
-                          "description": "Diagnostics for overridden methods that do not include an `@override` decorator.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportImplicitOverride"
                         },
                         "reportImplicitStringConcatenation": {
-                          "default": "none",
-                          "description": "Diagnostics for two or more string literals that follow each other, indicating an implicit concatenation. This is considered a bad practice and often masks bugs such as missing commas.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportImplicitStringConcatenation"
                         },
                         "reportImportCycles": {
-                          "default": "none",
-                          "description": "Diagnostics for cyclical import chains. These are not errors in Python, but they do slow down type analysis and often hint at architectural layering issues. Generally, they should be avoided.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportImportCycles"
                         },
                         "reportIncompatibleMethodOverride": {
-                          "default": "none",
-                          "description": "Diagnostics for methods that override a method of the same name in a base class in an incompatible manner (wrong number of parameters, incompatible parameter types, or incompatible return type).",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportIncompatibleMethodOverride"
                         },
                         "reportIncompatibleVariableOverride": {
-                          "default": "none",
-                          "description": "Diagnostics for overrides in subclasses that redefine a variable in an incompatible way.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportIncompatibleVariableOverride"
                         },
                         "reportIncompleteStub": {
-                          "default": "none",
-                          "description": "Diagnostics for the use of a module-level \u201c__getattr__\u201d function, indicating that the stub is incomplete.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportIncompleteStub"
                         },
                         "reportInconsistentConstructor": {
-                          "default": "none",
-                          "description": "Diagnostics for __init__ and __new__ methods whose signatures are inconsistent.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportInconsistentConstructor"
                         },
                         "reportInvalidStringEscapeSequence": {
-                          "default": "warning",
-                          "description": "Diagnostics for invalid escape sequences used within string literals. The Python specification indicates that such sequences will generate a syntax error in future versions.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportInvalidStringEscapeSequence"
                         },
                         "reportInvalidStubStatement": {
-                          "default": "none",
-                          "description": "Diagnostics for type stub statements that do not conform to PEP 484.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportInvalidStubStatement"
                         },
                         "reportInvalidTypeVarUse": {
-                          "default": "warning",
-                          "description": "Diagnostics for improper use of type variables in a function signature.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportInvalidTypeVarUse"
                         },
                         "reportMatchNotExhaustive": {
-                          "default": "none",
-                          "description": "Diagnostics for 'match' statements that do not exhaustively match all possible values.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportMatchNotExhaustive"
                         },
                         "reportMissingImports": {
-                          "default": "error",
-                          "description": "Diagnostics for imports that have no corresponding imported python file or type stub file.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportMissingImports"
                         },
                         "reportMissingModuleSource": {
-                          "default": "warning",
-                          "description": "Diagnostics for imports that have no corresponding source file. This happens when a type stub is found, but the module source file was not found, indicating that the code may fail at runtime when using this execution environment. Type checking will be done using the type stub.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportMissingModuleSource"
                         },
                         "reportMissingParameterType": {
-                          "default": "none",
-                          "description": "Diagnostics for parameters that are missing a type annotation.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportMissingParameterType"
                         },
                         "reportMissingSuperCall": {
-                          "default": "none",
-                          "description": "Diagnostics for missing call to parent class for inherited `__init__` methods.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportMissingSuperCall"
                         },
                         "reportMissingTypeArgument": {
-                          "default": "none",
-                          "description": "Diagnostics for generic class reference with missing type arguments.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportMissingTypeArgument"
                         },
                         "reportMissingTypeStubs": {
-                          "default": "none",
-                          "description": "Diagnostics for imports that have no corresponding type stub file (either a typeshed file or a custom type stub). The type checker requires type stubs to do its best job at analysis.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportMissingTypeStubs"
                         },
                         "reportOptionalCall": {
-                          "default": "error",
-                          "description": "Diagnostics for an attempt to call a variable with an Optional type.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportOptionalCall"
                         },
                         "reportOptionalContextManager": {
-                          "default": "error",
-                          "description": "Diagnostics for an attempt to use an Optional type as a context manager (as a parameter to a with statement).",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportOptionalContextManager"
                         },
                         "reportOptionalIterable": {
-                          "default": "error",
-                          "description": "Diagnostics for an attempt to use an Optional type as an iterable value (e.g. within a for statement).",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportOptionalIterable"
                         },
                         "reportOptionalMemberAccess": {
-                          "default": "error",
-                          "description": "Diagnostics for an attempt to access a member of a variable with an Optional type.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportOptionalMemberAccess"
                         },
                         "reportOptionalOperand": {
-                          "default": "error",
-                          "description": "Diagnostics for an attempt to use an Optional type as an operand to a binary or unary operator (like '+', '==', 'or', 'not').",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportOptionalOperand"
                         },
                         "reportOptionalSubscript": {
-                          "default": "error",
-                          "description": "Diagnostics for an attempt to subscript (index) a variable with an Optional type.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportOptionalSubscript"
                         },
                         "reportOverlappingOverload": {
-                          "default": "none",
-                          "description": "Diagnostics for function overloads that overlap in signature and obscure each other or have incompatible return types.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportOverlappingOverload"
                         },
                         "reportPrivateImportUsage": {
-                          "default": "error",
-                          "description": "Diagnostics for incorrect usage of symbol imported from a \"py.typed\" module that is not re-exported from that module.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportPrivateImportUsage"
                         },
                         "reportPrivateUsage": {
-                          "default": "none",
-                          "description": "Diagnostics for incorrect usage of private or protected variables or functions. Protected class members begin with a single underscore _ and can be accessed only by subclasses. Private class members begin with a double underscore but do not end in a double underscore and can be accessed only within the declaring class. Variables and functions declared outside of a class are considered private if their names start with either a single or double underscore, and they cannot be accessed outside of the declaring module.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportPrivateUsage"
                         },
                         "reportPropertyTypeMismatch": {
-                          "default": "none",
-                          "description": "Diagnostics for property whose setter and getter have mismatched types.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportPropertyTypeMismatch"
                         },
                         "reportSelfClsParameterName": {
-                          "default": "warning",
-                          "description": "Diagnostics for a missing or misnamed \u201cself\u201d parameter in instance methods and \u201ccls\u201d parameter in class methods. Instance methods in metaclasses (classes that derive from \u201ctype\u201d) are allowed to use \u201ccls\u201d for instance methods.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportSelfClsParameterName"
                         },
                         "reportShadowedImports": {
-                          "default": "none",
-                          "description": "Diagnostics for files that are overriding a module in the stdlib.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportShadowedImports"
                         },
                         "reportTypeCommentUsage": {
-                          "default": "none",
-                          "description": "Diagnostics for usage of deprecated type comments.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportTypeCommentUsage"
                         },
                         "reportTypedDictNotRequiredAccess": {
-                          "default": "error",
-                          "description": "Diagnostics for an attempt to access a non-required key within a TypedDict without a check for its presence.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportTypedDictNotRequiredAccess"
                         },
                         "reportUnboundVariable": {
-                          "default": "error",
-                          "description": "Diagnostics for unbound and possibly unbound variables.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnboundVariable"
                         },
                         "reportUndefinedVariable": {
-                          "default": "error",
-                          "description": "Diagnostics for undefined variables.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUndefinedVariable"
                         },
                         "reportUninitializedInstanceVariable": {
-                          "default": "none",
-                          "description": "Diagnostics for instance variables that are not declared or initialized within class body or `__init__` method.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUninitializedInstanceVariable"
                         },
                         "reportUnknownArgumentType": {
-                          "default": "none",
-                          "description": "Diagnostics for call arguments for functions or methods that have an unknown type.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnknownArgumentType"
                         },
                         "reportUnknownLambdaType": {
-                          "default": "none",
-                          "description": "Diagnostics for input or return parameters for lambdas that have an unknown type.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnknownLambdaType"
                         },
                         "reportUnknownMemberType": {
-                          "default": "none",
-                          "description": "Diagnostics for class or instance variables that have an unknown type.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnknownMemberType"
                         },
                         "reportUnknownParameterType": {
-                          "default": "none",
-                          "description": "Diagnostics for input or return parameters for functions or methods that have an unknown type.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnknownParameterType"
                         },
                         "reportUnknownVariableType": {
-                          "default": "none",
-                          "description": "Diagnostics for variables that have an unknown type..",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnknownVariableType"
                         },
                         "reportUnnecessaryCast": {
-                          "default": "none",
-                          "description": "Diagnostics for 'cast' calls that are statically determined to be unnecessary. Such calls are sometimes indicative of a programming error.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnnecessaryCast"
                         },
                         "reportUnnecessaryComparison": {
-                          "default": "none",
-                          "description": "Diagnostics for '==' and '!=' comparisons that are statically determined to be unnecessary. Such calls are sometimes indicative of a programming error.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnnecessaryComparison"
                         },
                         "reportUnnecessaryContains": {
-                          "default": "none",
-                          "description": "Diagnostics for 'in' operation that is statically determined to be unnecessary. Such operations are sometimes indicative of a programming error.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnnecessaryContains"
                         },
                         "reportUnnecessaryIsInstance": {
-                          "default": "none",
-                          "description": "Diagnostics for 'isinstance' or 'issubclass' calls where the result is statically determined to be always true. Such calls are often indicative of a programming error.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnnecessaryIsInstance"
                         },
                         "reportUnnecessaryTypeIgnoreComment": {
-                          "default": "none",
-                          "description": "Diagnostics for '# type: ignore' comments that have no effect.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnnecessaryTypeIgnoreComment"
                         },
                         "reportUnsupportedDunderAll": {
-                          "default": "warning",
-                          "description": "Diagnostics for unsupported operations performed on __all__.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnsupportedDunderAll"
                         },
                         "reportUntypedBaseClass": {
-                          "default": "none",
-                          "description": "Diagnostics for base classes whose type cannot be determined statically. These obscure the class type, defeating many type analysis features.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUntypedBaseClass"
                         },
                         "reportUntypedClassDecorator": {
-                          "default": "none",
-                          "description": "Diagnostics for class decorators that have no type annotations. These obscure the class type, defeating many type analysis features.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUntypedClassDecorator"
                         },
                         "reportUntypedFunctionDecorator": {
-                          "default": "none",
-                          "description": "Diagnostics for function decorators that have no type annotations. These obscure the function type, defeating many type analysis features.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUntypedFunctionDecorator"
                         },
                         "reportUntypedNamedTuple": {
-                          "default": "none",
-                          "description": "Diagnostics when \u201cnamedtuple\u201d is used rather than \u201cNamedTuple\u201d. The former contains no type information, whereas the latter does.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUntypedNamedTuple"
                         },
                         "reportUnusedCallResult": {
-                          "default": "none",
-                          "description": "Diagnostics for call expressions whose results are not consumed and are not None.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnusedCallResult"
                         },
                         "reportUnusedClass": {
-                          "default": "none",
-                          "description": "Diagnostics for a class with a private name (starting with an underscore) that is not accessed.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnusedClass"
                         },
                         "reportUnusedCoroutine": {
-                          "default": "error",
-                          "description": "Diagnostics for call expressions that return a Coroutine and whose results are not consumed.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnusedCoroutine"
                         },
                         "reportUnusedExpression": {
-                          "default": "warning",
-                          "description": "Diagnostics for simple expressions whose value is not used in any way.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnusedExpression"
                         },
                         "reportUnusedFunction": {
-                          "default": "none",
-                          "description": "Diagnostics for a function or method with a private name (starting with an underscore) that is not accessed.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnusedFunction"
                         },
                         "reportUnusedImport": {
-                          "default": "none",
-                          "description": "Diagnostics for an imported symbol that is not referenced within that file.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnusedImport"
                         },
                         "reportUnusedVariable": {
-                          "default": "none",
-                          "description": "Diagnostics for a variable that is not accessed.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnusedVariable"
                         },
                         "reportWildcardImportFromLibrary": {
-                          "default": "warning",
-                          "description": "Diagnostics for an wildcard import from an external library.",
-                          "enum": [
-                            "none",
-                            "information",
-                            "warning",
-                            "error"
-                          ],
-                          "type": "string"
+                          "$ref": "sublime://pyrightconfig#/properties/reportWildcardImportFromLibrary"
+                        },
+                        "strictDictionaryInference": {
+                          "$ref": "sublime://pyrightconfig#/properties/strictDictionaryInference"
+                        },
+                        "strictListInference": {
+                          "$ref": "sublime://pyrightconfig#/properties/strictListInference"
+                        },
+                        "strictParameterNoneValue": {
+                          "$ref": "sublime://pyrightconfig#/properties/strictParameterNoneValue"
+                        },
+                        "strictSetInference": {
+                          "$ref": "sublime://pyrightconfig#/properties/strictSetInference"
                         }
                       },
                       "type": "object"
                     },
                     "python.analysis.extraPaths": {
-                      "default": [],
-                      "description": "Additional import search resolution paths",
-                      "items": {
-                        "type": "string"
-                      },
-                      "type": "array"
+                      "$ref": "sublime://pyrightconfig#/properties/extraPaths"
                     },
                     "python.analysis.logLevel": {
                       "default": "Information",
@@ -802,19 +309,10 @@
                       "type": "string"
                     },
                     "python.analysis.stubPath": {
-                      "default": "typings",
-                      "description": "Path to directory containing custom type stub files.",
-                      "type": "string"
+                      "$ref": "sublime://pyrightconfig#/properties/stubPath"
                     },
                     "python.analysis.typeCheckingMode": {
-                      "default": "basic",
-                      "description": "Defines the default rule set for type checking.",
-                      "enum": [
-                        "off",
-                        "basic",
-                        "strict"
-                      ],
-                      "type": "string"
+                      "$ref": "sublime://pyrightconfig#/properties/typeCheckingMode"
                     },
                     "python.analysis.typeshedPaths": {
                       "default": [],
@@ -825,9 +323,7 @@
                       "type": "array"
                     },
                     "python.analysis.useLibraryCodeForTypes": {
-                      "default": true,
-                      "description": "Use library implementations to extract type information when type stub is not present.",
-                      "type": "boolean"
+                      "$ref": "sublime://pyrightconfig#/properties/useLibraryCodeForTypes"
                     },
                     "python.pythonPath": {
                       "default": "python",
@@ -835,9 +331,7 @@
                       "type": "string"
                     },
                     "python.venvPath": {
-                      "default": "",
-                      "description": "Path to folder with a list of Virtual Environments.",
-                      "type": "string"
+                      "$ref": "sublime://pyrightconfig#/properties/venvPath"
                     }
                   }
                 }
@@ -850,7 +344,6 @@
         "file_patterns": [
           "/pyrightconfig.json"
         ],
-        // @see https://github.com/microsoft/pyright/blob/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json
         "schema": {
           "$schema": "http://json-schema.org/draft-07/schema#",
           "description": "Pyright Configuration Schema",
@@ -924,11 +417,13 @@
               "$id": "#/properties/defineConstant",
               "type": "object",
               "title": "Identifiers that should be treated as constants",
-              "properties": {
-              },
+              "properties": {},
               "additionalProperties": {
-                  "type": ["string", "boolean"],
-                  "title": "Value of constant (boolean or string)"
+                "type": [
+                  "string",
+                  "boolean"
+                ],
+                "title": "Value of constant (boolean or string)"
               }
             },
             "typeCheckingMode": {
@@ -937,16 +432,17 @@
               "enum": [
                 "off",
                 "basic",
+                "standard",
                 "strict"
               ],
               "title": "Specifies the default rule set to use for type checking",
-              "default": "basic"
+              "default": "standard"
             },
             "useLibraryCodeForTypes": {
               "$id": "#/properties/useLibraryCodeForTypes",
               "type": "boolean",
               "title": "Use library implementations to extract type information when type stub is not present",
-              "default": false
+              "default": true
             },
             "typeshedPath": {
               "$id": "#/properties/typeshedPath",
@@ -964,6 +460,12 @@
                 "src/typestubs"
               ],
               "pattern": "^(.*)$"
+            },
+            "disableBytesTypePromotions": {
+              "$id": "#/properties/disableBytesTypePromotions",
+              "type": "boolean",
+              "title": "Do not treat `bytearray` and `memoryview` as implicit subtypes of `bytes`",
+              "default": false
             },
             "strictListInference": {
               "$id": "#/properties/strictListInference",
@@ -995,11 +497,23 @@
               "title": "Allow implicit Optional when default parameter value is None",
               "default": true
             },
+            "enableExperimentalFeatures": {
+              "$id": "#/properties/enableExperimentalFeatures",
+              "type": "boolean",
+              "title": "Enable the use of experimental features that are not part of the Python typing spec",
+              "default": false
+            },
             "enableTypeIgnoreComments": {
               "$id": "#/properties/enableTypeIgnoreComments",
               "type": "boolean",
               "title": "Allow \"# type: ignore\" comments",
               "default": true
+            },
+            "deprecateTypingAliases": {
+              "$id": "#/properties/deprecateTypingAliases",
+              "type": "boolean",
+              "title": "Treat typing-specific aliases to standard types as deprecated",
+              "default": false
             },
             "reportGeneralTypeIssues": {
               "$id": "#/properties/reportGeneralTypeIssues",
@@ -1017,7 +531,7 @@
               "$id": "#/properties/reportFunctionMemberAccess",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of member accesses on function objects",
-              "default": "none"
+              "default": "error"
             },
             "reportMissingImports": {
               "$id": "#/properties/reportMissingImports",
@@ -1035,7 +549,7 @@
               "$id": "#/properties/reportMissingTypeStubs",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of imports that cannot be resolved to type stub files",
-              "default": "none"
+              "default": "warning"
             },
             "reportImportCycles": {
               "$id": "#/properties/reportImportCycles",
@@ -1077,7 +591,7 @@
               "$id": "#/properties/reportWildcardImportFromLibrary",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of wlidcard import from external library",
-              "default": "none"
+              "default": "warning"
             },
             "reportOptionalSubscript": {
               "$id": "#/properties/reportOptionalSubscript",
@@ -1169,17 +683,23 @@
               "title": "Controls reporting of attempts to redefine variables that are in all-caps",
               "default": "none"
             },
+            "reportDeprecated": {
+              "$id": "#/properties/reportDeprecated",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting of use of deprecated class or function",
+              "default": "none"
+            },
             "reportIncompatibleMethodOverride": {
               "$id": "#/properties/reportIncompatibleMethodOverride",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of method overrides in subclasses that redefine the method in an incompatible way",
-              "default": "none"
+              "default": "error"
             },
             "reportIncompatibleVariableOverride": {
               "$id": "#/properties/reportIncompatibleVariableOverride",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of overrides in subclasses that redefine a variable in an incompatible way",
-              "default": "none"
+              "default": "error"
             },
             "reportInconsistentConstructor": {
               "$id": "#/properties/reportInconsistentConstructor",
@@ -1191,7 +711,7 @@
               "$id": "#/properties/reportOverlappingOverload",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of function overloads that overlap in signature and obscure each other or do not agree on return type",
-              "default": "none"
+              "default": "error"
             },
             "reportMissingSuperCall": {
               "$id": "#/properties/reportMissingSuperCall",
@@ -1301,12 +821,6 @@
               "title": "Controls reporting assert expressions that will always evaluate to true",
               "default": "warning"
             },
-            "reportImplicitOverride": {
-              "$id": "#/properties/reportImplicitOverride",
-              "$ref": "#/definitions/diagnostic",
-              "title": "Controls reporting overridden methods that are missing an `@override` decorator",
-              "default": "none"
-            },
             "reportImplicitStringConcatenation": {
               "$id": "#/properties/reportImplicitStringConcatenation",
               "$ref": "#/definitions/diagnostic",
@@ -1377,6 +891,12 @@
               "$id": "#/properties/reportShadowedImports",
               "$ref": "#/definitions/diagnostic",
               "title": "Controls reporting of shadowed imports of stdlib modules",
+              "default": "none"
+            },
+            "reportImplicitOverride": {
+              "$id": "#/properties/reportImplicitOverride",
+              "$ref": "#/definitions/diagnostic",
+              "title": "Controls reporting overridden methods that are missing an `@override` decorator",
               "default": "none"
             },
             "extraPaths": {
@@ -1488,7 +1008,8 @@
                 }
               }
             }
-          }
+          },
+          "$id": "sublime://pyrightconfig"
         }
       },
       {

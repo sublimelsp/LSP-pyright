@@ -1,0 +1,60 @@
+name: Update schema in Dependabot PR
+
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  pull-requests: write
+  repository-projects: write
+
+jobs:
+  update_schema:
+    name: Run schema update
+    runs-on: ubuntu-latest
+
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Update schema
+        id: update-schema
+        run: |
+          echo "::set-output name=UPDATE_OUTPUT::$(make update-schema)"
+
+      - name: Check for modified files
+        id: git-check
+        run: echo ::set-output name=modified::$(if [ -n "$(git status --porcelain)" ]; then echo "true"; else echo "false"; fi)
+
+      - name: Update changes in the PR
+        if: steps.git-check.outputs.modified == 'true'
+        run:  |
+          git config --global user.name 'workflow'
+          git config --global user.email 'worklow@workflow.com'
+          git add -A
+          git commit -m '[automated commit] update schema'
+          git push
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Build output
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            schema-update output:
+            ${{ steps.update-schema.outputs.UPDATE_OUTPUT }}
+          edit-mode: replace

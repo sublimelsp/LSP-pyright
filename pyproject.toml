@@ -9,6 +9,7 @@ skip_glob = [
   "branch-*/**",
   "libs/**",
   "resources/**",
+  "scripts/**",
   "stubs/**",
   "typings/**",
   "vendor/**",
@@ -20,7 +21,7 @@ skip_glob = [
 quiet = true
 recursive = true
 remove-all-unused-imports = true
-exclude = '\.git,\.?venv(-.*)?,\.mypy_cache,br-.*,branch-.*,libs,stubs,tests/files,typings'
+exclude = '\.git,\.?venv(-.*)?,\.mypy_cache,br-.*,branch-.*,libs,scripts,stubs,tests/files,typings'
 
 [tool.black]
 preview = true # use latest feature
@@ -33,6 +34,7 @@ exclude = '''
   language-server |
   plugin/libs |
   resources |
+  scripts |
   stubs |
   typings |
   _resources
