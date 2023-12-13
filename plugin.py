@@ -213,7 +213,7 @@ class LspPyrightPlugin(NpmClientHandler):
         """
         Resolves the python binary path depending on environment variables and files in the workspace.
 
-        See https://github.com/fannheyward/coc-pyright/blob/d58a468b1d7479a1b56906e386f44b997181e307/src/configSettings.ts#L47.  # noqa: E501
+        @see https://github.com/fannheyward/coc-pyright/blob/d58a468b1d7479a1b56906e386f44b997181e307/src/configSettings.ts#L47
         """
 
         def binary_from_python_path(path: str) -> Optional[str]:
