@@ -25,8 +25,7 @@ jobs:
 
       - name: Update schema
         id: update-schema
-        run: |
-          echo "::set-output name=UPDATE_OUTPUT::$(make update-schema)"
+        run: echo ::set-output name=UPDATE_OUTPUT::$(make update-schema)
 
       - name: Check for modified files
         id: git-check
