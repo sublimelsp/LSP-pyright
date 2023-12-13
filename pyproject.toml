@@ -1,28 +1,3 @@
-[tool.isort]
-line_length = 120
-profile = 'black'
-py_version = 38
-skip_glob = [
-  ".venv/**",
-  ".venv-*/**",
-  "br-*/**",
-  "branch-*/**",
-  "libs/**",
-  "resources/**",
-  "scripts/**",
-  "stubs/**",
-  "typings/**",
-  "vendor/**",
-  "venv/**",
-  "venv-*/**",
-]
-
-[tool.autoflake]
-quiet = true
-recursive = true
-remove-all-unused-imports = true
-exclude = '\.git,\.?venv(-.*)?,\.mypy_cache,br-.*,branch-.*,libs,scripts,stubs,tests/files,typings'
-
 [tool.black]
 preview = true # use latest feature
 line-length = 120
@@ -34,7 +9,6 @@ exclude = '''
   language-server |
   plugin/libs |
   resources |
-  scripts |
   stubs |
   typings |
   _resources
@@ -45,6 +19,26 @@ exclude = '''
 pythonVersion = '3.11'
 
 [tool.ruff]
-select = ["E", "F", "W"]
+preview = true
+select = ["E", "F", "W", "I"]
+ignore = [
+  "E203",
+  "F401", # we still need to use type annotation in comments in py33
+]
 line-length = 120
 target-version = 'py38'
+exclude = [
+  ".git",
+  ".mypy_cache",
+  ".venv",
+  ".venv-*",
+  "branch-*",
+  "libs",
+  "plugin/libs",
+  "stubs",
+  "tests/files",
+  "typings",
+  "vendor",
+  "venv",
+  "venv-*",
+]

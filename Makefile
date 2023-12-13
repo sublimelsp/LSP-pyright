@@ -1,18 +1,18 @@
 .PHONY: all
-all: fix
+all:
 
 .PHONY: ci-check
 ci-check:
-	# mypy -p plugin
-	flake8 .
-	black --check --diff --preview .
-	isort --check --diff .
+ 	# mypy -p plugin
+	ruff check --diff --preview .
+	black --diff --preview --check .
 
 .PHONY: ci-fix
 ci-fix:
-	autoflake --in-place .
+	ruff check --preview --fix .
+	# ruff format --preview .
 	black --preview .
-	isort .
+
 
 .PHONY: update-schema
 update-schema:
