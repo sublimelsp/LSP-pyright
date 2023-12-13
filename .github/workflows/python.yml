@@ -50,4 +50,4 @@ jobs:
 
       - name: Do linting
         run: |
-          make check
+          make ci-check

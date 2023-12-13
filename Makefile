@@ -1,15 +1,15 @@
 .PHONY: all
 all: fix
 
-.PHONY: check
-check:
+.PHONY: ci-check
+ci-check:
 	# mypy -p plugin
 	flake8 .
 	black --check --diff --preview .
 	isort --check --diff .
 
-.PHONY: fix
-fix:
+.PHONY: ci-fix
+ci-fix:
 	autoflake --in-place .
 	black --preview .
 	isort .
