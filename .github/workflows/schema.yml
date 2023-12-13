@@ -55,5 +55,6 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             schema-update output:
+
             ${{ steps.update-schema.outputs.UPDATE_OUTPUT }}
           edit-mode: replace
