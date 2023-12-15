@@ -26,14 +26,14 @@ jobs:
 
       - name: Update schema
         id: update-schema
-        run: echo ::set-output name=UPDATE_OUTPUT::$(make update-schema)
+        run: echo "OUTPUT=$(make update-schema)" >> "$GITHUB_OUTPUT"
 
       - name: Check for modified files
         id: git-check
-        run: echo ::set-output name=modified::$(if [ -n "$(git status --porcelain)" ]; then echo "true"; else echo "false"; fi)
+        run: echo "GIT_MODIFIED=$(if [ -n "$(git status --porcelain)" ]; then echo "true"; else echo "false"; fi)" >> "$GITHUB_OUTPUT"
 
       - name: Update changes in the PR
-        if: steps.git-check.outputs.modified == 'true'
+        if: steps.git-check.outputs.GIT_MODIFIED == 'true'
         run:  |
           git config --global user.name 'workflow'
           git config --global user.email 'worklow@workflow.com'
@@ -47,7 +47,6 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
-          body-includes: Build output
 
       - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v3
@@ -57,5 +56,5 @@ jobs:
           body: |
             schema-update output:
 
-            ${{ steps.update-schema.outputs.UPDATE_OUTPUT }}
+            ${{ steps.update-schema.outputs.OUTPUT }}
           edit-mode: replace
