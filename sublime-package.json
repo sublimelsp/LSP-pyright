@@ -531,17 +531,53 @@
               "title": "Python version to assume during type analysis",
               "type": "string"
             },
+            "reportAbstractUsage": {
+              "$id": "#/properties/reportAbstractUsage",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of attempted instantiation of abstract class"
+            },
+            "reportArgumentType": {
+              "$id": "#/properties/reportArgumentType",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of incompatible argument type"
+            },
             "reportAssertAlwaysTrue": {
               "$id": "#/properties/reportAssertAlwaysTrue",
               "$ref": "#/definitions/diagnostic",
               "default": "warning",
               "title": "Controls reporting assert expressions that will always evaluate to true"
             },
+            "reportAssertTypeFailure": {
+              "$id": "#/properties/reportAssertTypeFailure",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of type mismatch detected by typing.assert_type call"
+            },
+            "reportAssignmentType": {
+              "$id": "#/properties/reportAssignmentType",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of type incompatibilities for assignments"
+            },
+            "reportAttributeAccessIssue": {
+              "$id": "#/properties/reportAttributeAccessIssue",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of issues related to attribute accesses"
+            },
             "reportCallInDefaultInitializer": {
               "$id": "#/properties/reportCallInDefaultInitializer",
               "$ref": "#/definitions/diagnostic",
               "default": "none",
               "title": "Controls reporting usage of function calls within a default value initializer expression"
+            },
+            "reportCallIssue": {
+              "$id": "#/properties/reportCallIssue",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of issues related to call expressions and arguments"
             },
             "reportConstantRedefinition": {
               "$id": "#/properties/reportConstantRedefinition",
@@ -615,6 +651,18 @@
               "default": "none",
               "title": "Controls reporting of __init__ and __new__ methods whose signatures are inconsistent"
             },
+            "reportInconsistentOverload": {
+              "$id": "#/properties/reportInconsistentOverload",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of inconsistencies between function overload signatures"
+            },
+            "reportIndexIssue": {
+              "$id": "#/properties/reportIndexIssue",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of issues related to index operations and expressions"
+            },
             "reportInvalidStringEscapeSequence": {
               "$id": "#/properties/reportInvalidStringEscapeSequence",
               "$ref": "#/definitions/diagnostic",
@@ -626,6 +674,18 @@
               "$ref": "#/definitions/diagnostic",
               "default": "none",
               "title": "Controls reporting of type stub statements that do not conform to PEP 484"
+            },
+            "reportInvalidTypeArguments": {
+              "$id": "#/properties/reportInvalidTypeArguments",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of invalid type argument usage"
+            },
+            "reportInvalidTypeForm": {
+              "$id": "#/properties/reportInvalidTypeForm",
+              "$ref": "#/definitions/diagnostic",
+              "default": "warning",
+              "title": "Controls reporting of type expressions that use an invalid form"
             },
             "reportInvalidTypeVarUse": {
               "$id": "#/properties/reportInvalidTypeVarUse",
@@ -675,6 +735,18 @@
               "default": "warning",
               "title": "Controls reporting of imports that cannot be resolved to type stub files"
             },
+            "reportNoOverloadImplementation": {
+              "$id": "#/properties/reportNoOverloadImplementation",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of an overloaded function or method with a missing implementation"
+            },
+            "reportOperatorIssue": {
+              "$id": "#/properties/reportOperatorIssue",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of diagnostics related to unary and binary operators"
+            },
             "reportOptionalCall": {
               "$id": "#/properties/reportOptionalCall",
               "$ref": "#/definitions/diagnostic",
@@ -717,6 +789,12 @@
               "default": "error",
               "title": "Controls reporting of function overloads that overlap in signature and obscure each other or do not agree on return type"
             },
+            "reportPossiblyUnboundVariable": {
+              "$id": "#/properties/reportPossiblyUnboundVariable",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of attempts to use variable that is possibly unbound on some code paths"
+            },
             "reportPrivateImportUsage": {
               "$id": "#/properties/reportPrivateImportUsage",
               "$ref": "#/definitions/diagnostic",
@@ -735,11 +813,23 @@
               "default": "none",
               "title": "Controls reporting of property getter/setter type mismatches"
             },
+            "reportRedeclaration": {
+              "$id": "#/properties/reportRedeclaration",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of attempts to declare the type of a symbol multiple times"
+            },
+            "reportReturnType": {
+              "$id": "#/properties/reportReturnType",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of function return type incompatibility"
+            },
             "reportSelfClsParameterName": {
               "$id": "#/properties/reportSelfClsParameterName",
               "$ref": "#/definitions/diagnostic",
               "default": "warning",
-              "title": "Controls reporting assert expressions that will always evaluate to true"
+              "title": "Controls reporting missing or misnamed self parameters"
             },
             "reportShadowedImports": {
               "$id": "#/properties/reportShadowedImports",
@@ -763,7 +853,7 @@
               "$id": "#/properties/reportUnboundVariable",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Controls reporting of attempts to use an unbound or possibly unbound variable"
+              "title": "Controls reporting of attempts to use an unbound variable"
             },
             "reportUndefinedVariable": {
               "$id": "#/properties/reportUndefinedVariable",
@@ -885,6 +975,12 @@
               "default": "error",
               "title": "Controls reporting of call expressions that returns Coroutine whose results are not consumed"
             },
+            "reportUnusedExcept": {
+              "$id": "#/properties/reportUnusedExcept",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of unreachable except clauses"
+            },
             "reportUnusedExpression": {
               "$id": "#/properties/reportUnusedExpression",
               "$ref": "#/definitions/diagnostic",
@@ -913,7 +1009,7 @@
               "$id": "#/properties/reportWildcardImportFromLibrary",
               "$ref": "#/definitions/diagnostic",
               "default": "warning",
-              "title": "Controls reporting of wlidcard import from external library"
+              "title": "Controls reporting of wildcard import from external library"
             },
             "strict": {
               "$id": "#/properties/strict",
