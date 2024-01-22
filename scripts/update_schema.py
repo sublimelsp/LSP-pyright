@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from __future__ import annotations
 
 import json
@@ -37,12 +39,12 @@ def main() -> None:
     new_schema_keys = sorted(update_schema(sublime_package_schema_json, pyrightconfig_schema_json))
     after = json.dumps(sublime_package_schema_json, **json_dump_kwargs)
     if before != after:
-        SUBLIME_PACKAGE_JSON_PATH.write_text(after, encoding="utf-8")
+        SUBLIME_PACKAGE_JSON_PATH.write_text(f"{after}\n", encoding="utf-8")
         print("sublime-package.json schema updated.")
     else:
         print("No updates done to sublime-package.json.")
     if new_schema_keys:
-        new_schema_keys_text = "\n - ".join(new_schema_keys)
+        new_schema_keys_text = map(lambda k: f"\n - {k}", new_schema_keys)
         print(f"\nNew keys found in the latest pyrightconfig.json schema: {new_schema_keys_text}\n\n")
         print("Ensure that those are added to the sublime-package.json manually, if relevant.")
 

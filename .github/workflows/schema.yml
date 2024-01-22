@@ -26,7 +26,12 @@ jobs:
 
       - name: Update schema
         id: update-schema
-        run: echo "OUTPUT=$(make update-schema)" >> "$GITHUB_OUTPUT"
+        run: |
+          {
+            echo 'OUTPUT<<EOF'
+            make update-schema
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
 
       - name: Check for modified files
         id: git-check
