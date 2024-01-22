@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Generator
 from pathlib import Path
 from typing import Any
 from urllib.request import urlopen
@@ -56,7 +55,7 @@ def read_sublime_package_json() -> tuple[JsonDict, JsonDict]:
     return (pyrightconfig_schema_json, sublime_package_schema_json)
 
 
-def update_schema(sublime_package_json: JsonDict, pyrightconfig_schema_json: JsonDict) -> Generator[str, None, None]:
+def update_schema(sublime_package_json: JsonDict, pyrightconfig_schema_json: JsonDict) -> list[str]:
     pyrightconfig_contribution: JsonDict | None = None
     lsp_pyright_contribution: JsonDict | None = None
     for contribution in sublime_package_json["contributions"]["settings"]:
@@ -92,16 +91,13 @@ def update_schema(sublime_package_json: JsonDict, pyrightconfig_schema_json: Jso
     # then it might have to be added manually.
     all_settings_keys = [key.rpartition(".")[2] for key in settings_properties.keys()]
     all_overrides_keys = settings_properties["python.analysis.diagnosticSeverityOverrides"]["properties"].keys()
-
-    yield from (
-        pyrightconfig_key
-        for pyrightconfig_key in pyrightconfig_properties.keys()
-        if not (
-            pyrightconfig_key in all_settings_keys
-            or pyrightconfig_key in all_overrides_keys
-            or pyrightconfig_key in IGNORED_PYRIGHTCONFIG_KEYS
-        )
-    )
+    new_schema_keys = []
+    for pyrightconfig_key in pyrightconfig_properties.keys():
+        if pyrightconfig_key not in all_settings_keys \
+                and pyrightconfig_key not in all_overrides_keys \
+                and pyrightconfig_key not in IGNORED_PYRIGHTCONFIG_KEYS:
+            new_schema_keys.append(pyrightconfig_key)
+    return new_schema_keys
 
 
 def update_property_ref(property_key: str, property_schema: JsonDict, pyrightconfig_properties: JsonDict) -> None:
