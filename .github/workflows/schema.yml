@@ -62,7 +62,9 @@ jobs:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            schema-update output:
+            Following are the schema changes in the new version. Make sure that those are reflected in `LSP-pyright.sublime-settings` and `sublime-package.json` files.
 
+            ```
             ${{ steps.update-schema.outputs.OUTPUT }}
+            ```
           edit-mode: replace
