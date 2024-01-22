@@ -583,13 +583,13 @@
               "$id": "#/properties/reportAbstractUsage",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for an attempt to instantiate an abstract or protocol class or use an abstract method."
+              "title": "Controls reporting of attempted instantiation of abstract class"
             },
             "reportArgumentType": {
               "$id": "#/properties/reportArgumentType",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for a type incompatibility for an argument to a call."
+              "title": "Controls reporting of incompatible argument type"
             },
             "reportAssertAlwaysTrue": {
               "$id": "#/properties/reportAssertAlwaysTrue",
@@ -601,19 +601,19 @@
               "$id": "#/properties/reportAssertTypeFailure",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for a type incompatibility detected by a typing.assert_type call."
+              "title": "Controls reporting of type mismatch detected by typing.assert_type call"
             },
             "reportAssignmentType": {
               "$id": "#/properties/reportAssignmentType",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for type incompatibilities for assignments."
+              "title": "Controls reporting of type incompatibilities for assignments"
             },
             "reportAttributeAccessIssue": {
               "$id": "#/properties/reportAttributeAccessIssue",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for issues involving attribute accesses."
+              "title": "Controls reporting of issues related to attribute accesses"
             },
             "reportCallInDefaultInitializer": {
               "$id": "#/properties/reportCallInDefaultInitializer",
@@ -625,7 +625,7 @@
               "$id": "#/properties/reportCallIssue",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for issues involving call expressions and arguments."
+              "title": "Controls reporting of issues related to call expressions and arguments"
             },
             "reportConstantRedefinition": {
               "$id": "#/properties/reportConstantRedefinition",
@@ -703,13 +703,13 @@
               "$id": "#/properties/reportInconsistentOverload",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for inconsistencies between function overload signatures and implementation."
+              "title": "Controls reporting of inconsistencies between function overload signatures"
             },
             "reportIndexIssue": {
               "$id": "#/properties/reportIndexIssue",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics related to index operations and expressions."
+              "title": "Controls reporting of issues related to index operations and expressions"
             },
             "reportInvalidStringEscapeSequence": {
               "$id": "#/properties/reportInvalidStringEscapeSequence",
@@ -727,13 +727,13 @@
               "$id": "#/properties/reportInvalidTypeArguments",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for invalid type argument usage."
+              "title": "Controls reporting of invalid type argument usage"
             },
             "reportInvalidTypeForm": {
               "$id": "#/properties/reportInvalidTypeForm",
               "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for type expression that uses an invalid form."
+              "default": "warning",
+              "title": "Controls reporting of type expressions that use an invalid form"
             },
             "reportInvalidTypeVarUse": {
               "$id": "#/properties/reportInvalidTypeVarUse",
@@ -787,13 +787,13 @@
               "$id": "#/properties/reportNoOverloadImplementation",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for an overloaded function or method with a missing implementation."
+              "title": "Controls reporting of an overloaded function or method with a missing implementation"
             },
             "reportOperatorIssue": {
               "$id": "#/properties/reportOperatorIssue",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for related to unary or binary operators."
+              "title": "Controls reporting of diagnostics related to unary and binary operators"
             },
             "reportOptionalCall": {
               "$id": "#/properties/reportOptionalCall",
@@ -841,7 +841,7 @@
               "$id": "#/properties/reportPossiblyUnboundVariable",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for the use of variables that may be unbound on some code paths."
+              "title": "Controls reporting of attempts to use variable that is possibly unbound on some code paths"
             },
             "reportPrivateImportUsage": {
               "$id": "#/properties/reportPrivateImportUsage",
@@ -865,19 +865,19 @@
               "$id": "#/properties/reportRedeclaration",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for an attempt to declare the type of a symbol multiple times."
+              "title": "Controls reporting of attempts to declare the type of a symbol multiple times"
             },
             "reportReturnType": {
               "$id": "#/properties/reportReturnType",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics related to function return type compatibility."
+              "title": "Controls reporting of function return type incompatibility"
             },
             "reportSelfClsParameterName": {
               "$id": "#/properties/reportSelfClsParameterName",
               "$ref": "#/definitions/diagnostic",
               "default": "warning",
-              "title": "Controls reporting assert expressions that will always evaluate to true"
+              "title": "Controls reporting missing or misnamed self parameters"
             },
             "reportShadowedImports": {
               "$id": "#/properties/reportShadowedImports",
@@ -901,7 +901,7 @@
               "$id": "#/properties/reportUnboundVariable",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Controls reporting of attempts to use an unbound or possibly unbound variable"
+              "title": "Controls reporting of attempts to use an unbound variable"
             },
             "reportUndefinedVariable": {
               "$id": "#/properties/reportUndefinedVariable",
@@ -1027,7 +1027,7 @@
               "$id": "#/properties/reportUnusedExcept",
               "$ref": "#/definitions/diagnostic",
               "default": "error",
-              "title": "Diagnostics for unreachable except clause."
+              "title": "Controls reporting of unreachable except clauses"
             },
             "reportUnusedExpression": {
               "$id": "#/properties/reportUnusedExpression",
@@ -1057,7 +1057,7 @@
               "$id": "#/properties/reportWildcardImportFromLibrary",
               "$ref": "#/definitions/diagnostic",
               "default": "warning",
-              "title": "Controls reporting of wlidcard import from external library"
+              "title": "Controls reporting of wildcard import from external library"
             },
             "strict": {
               "$id": "#/properties/strict",
