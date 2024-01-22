@@ -8,6 +8,7 @@ on:
       - 'language-server/package.json'
 
 permissions:
+  contents: write
   pull-requests: write
   repository-projects: write
 
@@ -42,8 +43,8 @@ jobs:
       - name: Update changes in the PR
         if: steps.git-check.outputs.GIT_MODIFIED == 'true'
         run:  |
-          git config --global user.name 'workflow'
-          git config --global user.email 'worklow@workflow.com'
+          git config --global user.name github-actions[bot]
+          git config --global user.email github-actions[bot]@users.noreply.github.com
           git add -A
           git commit -m '[automated commit] update schema'
           git push
