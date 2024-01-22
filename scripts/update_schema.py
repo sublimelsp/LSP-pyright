@@ -44,7 +44,7 @@ def main() -> None:
     else:
         print("No updates done to sublime-package.json.")
     if new_schema_keys:
-        new_schema_keys_text = map(lambda k: f"\n - {k}", new_schema_keys)
+        new_schema_keys_text = "".join(map(lambda k: f"\n - {k}", new_schema_keys))
         print(f"\nNew keys found in the latest pyrightconfig.json schema: {new_schema_keys_text}\n\n")
         print("Ensure that those are added to the sublime-package.json manually, if relevant.")
 
