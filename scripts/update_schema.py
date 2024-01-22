@@ -93,9 +93,11 @@ def update_schema(sublime_package_json: JsonDict, pyrightconfig_schema_json: Jso
     all_overrides_keys = settings_properties["python.analysis.diagnosticSeverityOverrides"]["properties"].keys()
     new_schema_keys = []
     for pyrightconfig_key in pyrightconfig_properties.keys():
-        if pyrightconfig_key not in all_settings_keys \
-                and pyrightconfig_key not in all_overrides_keys \
-                and pyrightconfig_key not in IGNORED_PYRIGHTCONFIG_KEYS:
+        if (
+            pyrightconfig_key not in all_settings_keys
+            and pyrightconfig_key not in all_overrides_keys
+            and pyrightconfig_key not in IGNORED_PYRIGHTCONFIG_KEYS
+        ):
             new_schema_keys.append(pyrightconfig_key)
     return new_schema_keys
 
