@@ -87,29 +87,11 @@
                         "enableTypeIgnoreComments": {
                           "$ref": "sublime://pyrightconfig#/properties/enableTypeIgnoreComments"
                         },
-                        "reportAbstractUsage": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportAbstractUsage"
-                        },
-                        "reportArgumentType": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportArgumentType"
-                        },
                         "reportAssertAlwaysTrue": {
                           "$ref": "sublime://pyrightconfig#/properties/reportAssertAlwaysTrue"
                         },
-                        "reportAssertTypeFailure": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportAssertTypeFailure"
-                        },
-                        "reportAssignmentType": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportAssignmentType"
-                        },
-                        "reportAttributeAccessIssue": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportAttributeAccessIssue"
-                        },
                         "reportCallInDefaultInitializer": {
                           "$ref": "sublime://pyrightconfig#/properties/reportCallInDefaultInitializer"
-                        },
-                        "reportCallIssue": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportCallIssue"
                         },
                         "reportConstantRedefinition": {
                           "$ref": "sublime://pyrightconfig#/properties/reportConstantRedefinition"
@@ -147,23 +129,11 @@
                         "reportInconsistentConstructor": {
                           "$ref": "sublime://pyrightconfig#/properties/reportInconsistentConstructor"
                         },
-                        "reportInconsistentOverload": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportInconsistentOverload"
-                        },
-                        "reportIndexIssue": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportIndexIssue"
-                        },
                         "reportInvalidStringEscapeSequence": {
                           "$ref": "sublime://pyrightconfig#/properties/reportInvalidStringEscapeSequence"
                         },
                         "reportInvalidStubStatement": {
                           "$ref": "sublime://pyrightconfig#/properties/reportInvalidStubStatement"
-                        },
-                        "reportInvalidTypeArguments": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportInvalidTypeArguments"
-                        },
-                        "reportInvalidTypeForm": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportInvalidTypeForm"
                         },
                         "reportInvalidTypeVarUse": {
                           "$ref": "sublime://pyrightconfig#/properties/reportInvalidTypeVarUse"
@@ -189,12 +159,6 @@
                         "reportMissingTypeStubs": {
                           "$ref": "sublime://pyrightconfig#/properties/reportMissingTypeStubs"
                         },
-                        "reportNoOverloadImplementation": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportNoOverloadImplementation"
-                        },
-                        "reportOperatorIssue": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportOperatorIssue"
-                        },
                         "reportOptionalCall": {
                           "$ref": "sublime://pyrightconfig#/properties/reportOptionalCall"
                         },
@@ -216,9 +180,6 @@
                         "reportOverlappingOverload": {
                           "$ref": "sublime://pyrightconfig#/properties/reportOverlappingOverload"
                         },
-                        "reportPossiblyUnboundVariable": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportPossiblyUnboundVariable"
-                        },
                         "reportPrivateImportUsage": {
                           "$ref": "sublime://pyrightconfig#/properties/reportPrivateImportUsage"
                         },
@@ -227,12 +188,6 @@
                         },
                         "reportPropertyTypeMismatch": {
                           "$ref": "sublime://pyrightconfig#/properties/reportPropertyTypeMismatch"
-                        },
-                        "reportRedeclaration": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportRedeclaration"
-                        },
-                        "reportReturnType": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportReturnType"
                         },
                         "reportSelfClsParameterName": {
                           "$ref": "sublime://pyrightconfig#/properties/reportSelfClsParameterName"
@@ -308,9 +263,6 @@
                         },
                         "reportUnusedCoroutine": {
                           "$ref": "sublime://pyrightconfig#/properties/reportUnusedCoroutine"
-                        },
-                        "reportUnusedExcept": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportUnusedExcept"
                         },
                         "reportUnusedExpression": {
                           "$ref": "sublime://pyrightconfig#/properties/reportUnusedExpression"
@@ -579,53 +531,17 @@
               "title": "Python version to assume during type analysis",
               "type": "string"
             },
-            "reportAbstractUsage": {
-              "$id": "#/properties/reportAbstractUsage",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for an attempt to instantiate an abstract or protocol class or use an abstract method."
-            },
-            "reportArgumentType": {
-              "$id": "#/properties/reportArgumentType",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for a type incompatibility for an argument to a call."
-            },
             "reportAssertAlwaysTrue": {
               "$id": "#/properties/reportAssertAlwaysTrue",
               "$ref": "#/definitions/diagnostic",
               "default": "warning",
               "title": "Controls reporting assert expressions that will always evaluate to true"
             },
-            "reportAssertTypeFailure": {
-              "$id": "#/properties/reportAssertTypeFailure",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for a type incompatibility detected by a typing.assert_type call."
-            },
-            "reportAssignmentType": {
-              "$id": "#/properties/reportAssignmentType",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for type incompatibilities for assignments."
-            },
-            "reportAttributeAccessIssue": {
-              "$id": "#/properties/reportAttributeAccessIssue",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for issues involving attribute accesses."
-            },
             "reportCallInDefaultInitializer": {
               "$id": "#/properties/reportCallInDefaultInitializer",
               "$ref": "#/definitions/diagnostic",
               "default": "none",
               "title": "Controls reporting usage of function calls within a default value initializer expression"
-            },
-            "reportCallIssue": {
-              "$id": "#/properties/reportCallIssue",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for issues involving call expressions and arguments."
             },
             "reportConstantRedefinition": {
               "$id": "#/properties/reportConstantRedefinition",
@@ -699,18 +615,6 @@
               "default": "none",
               "title": "Controls reporting of __init__ and __new__ methods whose signatures are inconsistent"
             },
-            "reportInconsistentOverload": {
-              "$id": "#/properties/reportInconsistentOverload",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for inconsistencies between function overload signatures and implementation."
-            },
-            "reportIndexIssue": {
-              "$id": "#/properties/reportIndexIssue",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics related to index operations and expressions."
-            },
             "reportInvalidStringEscapeSequence": {
               "$id": "#/properties/reportInvalidStringEscapeSequence",
               "$ref": "#/definitions/diagnostic",
@@ -722,18 +626,6 @@
               "$ref": "#/definitions/diagnostic",
               "default": "none",
               "title": "Controls reporting of type stub statements that do not conform to PEP 484"
-            },
-            "reportInvalidTypeArguments": {
-              "$id": "#/properties/reportInvalidTypeArguments",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for invalid type argument usage."
-            },
-            "reportInvalidTypeForm": {
-              "$id": "#/properties/reportInvalidTypeForm",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for type expression that uses an invalid form."
             },
             "reportInvalidTypeVarUse": {
               "$id": "#/properties/reportInvalidTypeVarUse",
@@ -783,18 +675,6 @@
               "default": "warning",
               "title": "Controls reporting of imports that cannot be resolved to type stub files"
             },
-            "reportNoOverloadImplementation": {
-              "$id": "#/properties/reportNoOverloadImplementation",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for an overloaded function or method with a missing implementation."
-            },
-            "reportOperatorIssue": {
-              "$id": "#/properties/reportOperatorIssue",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for related to unary or binary operators."
-            },
             "reportOptionalCall": {
               "$id": "#/properties/reportOptionalCall",
               "$ref": "#/definitions/diagnostic",
@@ -837,12 +717,6 @@
               "default": "error",
               "title": "Controls reporting of function overloads that overlap in signature and obscure each other or do not agree on return type"
             },
-            "reportPossiblyUnboundVariable": {
-              "$id": "#/properties/reportPossiblyUnboundVariable",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for the use of variables that may be unbound on some code paths."
-            },
             "reportPrivateImportUsage": {
               "$id": "#/properties/reportPrivateImportUsage",
               "$ref": "#/definitions/diagnostic",
@@ -860,18 +734,6 @@
               "$ref": "#/definitions/diagnostic",
               "default": "none",
               "title": "Controls reporting of property getter/setter type mismatches"
-            },
-            "reportRedeclaration": {
-              "$id": "#/properties/reportRedeclaration",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for an attempt to declare the type of a symbol multiple times."
-            },
-            "reportReturnType": {
-              "$id": "#/properties/reportReturnType",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics related to function return type compatibility."
             },
             "reportSelfClsParameterName": {
               "$id": "#/properties/reportSelfClsParameterName",
@@ -1022,12 +884,6 @@
               "$ref": "#/definitions/diagnostic",
               "default": "error",
               "title": "Controls reporting of call expressions that returns Coroutine whose results are not consumed"
-            },
-            "reportUnusedExcept": {
-              "$id": "#/properties/reportUnusedExcept",
-              "$ref": "#/definitions/diagnostic",
-              "default": "error",
-              "title": "Diagnostics for unreachable except clause."
             },
             "reportUnusedExpression": {
               "$id": "#/properties/reportUnusedExpression",
