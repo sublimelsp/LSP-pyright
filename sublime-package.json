@@ -87,11 +87,29 @@
                         "enableTypeIgnoreComments": {
                           "$ref": "sublime://pyrightconfig#/properties/enableTypeIgnoreComments"
                         },
+                        "reportAbstractUsage": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportAbstractUsage"
+                        },
+                        "reportArgumentType": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportArgumentType"
+                        },
                         "reportAssertAlwaysTrue": {
                           "$ref": "sublime://pyrightconfig#/properties/reportAssertAlwaysTrue"
                         },
+                        "reportAssertTypeFailure": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportAssertTypeFailure"
+                        },
+                        "reportAssignmentType": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportAssignmentType"
+                        },
+                        "reportAttributeAccessIssue": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportAttributeAccessIssue"
+                        },
                         "reportCallInDefaultInitializer": {
                           "$ref": "sublime://pyrightconfig#/properties/reportCallInDefaultInitializer"
+                        },
+                        "reportCallIssue": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportCallIssue"
                         },
                         "reportConstantRedefinition": {
                           "$ref": "sublime://pyrightconfig#/properties/reportConstantRedefinition"
@@ -129,11 +147,23 @@
                         "reportInconsistentConstructor": {
                           "$ref": "sublime://pyrightconfig#/properties/reportInconsistentConstructor"
                         },
+                        "reportInconsistentOverload": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportInconsistentOverload"
+                        },
+                        "reportIndexIssue": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportIndexIssue"
+                        },
                         "reportInvalidStringEscapeSequence": {
                           "$ref": "sublime://pyrightconfig#/properties/reportInvalidStringEscapeSequence"
                         },
                         "reportInvalidStubStatement": {
                           "$ref": "sublime://pyrightconfig#/properties/reportInvalidStubStatement"
+                        },
+                        "reportInvalidTypeArguments": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportInvalidTypeArguments"
+                        },
+                        "reportInvalidTypeForm": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportInvalidTypeForm"
                         },
                         "reportInvalidTypeVarUse": {
                           "$ref": "sublime://pyrightconfig#/properties/reportInvalidTypeVarUse"
@@ -159,6 +189,12 @@
                         "reportMissingTypeStubs": {
                           "$ref": "sublime://pyrightconfig#/properties/reportMissingTypeStubs"
                         },
+                        "reportNoOverloadImplementation": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportNoOverloadImplementation"
+                        },
+                        "reportOperatorIssue": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportOperatorIssue"
+                        },
                         "reportOptionalCall": {
                           "$ref": "sublime://pyrightconfig#/properties/reportOptionalCall"
                         },
@@ -180,6 +216,9 @@
                         "reportOverlappingOverload": {
                           "$ref": "sublime://pyrightconfig#/properties/reportOverlappingOverload"
                         },
+                        "reportPossiblyUnboundVariable": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportPossiblyUnboundVariable"
+                        },
                         "reportPrivateImportUsage": {
                           "$ref": "sublime://pyrightconfig#/properties/reportPrivateImportUsage"
                         },
@@ -188,6 +227,12 @@
                         },
                         "reportPropertyTypeMismatch": {
                           "$ref": "sublime://pyrightconfig#/properties/reportPropertyTypeMismatch"
+                        },
+                        "reportRedeclaration": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportRedeclaration"
+                        },
+                        "reportReturnType": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportReturnType"
                         },
                         "reportSelfClsParameterName": {
                           "$ref": "sublime://pyrightconfig#/properties/reportSelfClsParameterName"
@@ -263,6 +308,9 @@
                         },
                         "reportUnusedCoroutine": {
                           "$ref": "sublime://pyrightconfig#/properties/reportUnusedCoroutine"
+                        },
+                        "reportUnusedExcept": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnusedExcept"
                         },
                         "reportUnusedExpression": {
                           "$ref": "sublime://pyrightconfig#/properties/reportUnusedExpression"

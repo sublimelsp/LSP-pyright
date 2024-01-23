@@ -32,9 +32,7 @@
 		"python.analysis.diagnosticSeverityOverrides": {
 			"reportDuplicateImport": "warning",
 			"reportImplicitStringConcatenation": "warning",
-			"reportMissingParameterType": "none",
 			"reportUnboundVariable": "warning",
-			"reportUninitializedInstanceVariable": "none",
 			"reportUnusedClass": "information",
 			"reportUnusedFunction": "information",
 			"reportUnusedImport": "information",
