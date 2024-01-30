@@ -666,7 +666,7 @@
             "reportImplicitStringConcatenation": {
               "$id": "#/properties/reportImplicitStringConcatenation",
               "$ref": "#/definitions/diagnostic",
-              "default": "warning",
+              "default": "none",
               "title": "Controls reporting usage of implicit concatenation of string literals"
             },
             "reportImportCycles": {
