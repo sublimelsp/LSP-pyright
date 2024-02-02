@@ -1,40 +1,18 @@
-[tool.black]
-preview = true # use latest feature
-line-length = 120
-target-version = ['py38']
-exclude = '''
-/(
-  \.git |
-  \.venv(-.*)? |
-  language-server |
-  plugin/libs |
-  resources |
-  stubs |
-  typings |
-  _resources
-)/
-'''
-
 [tool.pyright]
 pythonVersion = '3.11'
 
 [tool.ruff]
 preview = true
-select = ["E", "F", "W", "I"]
-ignore = [
-  "E203",
-  "F401", # we still need to use type annotation in comments in py33
-]
 line-length = 120
 target-version = 'py38'
 exclude = [
+  "*/libs/*",
   ".git",
   ".mypy_cache",
   ".venv",
   ".venv-*",
   "branch-*",
-  "libs",
-  "plugin/libs",
+  "scripts/module_scraper",
   "stubs",
   "tests/files",
   "typings",
@@ -42,3 +20,13 @@ exclude = [
   "venv",
   "venv-*",
 ]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"] # no "UP" because actually running py33
+ignore =  [
+  "E203",
+  "F401", # we still need to use type annotation in comments in py33
+]
+
+[tool.ruff.lint.per-file-ignores]
+"boot.py" = ["E402"]
