@@ -11,7 +11,9 @@ PACKAGE_NAME = "LSP-pyright"
 
 PROJECT_ROOT = Path(__file__).parents[1]
 PYRIGHTCONFIG_SCHEMA_ID = "sublime://pyrightconfig"
-PYRIGHT_CONFIGURATION_SCHEMA_URL = "https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json"  # noqa: E501
+PYRIGHT_CONFIGURATION_SCHEMA_URL = (
+    "https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json"  # noqa: E501
+)
 SUBLIME_PACKAGE_JSON_PATH = PROJECT_ROOT / "sublime-package.json"
 # Keys that are in the pyrightconfig.json schema but should not raise a comment when not present in the LSP schema.
 IGNORED_PYRIGHTCONFIG_KEYS = {

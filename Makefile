@@ -6,19 +6,17 @@ all:
 .PHONY: ci-check
 ci-check:
  	# mypy -p plugin
-	echo "Linting: ruff..."
+	echo "Check: ruff (lint)"
 	ruff check --diff --preview .
-	echo "Linting: black..."
-	black --diff --preview --check .
+	echo "Check: ruff (format)"
+	ruff format --diff --preview .
 
 .PHONY: ci-fix
 ci-fix:
-	echo "Fixing: ruff..."
+	echo "Fix: ruff (lint)"
 	ruff check --preview --fix .
-	# ruff format --preview .
-	echo "Fixing: black..."
-	black --preview .
-
+	echo "Fix: ruff (format)"
+	ruff format --preview .
 
 .PHONY: update-schema
 update-schema:
