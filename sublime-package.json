@@ -249,6 +249,9 @@
                         "reportUnboundVariable": {
                           "$ref": "sublime://pyrightconfig#/properties/reportUnboundVariable"
                         },
+                        "reportUnhashable": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnhashable"
+                        },
                         "reportUndefinedVariable": {
                           "$ref": "sublime://pyrightconfig#/properties/reportUndefinedVariable"
                         },
