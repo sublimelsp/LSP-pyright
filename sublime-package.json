@@ -909,6 +909,12 @@
               "default": "error",
               "title": "Controls reporting of attempts to use an undefined variable"
             },
+            "reportUnhashable": {
+              "$id": "#/properties/reportUnhashable",
+              "$ref": "#/definitions/diagnostic",
+              "default": "error",
+              "title": "Controls reporting of unhashable object in container that requires hashability"
+            },
             "reportUninitializedInstanceVariable": {
               "$id": "#/properties/reportUninitializedInstanceVariable",
               "$ref": "#/definitions/diagnostic",
