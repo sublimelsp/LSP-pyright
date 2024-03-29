@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 import sublime
-from LSP.plugin import ClientConfig, DottedDict, Response, WorkspaceFolder
+from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
 from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
@@ -13,11 +13,7 @@ from sublime_lib import ResourcePath
 
 assert __package__
 
-ST_VERSION = int(sublime.version())
 ST_PACKAGES_PATH = sublime.packages_path()
-
-if ST_VERSION >= 4070:
-    from LSP.plugin import MarkdownLangMap
 
 
 def plugin_loaded() -> None:
@@ -88,7 +84,7 @@ class LspPyrightPlugin(NpmClientHandler):
         ResourcePath(src).copytree(dest, exist_ok=True)
 
     @classmethod
-    def markdown_language_id_to_st_syntax_map(cls) -> Optional["MarkdownLangMap"]:
+    def markdown_language_id_to_st_syntax_map(cls) -> Optional[MarkdownLangMap]:
         return {"python": (("python", "py"), ("LSP-pyright/syntaxes/pyright",))}
 
     def on_server_response_async(self, method: str, response: Response) -> None:
