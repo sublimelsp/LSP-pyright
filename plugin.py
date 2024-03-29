@@ -11,6 +11,8 @@ from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
+assert __package__
+
 ST_VERSION = int(sublime.version())
 ST_PACKAGES_PATH = sublime.packages_path()
 
