@@ -13,7 +13,7 @@ CONFIGURATION_CONTENTS = """{
 """
 
 
-class LspPyrightCreateConfiguration(sublime_plugin.WindowCommand):
+class LspPyrightCreateConfigurationCommand(sublime_plugin.WindowCommand):
     def run(self) -> None:
         folders = self.window.folders()
         if len(folders) == 0:
