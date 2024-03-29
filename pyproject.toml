@@ -1,3 +1,6 @@
+[tool.basedpyright]
+pythonVersion = '3.11'
+
 [tool.pyright]
 pythonVersion = '3.11'
 
