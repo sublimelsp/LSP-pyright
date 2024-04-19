@@ -1,19 +1,21 @@
+from __future__ import annotations
+
 import os
 import re
 import shutil
 import subprocess
 import sys
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any, cast
 
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
-from LSP.plugin.core.typing import Any, Callable, List, Optional, Tuple, cast
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
 assert __package__
-
-ST_PACKAGES_PATH = sublime.packages_path()
 
 
 def plugin_loaded() -> None:
@@ -51,7 +53,7 @@ class LspPyrightPlugin(NpmClientHandler):
         super().on_settings_changed(settings)
 
         dev_environment = settings.get("pyright.dev_environment")
-        extraPaths = settings.get("python.analysis.extraPaths") or []  # type: List[str]
+        extraPaths: list[str] = settings.get("python.analysis.extraPaths") or []
 
         if dev_environment in {"sublime_text", "sublime_text_33", "sublime_text_38"}:
             py_ver = self.detect_st_py_ver(dev_environment)
@@ -65,13 +67,13 @@ class LspPyrightPlugin(NpmClientHandler):
         cls,
         window: sublime.Window,
         initiating_view: sublime.View,
-        workspace_folders: List[WorkspaceFolder],
+        workspace_folders: list[WorkspaceFolder],
         configuration: ClientConfig,
-    ) -> Optional[str]:
+    ) -> str | None:
         super().on_pre_start(window, initiating_view, workspace_folders, configuration)
 
         python_path = cls.python_path(configuration.settings, workspace_folders)
-        print('{}: INFO: Using python path "{}"'.format(cls.name(), python_path))
+        print(f'{cls.name()}: INFO: Using python path "{python_path}"')
         configuration.settings.set("python.pythonPath", python_path)
         return None
 
@@ -79,12 +81,12 @@ class LspPyrightPlugin(NpmClientHandler):
     def install_or_update(cls) -> None:
         super().install_or_update()
         # Copy resources
-        src = "Packages/{}/resources/".format(cls.package_name)
+        src = f"Packages/{cls.package_name}/resources/"
         dest = os.path.join(cls.package_storage(), "resources")
         ResourcePath(src).copytree(dest, exist_ok=True)
 
     @classmethod
-    def markdown_language_id_to_st_syntax_map(cls) -> Optional[MarkdownLangMap]:
+    def markdown_language_id_to_st_syntax_map(cls) -> MarkdownLangMap | None:
         return {"python": (("python", "py"), ("LSP-pyright/syntaxes/pyright",))}
 
     def on_server_response_async(self, method: str, response: Response) -> None:
@@ -117,14 +119,14 @@ class LspPyrightPlugin(NpmClientHandler):
     # -------------- #
 
     def patch_markdown_content(self, content: str) -> str:
-        # Add another linebreak before horizontal rule following fenced code block
+        # add another linebreak before horizontal rule following fenced code block
         content = re.sub("```\n---", "```\n\n---", content)
-        # Add markup for some common field name conventions in function docstring
+        # add markup for some common field name conventions in function docstring
         content = re.sub(
             r"\n:(\w+)[ \t]+([\w\\*.]+):",
             lambda m: "\n__{field}:__ `{name}`".format(
                 field=m.group(1).title(),
-                name=m.group(2).replace("\\_", "_").replace("\\*", "*"),
+                name=m.group(2).replace(R"\_", "_").replace(R"\*", "*"),
             ),
             content,
         )
@@ -133,108 +135,92 @@ class LspPyrightPlugin(NpmClientHandler):
         content = re.sub(r"\n:deprecated:", r"\n⚠️ __Deprecated:__", content)
         return content
 
-    def detect_st_py_ver(self, dev_environment: str) -> Tuple[int, int]:
+    def detect_st_py_ver(self, dev_environment: str) -> tuple[int, int]:
         default = (3, 3)
 
         if dev_environment == "sublime_text_33":
             return (3, 3)
         if dev_environment == "sublime_text_38":
             return (3, 8)
-
         if dev_environment == "sublime_text":
-            session = self.weaksession()
-            if not session:
+            if not ((session := self.weaksession()) and (workspace_folders := session.get_workspace_folders())):
                 return default
-            workspace_folders = session.get_workspace_folders()
-            if not workspace_folders:
-                return default
-            if workspace_folders[0].path == os.path.join(ST_PACKAGES_PATH, "User"):
+            # ST auto uses py38 for files in "Packages/User/"
+            if (first_folder := Path(workspace_folders[0].path).resolve()) == Path(sublime.packages_path()) / "User":
                 return (3, 8)
-            python_version_file = os.path.join(workspace_folders[0].path, ".python-version")
+            # the project wants to use py38
             try:
-                with open(python_version_file, "r") as file:
-                    if file.read().strip() == "3.8":
-                        return (3, 8)
+                if (first_folder / ".python-version").read_bytes().strip() == b"3.8":
+                    return (3, 8)
             except Exception:
                 pass
+            return default
 
-        return default
+        raise ValueError(f'Invalid "dev_environment" setting: {dev_environment}')
 
-    @classmethod
-    def get_plugin_setting(cls, key: str, default: Any = None) -> Any:
-        return sublime.load_settings(cls.package_name + ".sublime-settings").get(key, default)
-
-    def find_package_dependency_dirs(self, py_ver: Tuple[int, int] = (3, 3)) -> List[str]:
+    def find_package_dependency_dirs(self, py_ver: tuple[int, int] = (3, 3)) -> list[str]:
         dep_dirs = sys.path.copy()
 
         # replace paths for target Python version
         # @see https://github.com/sublimelsp/LSP-pyright/issues/28
-        re_pattern = r"(python3\.?)[38]"
+        re_pattern = re.compile(r"(python3\.?)[38]", flags=re.IGNORECASE)
         re_replacement = r"\g<1>8" if py_ver == (3, 8) else r"\g<1>3"
-        dep_dirs = [re.sub(re_pattern, re_replacement, d, flags=re.IGNORECASE) for d in dep_dirs]
+        dep_dirs = [re_pattern.sub(re_replacement, dep_dir) for dep_dir in dep_dirs]
 
         # move the "Packages/" to the last
         # @see https://github.com/sublimelsp/LSP-pyright/pull/26#discussion_r520747708
-        dep_dirs.remove(ST_PACKAGES_PATH)
-        dep_dirs.append(ST_PACKAGES_PATH)
+        packages_path = sublime.packages_path()
+        dep_dirs.remove(packages_path)
+        dep_dirs.append(packages_path)
 
+        # sublime stubs - add as first
         if py_ver == (3, 3):
-            # sublime stubs - add as first
             dep_dirs.insert(0, os.path.join(self.package_storage(), "resources", "typings", "sublime_text"))
 
-        return [path for path in dep_dirs if os.path.isdir(path)]
+        return list(filter(os.path.isdir, dep_dirs))
 
     @classmethod
-    def python_path(cls, settings: DottedDict, workspace_folders: List[WorkspaceFolder]) -> str:
-        python_path = settings.get("python.pythonPath")
-        if python_path:
+    def python_path(cls, settings: DottedDict, workspace_folders: list[WorkspaceFolder]) -> str:
+        if python_path := settings.get("python.pythonPath"):
             return python_path
 
         if workspace_folders:
-            workspace_folder = os.path.abspath(workspace_folders[0].path)
-
-            while True:
-                python_path = cls.python_path_from_venv(workspace_folder)
-                if python_path:
-                    return python_path
-
-                parent = os.path.dirname(workspace_folder)
-                if workspace_folder != parent:
-                    workspace_folder = parent
-                else:
-                    break
+            workspace_folder = Path(workspace_folders[0].path)
+            for folder in (workspace_folder, *workspace_folder.parents):
+                if python_path := cls.python_path_from_venv(folder):
+                    return str(python_path)
 
         return shutil.which("python") or shutil.which("python3") or ""
 
     @classmethod
-    def python_path_from_venv(cls, workspace_folder: str) -> Optional[str]:
+    def python_path_from_venv(cls, workspace_folder: str | Path) -> Path | None:
         """
         Resolves the python binary path depending on environment variables and files in the workspace.
 
         @see https://github.com/fannheyward/coc-pyright/blob/d58a468b1d7479a1b56906e386f44b997181e307/src/configSettings.ts#L47
         """
+        workspace_folder = Path(workspace_folder)
 
-        def binary_from_python_path(path: str) -> Optional[str]:
+        def binary_from_python_path(path: str | Path) -> Path | None:
+            path = Path(path)
             if sublime.platform() == "windows":
-                binary_path = os.path.join(path, "Scripts", "python.exe")
+                binary_path = path / "Scripts/python.exe"
             else:
-                binary_path = os.path.join(path, "bin", "python")
-
-            return binary_path if os.path.isfile(binary_path) else None
+                binary_path = path / "bin/python"
+            return binary_path if binary_path.is_file() else None
 
         # Config file, venv resolution command, post-processing
-        venv_config_files = [
+        venv_config_files: list[tuple[str, str, Callable[[str], Path | None] | None]] = [
             (".pdm-python", "pdm info --python", None),
             (".python-version", "pyenv which python", None),
             ("Pipfile", "pipenv --py", None),
             ("poetry.lock", "poetry env info -p", binary_from_python_path),
-        ]  # type: List[Tuple[str, str, Optional[Callable[[str], Optional[str]]]]]
+        ]
 
         for config_file, command, post_processing in venv_config_files:
-            full_config_file_path = os.path.join(workspace_folder, config_file)
-            if not os.path.isfile(full_config_file_path):
+            if not (workspace_folder / config_file).is_file():
                 continue
-            print("{}: INFO: {} detected. Run subprocess command: {}".format(cls.name(), config_file, command))
+            print(f"{cls.name()}: INFO: {config_file} detected. Run subprocess command: {command}")
             try:
                 python_path = subprocess.check_output(
                     command,
@@ -244,20 +230,19 @@ class LspPyrightPlugin(NpmClientHandler):
                     stderr=subprocess.STDOUT,
                     universal_newlines=True,
                 ).strip()
-                return post_processing(python_path) if post_processing else python_path
+                if post_processing:
+                    python_path = post_processing(python_path)
+                return Path(python_path) if python_path else None
             except FileNotFoundError:
-                print("{}: WARN: subprocess failed with file not found: {}".format(cls.name(), command[0]))
+                print(f"{cls.name()}: WARN: subprocess failed with file not found: {command[0]}")
             except PermissionError as e:
-                print("{}: WARN: subprocess failed with permission error: {}".format(cls.name(), e))
+                print(f"{cls.name()}: WARN: subprocess failed with permission error: {e}")
             except subprocess.CalledProcessError as e:
-                print("{}: WARN: subprocess failed: {}".format(cls.name(), str(e.output).strip()))
+                print(f"{cls.name()}: WARN: subprocess failed: {str(e.output).strip()}")
 
         # virtual environment as subfolder in project
-        for file in os.listdir(workspace_folder):
-            maybe_venv_path = os.path.join(workspace_folder, file)
-            if os.path.isfile(os.path.join(maybe_venv_path, "pyvenv.cfg")):
-                binary = binary_from_python_path(maybe_venv_path)
-                if binary is not None:
-                    return binary  # found a venv
+        for maybe_venv_path in workspace_folder.iterdir():
+            if (maybe_venv_path / "pyvenv.cfg").is_file() and (binary := binary_from_python_path(maybe_venv_path)):
+                return binary  # found a venv
 
         return None

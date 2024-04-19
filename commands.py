@@ -1,8 +1,9 @@
-from os import path
+from __future__ import annotations
+
+from pathlib import Path
 
 import sublime
 import sublime_plugin
-from LSP.plugin.core.typing import List
 
 CONFIGURATION_FILENAME = "pyrightconfig.json"
 CONFIGURATION_CONTENTS = """{
@@ -27,14 +28,14 @@ class LspPyrightCreateConfigurationCommand(sublime_plugin.WindowCommand):
                 placeholder="Select a folder to create the configuration file in",
             )
 
-    def _on_selected(self, folders: List[str], index: int) -> None:
+    def _on_selected(self, folders: list[str], index: int) -> None:
         if index > -1:
             self._create_configuration(folders[index])
 
     def _create_configuration(self, folder_path: str) -> None:
-        config_path = path.join(folder_path, CONFIGURATION_FILENAME)
-        new_view = self.window.open_file(config_path)
-        if not path.isfile(config_path):
+        config_path = Path(folder_path) / CONFIGURATION_FILENAME
+        new_view = self.window.open_file(str(config_path))
+        if not config_path.is_file():
             self._poll_view_until_loaded(new_view)
 
     def _poll_view_until_loaded(self, view: sublime.View, attempt: int = 1) -> None:

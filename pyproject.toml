@@ -25,11 +25,8 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I"] # no "UP" because actually running py33
-ignore =  [
-  "E203",
-  "F401", # we still need to use type annotation in comments in py33
-]
+select = ["E", "F", "W", "I", "UP"]
+ignore = ["E203"]
 
 [tool.ruff.lint.per-file-ignores]
 "boot.py" = ["E402"]

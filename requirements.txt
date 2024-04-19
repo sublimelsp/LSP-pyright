@@ -1,5 +1,2 @@
-# This is an implicit value, here for clarity
---index https://pypi.python.org/simple/
-
 mypy
-ruff>=0.2
+ruff>=0.4
