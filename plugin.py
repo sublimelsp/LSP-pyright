@@ -242,7 +242,9 @@ class LspPyrightPlugin(NpmClientHandler):
 
         # virtual environment as subfolder in project
         for maybe_venv_path in workspace_folder.iterdir():
-            if (maybe_venv_path / "pyvenv.cfg").is_file() and (binary := binary_from_python_path(maybe_venv_path)):
-                return binary  # found a venv
-
+            try:
+                if (maybe_venv_path / "pyvenv.cfg").is_file() and (binary := binary_from_python_path(maybe_venv_path)):
+                    return binary  # found a venv
+            except PermissionError:
+                pass
         return None
