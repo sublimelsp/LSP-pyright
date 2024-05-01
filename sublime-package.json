@@ -249,11 +249,11 @@
                         "reportUnboundVariable": {
                           "$ref": "sublime://pyrightconfig#/properties/reportUnboundVariable"
                         },
-                        "reportUnhashable": {
-                          "$ref": "sublime://pyrightconfig#/properties/reportUnhashable"
-                        },
                         "reportUndefinedVariable": {
                           "$ref": "sublime://pyrightconfig#/properties/reportUndefinedVariable"
+                        },
+                        "reportUnhashable": {
+                          "$ref": "sublime://pyrightconfig#/properties/reportUnhashable"
                         },
                         "reportUninitializedInstanceVariable": {
                           "$ref": "sublime://pyrightconfig#/properties/reportUninitializedInstanceVariable"
@@ -783,7 +783,7 @@
             "reportMissingTypeStubs": {
               "$id": "#/properties/reportMissingTypeStubs",
               "$ref": "#/definitions/diagnostic",
-              "default": "warning",
+              "default": "none",
               "title": "Controls reporting of imports that cannot be resolved to type stub files"
             },
             "reportNoOverloadImplementation": {
