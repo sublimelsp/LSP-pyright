@@ -1,4 +1,6 @@
+*.pyright-syntax-test export-ignore
 .dependabot export-ignore
+.editorconfig export-ignore
 .gitattributes export-ignore
 .github/ export-ignore
 .gitignore export-ignore
@@ -9,6 +11,8 @@ docs/ export-ignore
 Makefile export-ignore
 mkdocs.yml export-ignore
 mypy.ini export-ignore
+pyproject.toml export-ignore
+requirements.txt export-ignore
 scripts/ export-ignore
 tests/ export-ignore
 tox.ini export-ignore
