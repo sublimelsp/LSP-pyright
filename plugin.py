@@ -184,22 +184,20 @@ class LspPyrightPlugin(NpmClientHandler):
         if python_path := settings.get("python.pythonPath"):
             return python_path
 
-        if workspace_folders:
-            workspace_folder = Path(workspace_folders[0].path).resolve()
-            for folder in (workspace_folder, *workspace_folder.parents):
+        if workspace_folders and (first_folder := Path(workspace_folders[0].path).resolve()):
+            for folder in (first_folder, *first_folder.parents):
                 if python_path := cls.python_path_from_venv(folder):
                     return str(python_path)
 
         return shutil.which("python") or shutil.which("python3") or ""
 
     @classmethod
-    def python_path_from_venv(cls, workspace_folder: str | Path) -> Path | None:
+    def python_path_from_venv(cls, workspace_folder: Path) -> Path | None:
         """
         Resolves the python binary path depending on environment variables and files in the workspace.
 
         @see https://github.com/fannheyward/coc-pyright/blob/d58a468b1d7479a1b56906e386f44b997181e307/src/configSettings.ts#L47
         """
-        workspace_folder = Path(workspace_folder)
 
         def binary_from_python_path(path: str | Path) -> Path | None:
             path = Path(path)
@@ -210,7 +208,7 @@ class LspPyrightPlugin(NpmClientHandler):
             return binary_path if binary_path.is_file() else None
 
         # Config file, venv resolution command, post-processing
-        venv_config_files: list[tuple[str, str, Callable[[str], Path | None] | None]] = [
+        venv_config_files: list[tuple[str, str, Callable[[str | Path], Path | None] | None]] = [
             (".pdm-python", "pdm info --python", None),
             (".python-version", "pyenv which python", None),
             ("Pipfile", "pipenv --py", None),
