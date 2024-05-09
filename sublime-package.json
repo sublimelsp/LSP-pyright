@@ -735,7 +735,7 @@
             "reportInvalidTypeForm": {
               "$id": "#/properties/reportInvalidTypeForm",
               "$ref": "#/definitions/diagnostic",
-              "default": "warning",
+              "default": "error",
               "title": "Controls reporting of type expressions that use an invalid form"
             },
             "reportInvalidTypeVarUse": {
