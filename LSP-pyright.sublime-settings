@@ -30,13 +30,13 @@
 		// Allows a user to override the severity levels for individual diagnostics.
 		// @see https://github.com/microsoft/pyright/blob/main/docs/configuration.md#type-check-diagnostics-settings
 		"python.analysis.diagnosticSeverityOverrides": {
-			"reportDuplicateImport": "warning",
-			"reportImplicitStringConcatenation": "warning",
-			"reportUnboundVariable": "warning",
-			"reportUnusedClass": "information",
-			"reportUnusedFunction": "information",
-			"reportUnusedImport": "information",
-			"reportUnusedVariable": "information",
+			// "reportDuplicateImport": "warning",
+			// "reportImplicitStringConcatenation": "warning",
+			// "reportUnboundVariable": "warning",
+			// "reportUnusedClass": "information",
+			// "reportUnusedFunction": "information",
+			// "reportUnusedImport": "information",
+			// "reportUnusedVariable": "information",
 		},
 		// Specifies the level of logging for the Output panel
 		"python.analysis.logLevel": "Information",
