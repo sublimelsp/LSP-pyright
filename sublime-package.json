@@ -528,6 +528,12 @@
               "title": "Analysis settings to use for specified subdirectories of code",
               "type": "array"
             },
+            "extends": {
+              "$id": "#/properties/extends",
+              "pattern": "^(.*)$",
+              "title": "Path to configuration file that this configuration extends",
+              "type": "string"
+            },
             "extraPaths": {
               "$id": "#/properties/extraPaths",
               "items": {
