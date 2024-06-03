@@ -220,14 +220,18 @@ class LspPyrightPlugin(NpmClientHandler):
                 continue
             print(f"{cls.name()}: INFO: {config_file} detected. Run subprocess command: {command}")
             try:
-                python_path = subprocess.check_output(
+                stdout, stderr = subprocess.Popen(
                     command,
                     cwd=workspace_folder,
                     shell=True,
                     startupinfo=get_default_startupinfo(),
-                    stderr=subprocess.STDOUT,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
                     universal_newlines=True,
-                ).strip()
+                ).communicate()
+                if stderr:
+                    print(f"{cls.name()}: INFO: subprocess stderr: {stderr.strip()}")
+                python_path = stdout.strip()
                 if post_processing:
                     python_path = post_processing(python_path)
                 return Path(python_path) if python_path else None
