@@ -2,7 +2,9 @@
     "*": {
         "*": [
             "lsp_utils",
-            "sublime_lib"
+            "more-itertools",
+            "sublime_lib",
+            "typing-extensions"
         ]
     }
 }

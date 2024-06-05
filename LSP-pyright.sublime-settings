@@ -17,6 +17,19 @@
 		// - "sublime_text_33": Similar to "sublime_text" but Python 3.3 forced.
 		// - "sublime_text_38": Similar to "sublime_text" but Python 3.8 forced.
 		"pyright.dev_environment": "",
+		// The strategies used to find a virtual environment in order.
+		"pyright.venv.strategies": [
+			"local_dot_venv",
+			"env_var_conda_prefix",
+			"env_var_virtual_env",
+			"rye",
+			"poetry",
+			"pdm",
+			"hatch",
+			"pipenv",
+			"pyenv",
+			"any_subdirectory",
+		],
 		// Offer auto-import completions.
 		"python.analysis.autoImportCompletions": true,
 		// Automatically add common search paths like 'src'?
