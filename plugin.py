@@ -220,21 +220,25 @@ class LspPyrightPlugin(NpmClientHandler):
                 continue
             print(f"{cls.name()}: INFO: {config_file} detected. Run subprocess command: {command}")
             try:
-                stdout, stderr = subprocess.Popen(
-                    command,
-                    cwd=workspace_folder,
-                    shell=True,
-                    startupinfo=get_default_startupinfo(),
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    universal_newlines=True,
-                ).communicate()
+                stdout, stderr = map(
+                    str.rstrip,
+                    subprocess.Popen(
+                        command,
+                        cwd=workspace_folder,
+                        shell=True,
+                        startupinfo=get_default_startupinfo(),
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        universal_newlines=True,
+                    ).communicate(),
+                )
                 if stderr:
-                    print(f"{cls.name()}: INFO: subprocess stderr: {stderr.strip()}")
-                python_path = stdout.strip()
+                    print(f"{cls.name()}: INFO: subprocess stderr: {stderr}")
+                python_path = stdout
                 if post_processing:
                     python_path = post_processing(python_path)
-                return Path(python_path) if python_path else None
+                if python_path:
+                    return Path(python_path)
             except FileNotFoundError:
                 print(f"{cls.name()}: WARN: subprocess failed with file not found: {command[0]}")
             except PermissionError as e:
