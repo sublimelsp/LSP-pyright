@@ -6,8 +6,7 @@ name: Python
 on:
   push:
     branches:
-      - master
-      - st3
+      - '**'
     paths:
       - '.github/workflows/python.yml'
       - '**.py'
@@ -15,8 +14,7 @@ on:
       - 'Makefile'
   pull_request:
     branches:
-      - master
-      - st3
+      - '**'
     paths:
       - '.github/workflows/python.yml'
       - '**.py'
@@ -27,6 +25,9 @@ jobs:
   job_lint:
     name: ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
+
+    env:
+      UV_SYSTEM_PYTHON: 1
 
     strategy:
       matrix:
@@ -45,8 +46,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip wheel
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install -U uv
+          make install-dev
 
       - name: Do linting
         run: |

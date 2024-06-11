@@ -3,15 +3,13 @@ from __future__ import annotations
 import os
 import re
 import shutil
-import subprocess
 import sys
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, cast
+from typing import cast
 
 import sublime
-import sublime_plugin
 from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
 from lsp_utils import NpmClientHandler
@@ -20,24 +18,6 @@ from sublime_lib import ResourcePath
 from .constants import PACKAGE_NAME
 from .log import log_info, log_warning
 from .venv_finder import VenvInfo, find_venv_by_finder_names, get_finder_name_mapping
-
-
-def plugin_loaded() -> None:
-    LspPyrightPlugin.setup()
-
-
-def plugin_unloaded() -> None:
-    LspPyrightPlugin.cleanup()
-
-
-def get_default_startupinfo() -> Any:
-    if sublime.platform() == "windows":
-        # do not create a window for the process
-        STARTUPINFO = subprocess.STARTUPINFO()  # type: ignore
-        STARTUPINFO.dwFlags |= subprocess.STARTF_USESHOWWINDOW  # type: ignore
-        STARTUPINFO.wShowWindow = subprocess.SW_HIDE  # type: ignore
-        return STARTUPINFO
-    return None
 
 
 @dataclass
@@ -256,8 +236,3 @@ class LspPyrightPlugin(NpmClientHandler):
 
         _update_simple_python_path()
         _update_venv_info()
-
-
-class PylanceEventListener(sublime_plugin.EventListener):
-    def on_pre_close_window(self, window: sublime.Window) -> None:
-        LspPyrightPlugin.window_attrs.pop(window.id(), None)
