@@ -8,17 +8,8 @@
 	// @see https://github.com/microsoft/pyright/blob/main/docs/settings.md
 	// @see https://github.com/microsoft/pyright/blob/main/packages/vscode-pyright/package.json
 	"settings": {
-		// Use a predefined setup from this plugin, valid values are:
-		// - "": An empty string does nothing.
-		// - "sublime_text": Suitable for people who are developing ST Python plugins.
-		//                   The Python version which the developed plugin runs on will be used.
-		//                   `sys.path` from plugin_host will be added into "python.analysis.extraPaths"
-		//                   so ST package dependecies can be resolved by the LSP server.
-		// - "sublime_text_33": Similar to "sublime_text" but Python 3.3 forced.
-		// - "sublime_text_38": Similar to "sublime_text" but Python 3.8 forced.
-		"pyright.dev_environment": "",
 		// The strategies used to find a virtual environment in order.
-		"pyright.venv.strategies": [
+		"venvStrategies": [
 			"local_dot_venv",
 			"env_var_conda_prefix",
 			"env_var_virtual_env",
@@ -30,6 +21,15 @@
 			"pyenv",
 			"any_subdirectory",
 		],
+		// Use a predefined setup from this plugin, valid values are:
+		// - "": An empty string does nothing.
+		// - "sublime_text": Suitable for people who are developing ST Python plugins.
+		//                   The Python version which the developed plugin runs on will be used.
+		//                   `sys.path` from plugin_host will be added into "python.analysis.extraPaths"
+		//                   so ST package dependecies can be resolved by the LSP server.
+		// - "sublime_text_33": Similar to "sublime_text" but Python 3.3 forced.
+		// - "sublime_text_38": Similar to "sublime_text" but Python 3.8 forced.
+		"pyright.dev_environment": "",
 		// Offer auto-import completions.
 		"python.analysis.autoImportCompletions": true,
 		// Automatically add common search paths like 'src'?

@@ -218,7 +218,7 @@ class LspPyrightPlugin(NpmClientHandler):
                 return
 
             supported_finder_names = tuple(get_finder_name_mapping().keys())
-            finder_names: list[str] = settings.get("pyright.venv.strategies")
+            finder_names: list[str] = settings.get("venvStrategies")
             if invalid_finder_names := sorted(set(finder_names) - set(supported_finder_names)):
                 log_warning(f"The following finder names are not supported: {', '.join(invalid_finder_names)}")
 
