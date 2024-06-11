@@ -8,6 +8,8 @@
 	// @see https://github.com/microsoft/pyright/blob/main/docs/settings.md
 	// @see https://github.com/microsoft/pyright/blob/main/packages/vscode-pyright/package.json
 	"settings": {
+		// The (Jinja2) template of the status bar text which is inside the parentheses `(...)`.
+		"statusText": "{% if venv %}venv: {{ venv.venv_prompt }}; py: {{ venv.python_version }}; by: {{ venv.finder_name }}{% endif %}",
 		// The strategies used to find a virtual environment in order.
 		"venvStrategies": [
 			"local_dot_venv",

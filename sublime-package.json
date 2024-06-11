@@ -21,6 +21,11 @@
                 "settings": {
                   "additionalProperties": false,
                   "properties": {
+                    "statusText": {
+                      "default": "{% if venv %}venv: {{ venv.venv_prompt }}; py: {{ venv.python_version }}; by: {{ venv.finder_name }}{% endif %}",
+                      "markdownDescription": "The (Jinja2) template of the status bar text which is inside the parentheses `(...)`.",
+                      "type": "string"
+                    },
                     "venvStrategies": {
                       "default": [],
                       "description": "The strategies used to find a virtual environment in order.",

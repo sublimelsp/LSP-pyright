@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import cast
 
+import jinja2
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
@@ -121,22 +122,25 @@ class LspPyrightPlugin(NpmClientHandler):
     # -------------- #
 
     def update_status_bar_text(self) -> None:
-        status_parts: list[str] = []
-
         if not (session := self.weaksession()):
             return
         window_id = session.window.id()
 
-        # @todo make this into a configurable template
-        if venv_info := self.window_attrs[window_id].venv_info:
-            if venv_info.prompt:
-                status_parts.append(f"venv: {venv_info.prompt}")
-            if venv_info.python_version:
-                status_parts.append(f"py: {venv_info.python_version}")
-            if venv_info.meta.finder_name:
-                status_parts.append(f"by: {venv_info.meta.finder_name}")
+        variables = {
+            "server_version": "",  # no way to get it?
+            "venv": {},
+        }
 
-        session.set_config_status_async("; ".join(status_parts))
+        if venv_info := self.window_attrs[window_id].venv_info:
+            variables["venv"].update(  # type: ignore
+                finder_name=venv_info.meta.finder_name,
+                python_version=venv_info.python_version,
+                venv_prompt=venv_info.prompt,
+            )
+
+        template_text = str(session.config.settings.get("statusText") or "")
+        template_obj = jinja2.Environment().from_string(template_text)
+        session.set_config_status_async(template_obj.render(variables))
 
     def patch_markdown_content(self, content: str) -> str:
         # add another linebreak before horizontal rule following fenced code block
