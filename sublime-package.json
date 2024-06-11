@@ -37,6 +37,37 @@
                         "Similar to \"sublime_text\" but Python 3.8 forced."
                       ]
                     },
+                    "pyright.venv.strategies": {
+                      "default": [],
+                      "description": "The strategies used to find a virtual environment in order.",
+                      "items": {
+                        "enum": [
+                          "any_subdirectory",
+                          "env_var_conda_prefix",
+                          "env_var_virtual_env",
+                          "hatch",
+                          "local_dot_venv",
+                          "pdm",
+                          "pipenv",
+                          "poetry",
+                          "pyenv",
+                          "rye"
+                        ],
+                        "markdownEnumDescriptions": [
+                          "Finds the virtual environment with any subdirectory.",
+                          "Finds the virtual environment using the `CONDA_PREFIX` environment variable.",
+                          "Finds the virtual environment using the `VIRTUAL_ENV` environment variable.",
+                          "Finds the virtual environment using `hatch`.",
+                          "Finds the virtual environment `.venv` or `venv` directory.",
+                          "Finds the virtual environment using `pdm`.",
+                          "Finds the virtual environment using `pipenv`.",
+                          "Finds the virtual environment using `poetry`.",
+                          "Finds the virtual environment using `pyenv`.",
+                          "Finds the virtual environment using `rye`."
+                        ]
+                      },
+                      "type": "array",
+                    },
                     "pyright.disableLanguageServices": {
                       "default": false,
                       "description": "Disables type completion, definitions, and references.",
