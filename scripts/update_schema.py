@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict
 from urllib.request import urlopen
 
 PACKAGE_NAME = "LSP-pyright"
@@ -20,6 +20,7 @@ IGNORED_PYRIGHTCONFIG_KEYS = {
     "defineConstant",
     "exclude",
     "executionEnvironments",
+    "extends",
     "ignore",
     "include",
     "pythonPlatform",
@@ -30,7 +31,7 @@ IGNORED_PYRIGHTCONFIG_KEYS = {
     "verboseOutput",
 }
 
-JsonDict = dict[str, Any]
+JsonDict = Dict[str, Any]
 
 
 def main() -> None:
@@ -106,8 +107,7 @@ def update_schema(sublime_package_json: JsonDict, pyrightconfig_schema_json: Jso
 
 def update_property_ref(property_key: str, property_schema: JsonDict, pyrightconfig_properties: JsonDict) -> None:
     property_schema.clear()
-    pyrightconfig_property_id: str = pyrightconfig_properties[property_key]["$id"]
-    property_schema["$ref"] = PYRIGHTCONFIG_SCHEMA_ID + pyrightconfig_property_id
+    property_schema["$ref"] = f"{PYRIGHTCONFIG_SCHEMA_ID}#/definitions/{property_key}"
 
 
 if __name__ == "__main__":
