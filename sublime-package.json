@@ -385,8 +385,8 @@
                       "$ref": "sublime://pyrightconfig#/definitions/venvPath"
                     },
                     "statusText": {
-                      "default": "{% if venv %}venv: {{ venv.venv_prompt }}; py: {{ venv.python_version }}; by: {{ venv.finder_name }}{% endif %}",
-                      "markdownDescription": "The (Jinja2) template of the status bar text which is inside the parentheses `(...)`.",
+                      "default": "{% set parts = [] %}{% if server_version %}{% do parts.append('v' + server_version) %}{% endif %}{% if venv %}{% do parts.append('venv: ' + venv.venv_prompt) %}{% do parts.append('py: ' + venv.python_version) %}{% do parts.append('by: ' + venv.finder_name) %}{% endif %}{{ parts|join('; ') }}",
+                      "markdownDescription": "The (Jinja2) template of the status bar text which is inside the parentheses `(...)`. See https://jinja.palletsprojects.com/templates/",
                       "type": "string"
                     },
                     "venvStrategies": {
