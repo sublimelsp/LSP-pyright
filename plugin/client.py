@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import re
 import shutil
@@ -38,6 +39,11 @@ class LspPyrightPlugin(NpmClientHandler):
     server_directory = "language-server"
     server_binary_path = os.path.join(server_directory, "node_modules", "pyright", "langserver.index.js")
 
+    server_package_json_path = os.path.join("node_modules", "pyright", "package.json")
+    """The path to the `package.json` file of the language server."""
+    server_version = ""
+    """The version of the language server."""
+
     window_attrs: defaultdict[int, WindowAttr] = defaultdict(WindowAttr)
     """Per-window attributes. I.e., per-session attributes. The key is the window ID."""
 
@@ -74,6 +80,7 @@ class LspPyrightPlugin(NpmClientHandler):
     ) -> str | None:
         super().on_pre_start(window, initiating_view, workspace_folders, configuration)
 
+        cls.server_version = cls.parse_server_version()
         cls.update_venv_info(configuration.settings, workspace_folders, window=window)
         if venv_info := cls.window_attrs[window.id()].venv_info:
             log_info(f"Using python executable: {venv_info.python_executable}")
@@ -127,7 +134,7 @@ class LspPyrightPlugin(NpmClientHandler):
         window_id = session.window.id()
 
         variables: dict[str, Any] = {
-            "server_version": "",  # no way to get it?
+            "server_version": self.server_version,
             "venv": {},
         }
 
@@ -206,6 +213,13 @@ class LspPyrightPlugin(NpmClientHandler):
             dep_dirs.insert(0, os.path.join(self.package_storage(), "resources", "typings", "sublime_text"))
 
         return list(filter(os.path.isdir, dep_dirs))
+
+    @classmethod
+    def parse_server_version(cls) -> str:
+        if server_dir := cls._server_directory_path():
+            with open(Path(server_dir) / cls.server_package_json_path, "rb") as f:
+                return json.load(f).get("version", "")
+        return ""
 
     @classmethod
     def update_venv_info(
