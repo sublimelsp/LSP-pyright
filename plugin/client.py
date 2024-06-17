@@ -21,6 +21,8 @@ from .log import log_info, log_warning
 from .template import render_template
 from .venv_finder import VenvInfo, find_venv_by_finder_names, get_finder_name_mapping
 
+WindowId = int
+
 
 @dataclass
 class WindowAttr:
@@ -44,8 +46,8 @@ class LspPyrightPlugin(NpmClientHandler):
     server_version = ""
     """The version of the language server."""
 
-    window_attrs: defaultdict[int, WindowAttr] = defaultdict(WindowAttr)
-    """Per-window attributes. I.e., per-session attributes. The key is the window ID."""
+    window_attrs: defaultdict[WindowId, WindowAttr] = defaultdict(WindowAttr)
+    """Per-window attributes. I.e., per-session attributes."""
 
     @classmethod
     def required_node_version(cls) -> str:
