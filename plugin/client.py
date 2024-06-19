@@ -13,7 +13,7 @@ from typing import Any, cast
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
-from lsp_utils import NpmClientHandler, ServerNpmResource
+from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
 from .constants import PACKAGE_NAME
@@ -92,20 +92,7 @@ class LspPyrightPlugin(NpmClientHandler):
     @classmethod
     def install_or_update(cls) -> None:
         super().install_or_update()
-
-        copies: list[tuple[str, str]] = [
-            (
-                f"Packages/{cls.package_name}/resources/",
-                os.path.join(cls.package_storage(), "resources"),
-            ),
-        ]
-        if server := cast(ServerNpmResource, cls.get_server()):
-            copies.append((
-                f"Packages/{cls.package_name}/overwrites/",
-                server.server_directory_path,
-            ))
-        for src, dest in copies:
-            ResourcePath(src).copytree(dest, exist_ok=True)
+        cls.copy_overwrite_dirs()
 
     @classmethod
     def markdown_language_id_to_st_syntax_map(cls) -> MarkdownLangMap | None:
@@ -139,6 +126,19 @@ class LspPyrightPlugin(NpmClientHandler):
     # -------------- #
     # custom methods #
     # -------------- #
+
+    @classmethod
+    def copy_overwrite_dirs(cls) -> None:
+        if not (server_dir := cls._server_directory_path()):
+            log_warning("Failed to get the server instance during copying overwrite dirs.")
+            return
+
+        dir_src = f"Packages/{cls.package_name}/overwrites/"
+        dir_dst = server_dir
+        try:
+            ResourcePath(dir_src).copytree(dir_dst, exist_ok=True)
+        except OSError:
+            raise RuntimeError(f'Failed to copy overwrite dirs from "{dir_src}" to "{dir_dst}".')
 
     def update_status_bar_text(self) -> None:
         if not (session := self.weaksession()):
@@ -221,8 +221,8 @@ class LspPyrightPlugin(NpmClientHandler):
         dep_dirs.append(packages_path)
 
         # sublime stubs - add as first
-        if py_ver == (3, 3):
-            dep_dirs.insert(0, os.path.join(self.package_storage(), "resources", "typings", "sublime_text"))
+        if py_ver == (3, 3) and (server_dir := self._server_directory_path()):
+            dep_dirs.insert(0, os.path.join(server_dir, "resources", "typings", "sublime_text_py33"))
 
         return list(filter(os.path.isdir, dep_dirs))
 
