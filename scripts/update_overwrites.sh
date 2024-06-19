@@ -50,5 +50,5 @@ update_st_api_stubs() {
     echo '[INFO] Sublime Text API stubs updated.'
 }
 
-update_typeshed
+# update_typeshed
 update_st_api_stubs
