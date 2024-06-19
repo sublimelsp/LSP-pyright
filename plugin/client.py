@@ -13,7 +13,7 @@ from typing import Any, cast
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
-from lsp_utils import NpmClientHandler
+from lsp_utils import NpmClientHandler, ServerNpmResource
 from sublime_lib import ResourcePath
 
 from .constants import PACKAGE_NAME
@@ -92,10 +92,20 @@ class LspPyrightPlugin(NpmClientHandler):
     @classmethod
     def install_or_update(cls) -> None:
         super().install_or_update()
-        # Copy resources
-        src = f"Packages/{cls.package_name}/resources/"
-        dest = os.path.join(cls.package_storage(), "resources")
-        ResourcePath(src).copytree(dest, exist_ok=True)
+
+        copies: list[tuple[str, str]] = [
+            (
+                f"Packages/{cls.package_name}/resources/",
+                os.path.join(cls.package_storage(), "resources"),
+            ),
+        ]
+        if server := cast(ServerNpmResource, cls.get_server()):
+            copies.append((
+                f"Packages/{cls.package_name}/overwrites/",
+                server.server_directory_path,
+            ))
+        for src, dest in copies:
+            ResourcePath(src).copytree(dest, exist_ok=True)
 
     @classmethod
     def markdown_language_id_to_st_syntax_map(cls) -> MarkdownLangMap | None:
