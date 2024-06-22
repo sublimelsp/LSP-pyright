@@ -18,7 +18,7 @@ from sublime_lib import ResourcePath
 
 from .constants import PACKAGE_NAME
 from .log import log_info, log_warning
-from .template import render_template
+from .template import load_string_template
 from .venv_finder import VenvInfo, find_venv_by_finder_names, get_finder_name_mapping
 
 WindowId = int
@@ -140,27 +140,29 @@ class LspPyrightPlugin(NpmClientHandler):
         except OSError:
             raise RuntimeError(f'Failed to copy overwrite dirs from "{dir_src}" to "{dir_dst}".')
 
-    def update_status_bar_text(self) -> None:
+    def update_status_bar_text(self, extra_variables: dict[str, Any] | None = None) -> None:
         if not (session := self.weaksession()):
             return
         window_id = session.window.id()
 
         variables: dict[str, Any] = {
             "server_version": self.server_version,
-            "venv": {},
         }
 
         if venv_info := self.window_attrs[window_id].venv_info:
-            variables["venv"].update(
-                finder_name=venv_info.meta.finder_name,
-                python_version=venv_info.python_version,
-                venv_prompt=venv_info.prompt,
-            )
+            variables["venv"] = {
+                "finder_name": venv_info.meta.finder_name,
+                "python_version": venv_info.python_version,
+                "venv_prompt": venv_info.prompt,
+            }
+
+        if extra_variables:
+            variables.update(extra_variables)
 
         rendered_text = ""
         if template_text := str(session.config.settings.get("statusText") or ""):
             try:
-                rendered_text = render_template(template_text, variables)
+                rendered_text = load_string_template(template_text).render(variables)
             except Exception as e:
                 log_warning(f'Invalid "statusText" template: {e}')
         session.set_config_status_async(rendered_text)
