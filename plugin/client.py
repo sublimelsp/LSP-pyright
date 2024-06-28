@@ -14,6 +14,7 @@ import sublime
 from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
 from lsp_utils import NpmClientHandler
+from more_itertools import first_true
 from sublime_lib import ResourcePath
 
 from .constants import PACKAGE_NAME
@@ -27,7 +28,7 @@ WindowId = int
 @dataclass
 class WindowAttr:
     simple_python_executable: Path | None = None
-    """The path to the Python executable from `$ which python` or `$ which python3`."""
+    """The path to the Python executable found by the `PATH` env variable."""
     venv_info: VenvInfo | None = None
     """The information of the virtual environment."""
 
@@ -267,7 +268,7 @@ class LspPyrightPlugin(NpmClientHandler):
         def _update_simple_python_path() -> None:
             window_attr.simple_python_executable = None
 
-            if python_path := shutil.which("python") or shutil.which("python3") or "":
+            if python_path := first_true(("py", "python3", "python"), pred=shutil.which):
                 window_attr.simple_python_executable = Path(python_path)
 
         _update_simple_python_path()
