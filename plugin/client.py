@@ -5,7 +5,7 @@ import os
 import re
 import shutil
 import sys
-from collections import defaultdict
+import weakref
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, cast
@@ -21,8 +21,6 @@ from .constants import PACKAGE_NAME
 from .log import log_info, log_warning
 from .template import load_string_template
 from .venv_finder import VenvInfo, find_venv_by_finder_names, get_finder_name_mapping
-
-WindowId = int
 
 
 @dataclass
@@ -47,7 +45,7 @@ class LspPyrightPlugin(NpmClientHandler):
     server_version = ""
     """The version of the language server."""
 
-    window_attrs: defaultdict[WindowId, WindowAttr] = defaultdict(WindowAttr)
+    window_attrs: weakref.WeakKeyDictionary[sublime.Window, WindowAttr] = weakref.WeakKeyDictionary()
     """Per-window attributes. I.e., per-session attributes."""
 
     @classmethod
@@ -64,6 +62,20 @@ class LspPyrightPlugin(NpmClientHandler):
         if view.settings().get("repl"):
             return True
         return False
+
+    @classmethod
+    def can_start(
+        cls,
+        window: sublime.Window,
+        initiating_view: sublime.View,
+        workspace_folders: list[WorkspaceFolder],
+        configuration: ClientConfig,
+    ) -> str | None:
+        if message := super().can_start(window, initiating_view, workspace_folders, configuration):
+            return message
+
+        cls.window_attrs.setdefault(window, WindowAttr())
+        return None
 
     def on_settings_changed(self, settings: DottedDict) -> None:
         super().on_settings_changed(settings)
@@ -92,7 +104,7 @@ class LspPyrightPlugin(NpmClientHandler):
 
         cls.server_version = cls.parse_server_version()
         cls.update_venv_info(configuration.settings, workspace_folders, window=window)
-        if venv_info := cls.window_attrs[window.id()].venv_info:
+        if venv_info := cls.window_attrs[window].venv_info:
             log_info(f"Using python executable: {venv_info.python_executable}")
             configuration.settings.set("python.pythonPath", str(venv_info.python_executable))
         return None
@@ -151,13 +163,12 @@ class LspPyrightPlugin(NpmClientHandler):
     def update_status_bar_text(self, extra_variables: dict[str, Any] | None = None) -> None:
         if not (session := self.weaksession()):
             return
-        window_id = session.window.id()
 
         variables: dict[str, Any] = {
             "server_version": self.server_version,
         }
 
-        if venv_info := self.window_attrs[window_id].venv_info:
+        if venv_info := self.window_attrs[session.window].venv_info:
             variables["venv"] = {
                 "finder_name": venv_info.meta.finder_name,
                 "python_version": venv_info.python_version,
@@ -251,8 +262,7 @@ class LspPyrightPlugin(NpmClientHandler):
         *,
         window: sublime.Window,
     ) -> None:
-        window_id = window.id()
-        window_attr = cls.window_attrs[window_id]
+        window_attr = cls.window_attrs[window]
 
         def _update_venv_info() -> None:
             window_attr.venv_info = None
