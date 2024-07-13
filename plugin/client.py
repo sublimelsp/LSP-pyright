@@ -58,10 +58,12 @@ class LspPyrightPlugin(NpmClientHandler):
 
     @classmethod
     def should_ignore(cls, view: sublime.View) -> bool:
-        # ignore REPL views (https://github.com/sublimelsp/LSP-pyright/issues/343)
-        if view.settings().get("repl"):
-            return True
-        return False
+        return bool(
+            # ignore REPL views (https://github.com/sublimelsp/LSP-pyright/issues/343)
+            view.settings().get("repl")
+            # ignore Python-like syntax test files
+            or view.substr(sublime.Region(0, 20)).startswith("# SYNTAX TEST ")
+        )
 
     @classmethod
     def can_start(
