@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, cast
 
+import jmespath
 import sublime
 from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response, WorkspaceFolder
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
@@ -40,8 +41,6 @@ class LspPyrightPlugin(NpmClientHandler):
     server_directory = "language-server"
     server_binary_path = os.path.join(server_directory, "node_modules", "pyright", "langserver.index.js")
 
-    server_package_json_path = os.path.join("node_modules", "pyright", "package.json")
-    """The path to the `package.json` file of the language server."""
     server_version = ""
     """The version of the language server."""
 
@@ -64,6 +63,12 @@ class LspPyrightPlugin(NpmClientHandler):
             # ignore Python-like syntax test files
             or view.substr(sublime.Region(0, 20)).startswith("# SYNTAX TEST ")
         )
+
+    @classmethod
+    def setup(cls) -> None:
+        super().setup()
+
+        cls.server_version = cls.parse_server_version()
 
     @classmethod
     def can_start(
@@ -104,7 +109,6 @@ class LspPyrightPlugin(NpmClientHandler):
     ) -> str | None:
         super().on_pre_start(window, initiating_view, workspace_folders, configuration)
 
-        cls.server_version = cls.parse_server_version()
         cls.update_venv_info(configuration.settings, workspace_folders, window=window)
         if venv_info := cls.window_attrs[window].venv_info:
             log_info(f"Using python executable: {venv_info.python_executable}")
@@ -251,10 +255,8 @@ class LspPyrightPlugin(NpmClientHandler):
 
     @classmethod
     def parse_server_version(cls) -> str:
-        if server_dir := cls._server_directory_path():
-            with open(Path(server_dir) / cls.server_package_json_path, "rb") as f:
-                return json.load(f).get("version", "")
-        return ""
+        lock_file_content = sublime.load_resource(f"Packages/{PACKAGE_NAME}/language-server/package-lock.json")
+        return jmespath.search("dependencies.pyright.version", json.loads(lock_file_content)) or ""
 
     @classmethod
     def update_venv_info(
