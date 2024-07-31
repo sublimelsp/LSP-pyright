@@ -473,6 +473,11 @@
               "title": "Enable the use of experimental features that are not part of the Python typing spec",
               "type": "boolean"
             },
+            "enableReachabilityAnalysis": {
+              "default": true,
+              "title": "Identify code determined to be unreachable through type analysis",
+              "type": "boolean"
+            },
             "enableTypeIgnoreComments": {
               "default": true,
               "title": "Allow \"# type: ignore\" comments",
@@ -958,6 +963,9 @@
             "enableExperimentalFeatures": {
               "$ref": "#/definitions/enableExperimentalFeatures"
             },
+            "enableReachabilityAnalysis": {
+              "$ref": "#/definitions/enableReachabilityAnalysis"
+            },
             "enableTypeIgnoreComments": {
               "$ref": "#/definitions/enableTypeIgnoreComments"
             },
@@ -984,6 +992,9 @@
                   },
                   "enableExperimentalFeatures": {
                     "$ref": "#/definitions/enableExperimentalFeatures"
+                  },
+                  "enableReachabilityAnalysis": {
+                    "$ref": "#/definitions/enableReachabilityAnalysis"
                   },
                   "enableTypeIgnoreComments": {
                     "$ref": "#/definitions/enableTypeIgnoreComments"
