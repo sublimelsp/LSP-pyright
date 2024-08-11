@@ -6,7 +6,7 @@ jmespath==1.0.1
     # via -r requirements.in
 markupsafe==2.1.5
     # via jinja2
-more-itertools==10.3.0
+more-itertools==10.4.0
     # via -r requirements.in
 typing-extensions==4.12.2
     # via -r requirements.in
