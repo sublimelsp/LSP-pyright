@@ -21,14 +21,15 @@ from sublime_lib import ResourcePath
 from .constants import PACKAGE_NAME
 from .log import log_info, log_warning
 from .template import load_string_template
-from .venv_finder import VenvInfo, find_venv_by_finder_names, get_finder_name_mapping
+from .virtual_env.helpers import find_venv_by_finder_names, find_venv_by_python_executable
+from .virtual_env.venv_finder import BaseVenvInfo, get_finder_name_mapping
 
 
 @dataclass
 class WindowAttr:
     simple_python_executable: Path | None = None
     """The path to the Python executable found by the `PATH` env variable."""
-    venv_info: VenvInfo | None = None
+    venv_info: BaseVenvInfo | None = None
     """The information of the virtual environment."""
 
     @property
@@ -272,7 +273,7 @@ class LspPyrightPlugin(NpmClientHandler):
             window_attr.venv_info = None
 
             if python_path := settings.get("python.pythonPath"):
-                window_attr.venv_info = VenvInfo.from_python_executable(python_path)
+                window_attr.venv_info = find_venv_by_python_executable(python_path)
                 return
 
             supported_finder_names = tuple(get_finder_name_mapping().keys())
