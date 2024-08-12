@@ -5,7 +5,10 @@ import os
 import subprocess
 import sys
 from collections.abc import Generator, Iterable
+from pathlib import Path
 from typing import Any, TypeVar
+
+from .log import log_error
 
 _T = TypeVar("_T")
 
@@ -55,3 +58,25 @@ def get_default_startupinfo() -> Any:
         STARTUPINFO.wShowWindow = subprocess.SW_HIDE  # type: ignore
         return STARTUPINFO
     return None
+
+
+def run_shell_command(command: str, *, cwd: str | Path | None = None) -> tuple[str, str, int] | None:
+    try:
+        proc = subprocess.Popen(
+            command,
+            cwd=cwd,
+            shell=True,
+            startupinfo=get_default_startupinfo(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
+        stdout, stderr = map(str.rstrip, proc.communicate())
+    except Exception as e:
+        log_error(f"Failed running command ({command}): {e}")
+        return None
+
+    if stderr:
+        log_error(f"Failed running command ({command}): {stderr}")
+
+    return stdout, stderr, proc.returncode or 0
