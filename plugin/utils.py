@@ -6,7 +6,7 @@ import subprocess
 import sys
 from collections.abc import Generator, Iterable
 from pathlib import Path
-from typing import Any, TypeVar
+from typing import Any, Sequence, TypeVar
 
 from .log import log_error
 
@@ -60,12 +60,14 @@ def get_default_startupinfo() -> Any:
     return None
 
 
-def run_shell_command(command: str, *, cwd: str | Path | None = None) -> tuple[str, str, int] | None:
+def run_shell_command(
+    command: str | Sequence[str], *, cwd: str | Path | None = None, shell: bool = True
+) -> tuple[str, str, int] | None:
     try:
         proc = subprocess.Popen(
             command,
             cwd=cwd,
-            shell=True,
+            shell=shell,
             startupinfo=get_default_startupinfo(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

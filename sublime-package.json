@@ -28,14 +28,28 @@
                         "",
                         "sublime_text",
                         "sublime_text_33",
-                        "sublime_text_38"
+                        "sublime_text_38",
+                        "blender",
+                        "gdb"
                       ],
                       "markdownEnumDescriptions": [
                         "No modifications applied.",
                         "Suitable for people who are developing ST python plugins. The Python version which the developed plugin runs on will be used. - `sys.path` from the plugin_host will be added into \"python.analysis.extraPaths\" so that ST package dependencies can be resolved by the LSP server.",
                         "Similar to \"sublime_text\" but Python 3.3 forced.",
-                        "Similar to \"sublime_text\" but Python 3.8 forced."
+                        "Similar to \"sublime_text\" but Python 3.8 forced.",
+                        "Suitable for people who are developing Blender add-ons. `sys.path` from Blender's embedded Python interpreter will be added into \"python.analysis.extraPaths\". Note that this requires invoking Blender, headless, to query the additional Python paths. The setting \"pyright.dev_environment_blender_binary\" controls which executable to call to invoke Blender.",
+                        "Suitable for people who are developing GDB automation scripts. `sys.path` from GDB's embedded Python interpreter will be added into \"python.analysis.extraPaths\". Note that this requires invoking GDB, in batch mode, to query the additional Python paths. The setting \"pyright.dev_environment_gdb_binary\" controls which exectuable to call to invoke GDB."
                       ]
+                    },
+                    "pyright.dev_environment.blender.binary": {
+                      "default": "blender",
+                      "description": "When the predefined setup is \"blender\", invoke this binary to query the additional search paths.",
+                      "type": "string"
+                    },
+                    "pyright.dev_environment.gdb.binary": {
+                      "default": "gdb",
+                      "description": "When the predefined setup is \"gdb\", invoke this binary to query the additional search paths.",
+                      "type": "string"
                     },
                     "pyright.disableLanguageServices": {
                       "default": false,
