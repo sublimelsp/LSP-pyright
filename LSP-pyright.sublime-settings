@@ -35,16 +35,16 @@
 		// - "blender": Suitable for people who are developing Blender add-ons. `sys.path` from Blender's embedded
 		//              Python interpreter will be added into "python.analysis.extraPaths". Note that this requires
 		//              invoking Blender, headless, to query the additional Python paths. The setting
-		//              "pyright.dev_environment_blender_binary" controls which executable to call to invoke Blender.
+		//              "pyright.dev_environment_blender.binary" controls which executable to call to invoke Blender.
 		// - "gdb": Suitable for people who are developing GDB automation scripts. `sys.path` from GDB's embedded
 		//          Python interpreter will be added into "python.analysis.extraPaths". Note that this requires invoking
 		//          GDB, in batch mode, to query the additional Python paths. The setting
-		//          "pyright.dev_environment_gdb_binary" controls which exectuable to call to invoke GDB.
+		//          "pyright.dev_environment_gdb.binary" controls which exectuable to call to invoke GDB.
 		"pyright.dev_environment": "",
 		// When the predefined setup is "blender", invoke this binary to query the additional search paths.
-		"pyright.dev_environment.blender.binary": "blender",
+		"pyright.dev_environment_blender.binary": "blender",
 		// When the predefined setup is "gdb", invoke this binary to query the additional search paths.
-		"pyright.dev_environment.gdb.binary": "gdb",
+		"pyright.dev_environment_gdb.binary": "gdb",
 		// Offer auto-import completions.
 		"python.analysis.autoImportCompletions": true,
 		// Automatically add common search paths like 'src'?
