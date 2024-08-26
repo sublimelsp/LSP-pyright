@@ -31,7 +31,7 @@ class BaseDevEnvironmentHandler(ABC):
     @final
     @classmethod
     def get_dev_environment_subsetting(cls, settings: DottedDict, subkey: str) -> Any:
-        """Gets the sub-setting of `XXX.dev_environment.CLS_NAME.SUBKEY`."""
+        """Gets the sub-setting of `XXX.dev_environment_NAME.SUBKEY`."""
         return settings.get(f"{SERVER_SETTING_DEV_ENVIRONMENT}_{cls.name()}.{subkey}")
 
     @classmethod
