@@ -42,9 +42,9 @@
 		//          "pyright.dev_environment.gdb.binary" controls which exectuable to call to invoke GDB.
 		"pyright.dev_environment": "",
 		// When the predefined setup is "blender", invoke this binary to query the additional search paths.
-		"pyright.dev_environment.blender.binary": "blender",
+		"pyright.dev_environment_blender.binary": "blender",
 		// When the predefined setup is "gdb", invoke this binary to query the additional search paths.
-		"pyright.dev_environment.gdb.binary": "gdb",
+		"pyright.dev_environment_gdb.binary": "gdb",
 		// Offer auto-import completions.
 		"python.analysis.autoImportCompletions": true,
 		// Automatically add common search paths like 'src'?

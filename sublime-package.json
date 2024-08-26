@@ -41,12 +41,12 @@
                         "Suitable for people who are developing GDB automation scripts. `sys.path` from GDB's embedded Python interpreter will be added into \"python.analysis.extraPaths\". Note that this requires invoking GDB, in batch mode, to query the additional Python paths. The setting \"pyright.dev_environment_gdb_binary\" controls which exectuable to call to invoke GDB."
                       ]
                     },
-                    "pyright.dev_environment.blender.binary": {
+                    "pyright.dev_environment_blender.binary": {
                       "default": "blender",
                       "description": "When the predefined setup is \"blender\", invoke this binary to query the additional search paths.",
                       "type": "string"
                     },
-                    "pyright.dev_environment.gdb.binary": {
+                    "pyright.dev_environment_gdb.binary": {
                       "default": "gdb",
                       "description": "When the predefined setup is \"gdb\", invoke this binary to query the additional search paths.",
                       "type": "string"
