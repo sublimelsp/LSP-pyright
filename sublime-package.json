@@ -98,6 +98,9 @@
                         "enableExperimentalFeatures": {
                           "$ref": "sublime://pyrightconfig#/definitions/enableExperimentalFeatures"
                         },
+                        "enableReachabilityAnalysis": {
+                          "$ref": "sublime://pyrightconfig#/definitions/enableReachabilityAnalysis"
+                        },
                         "enableTypeIgnoreComments": {
                           "$ref": "sublime://pyrightconfig#/definitions/enableTypeIgnoreComments"
                         },
