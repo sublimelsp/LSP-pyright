@@ -478,7 +478,7 @@
               ]
             },
             "disableBytesTypePromotions": {
-              "default": false,
+              "default": true,
               "title": "Do not treat `bytearray` and `memoryview` as implicit subtypes of `bytes`",
               "type": "boolean"
             },
