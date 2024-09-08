@@ -229,6 +229,12 @@ class LspPyrightPlugin(NpmClientHandler):
     ) -> None:
         window_attr = cls.window_attrs[window]
 
+        def _update_simple_python_path() -> None:
+            window_attr.simple_python_executable = None
+
+            if python_path := first_true(("py", "python3", "python"), pred=shutil.which):
+                window_attr.simple_python_executable = Path(python_path)
+
         def _update_venv_info() -> None:
             window_attr.venv_info = None
 
@@ -246,12 +252,6 @@ class LspPyrightPlugin(NpmClientHandler):
                     if venv_info := find_venv_by_finder_names(finder_names, project_dir=folder):
                         window_attr.venv_info = venv_info
                         return
-
-        def _update_simple_python_path() -> None:
-            window_attr.simple_python_executable = None
-
-            if python_path := first_true(("py", "python3", "python"), pred=shutil.which):
-                window_attr.simple_python_executable = Path(python_path)
 
         _update_simple_python_path()
         _update_venv_info()

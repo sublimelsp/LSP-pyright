@@ -18,7 +18,7 @@ class BaseSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, ABC):
     def python_version(self) -> tuple[int, int]:
         return (3, 3)
 
-    def handle(self, *, settings: DottedDict) -> None:
+    def handle_(self, *, settings: DottedDict) -> None:
         self._inject_extra_paths(settings=settings, paths=self.find_package_dependency_dirs())
 
     def find_package_dependency_dirs(self) -> list[str]:
@@ -64,7 +64,7 @@ class SublimeText38DevEnvironmentHandler(BaseSublimeTextDevEnvironmentHandler):
 
 
 class SublimeTextDevEnvironmentHandler(BaseSublimeTextDevEnvironmentHandler):
-    def handle(self, *, settings: DottedDict) -> None:
+    def handle_(self, *, settings: DottedDict) -> None:
         handler_cls = self.resolve_handler_cls()
         handler = handler_cls(server_dir=self.server_dir, workspace_folders=self.workspace_folders)
         handler.handle(settings=settings)

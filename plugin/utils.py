@@ -61,7 +61,10 @@ def get_default_startupinfo() -> Any:
 
 
 def run_shell_command(
-    command: str | Sequence[str], *, cwd: str | Path | None = None, shell: bool = True
+    command: str | Sequence[str],
+    *,
+    cwd: str | Path | None = None,
+    shell: bool = True,
 ) -> tuple[str, str, int] | None:
     try:
         proc = subprocess.Popen(

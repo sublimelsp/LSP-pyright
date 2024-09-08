@@ -9,6 +9,7 @@ from LSP.plugin.core.collections import DottedDict
 from ..constants import SERVER_SETTING_ANALYSIS_EXTRAPATHS, SERVER_SETTING_DEV_ENVIRONMENT
 from ..log import log_info
 from ..utils import camel_to_snake, remove_suffix
+from ..virtual_env.venv_info import BaseVenvInfo
 
 
 class BaseDevEnvironmentHandler(ABC):
@@ -17,11 +18,14 @@ class BaseDevEnvironmentHandler(ABC):
         *,
         server_dir: str | Path,
         workspace_folders: Sequence[str],
+        venv_info: BaseVenvInfo | None = None,
     ) -> None:
         self.server_dir = Path(server_dir)
         """The language server directory."""
         self.workspace_folders = workspace_folders
         """The workspace folders."""
+        self.venv_info = venv_info
+        """The virtual environment information."""
 
     @classmethod
     def name(cls) -> str:
@@ -39,13 +43,31 @@ class BaseDevEnvironmentHandler(ABC):
         """Check if this class support the given `dev_environment`."""
         return cls.name() == dev_environment
 
-    @abstractmethod
+    @final
     def handle(self, *, settings: DottedDict) -> None:
         """Handle this environment."""
+        self.handle_(settings=settings)
 
-    def _inject_extra_paths(self, *, settings: DottedDict, paths: Iterable[str | Path]) -> None:
-        """Appends the given `paths` to `XXX.analysis.extraPaths` setting."""
-        extra_paths: list[str] = settings.get(SERVER_SETTING_ANALYSIS_EXTRAPATHS) or []
-        extra_paths.extend(map(str, paths))
-        log_info(f"Adding extra analysis paths: {paths}")
-        settings.set(SERVER_SETTING_ANALYSIS_EXTRAPATHS, extra_paths)
+        if self.venv_info:
+            self._inject_extra_paths(settings=settings, paths=(self.venv_info.site_packages_dir,), prepend=True)
+
+    @abstractmethod
+    def handle_(self, *, settings: DottedDict) -> None:
+        """Handle this environment. (subclass)"""
+
+    def _inject_extra_paths(
+        self,
+        *,
+        settings: DottedDict,
+        paths: Iterable[str | Path],
+        prepend: bool = False,
+    ) -> None:
+        """Injects the given `paths` to `XXX.analysis.extraPaths` setting."""
+        current_paths: list[str] = settings.get(SERVER_SETTING_ANALYSIS_EXTRAPATHS) or []
+        extra_paths = list(map(str, paths))
+        if prepend:
+            next_paths = extra_paths + current_paths
+        else:
+            next_paths = current_paths + extra_paths
+        log_info(f"Adding extra analysis paths ({prepend = }): {paths}")
+        settings.set(SERVER_SETTING_ANALYSIS_EXTRAPATHS, next_paths)

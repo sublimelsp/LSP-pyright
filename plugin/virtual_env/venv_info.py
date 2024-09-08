@@ -45,11 +45,33 @@ class BaseVenvInfo(ABC):
     """The metadata which is not related to venv."""
 
     @property
+    def bin_dir(self) -> Path:
+        """The path of the `bin` directory of the virtual environment."""
+        if os.name == "nt":
+            return self.venv_dir / "Scripts"
+        return self.venv_dir / "bin"
+
+    @property
+    def lib_dir(self) -> Path:
+        """The path of the `lib` directory of the virtual environment."""
+        if os.name == "nt":
+            return self.venv_dir / "Lib"
+        return self.venv_dir / "lib"
+
+    @property
+    def site_packages_dir(self) -> Path:
+        """The path of the `site-packages` directory of the virtual environment."""
+        if os.name == "nt":
+            return self.lib_dir / "site-packages"
+        python_version = ".".join(self.python_version.split(".")[:2])
+        return self.lib_dir / f"python{python_version}/site-packages"
+
+    @property
     def python_executable(self) -> Path:
         """The path of the Python executable of the virtual environment."""
         if os.name == "nt":
-            return self.venv_dir / "Scripts/python.exe"
-        return self.venv_dir / "bin/python"
+            return self.bin_dir / "python.exe"
+        return self.bin_dir / "python"
 
     @abstractmethod
     def is_valid(self) -> bool:
