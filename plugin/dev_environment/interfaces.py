@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Iterable, Sequence, final
+from typing import Any, Iterable, Literal, Sequence, final
 
 from LSP.plugin.core.collections import DottedDict
 
@@ -49,7 +49,7 @@ class BaseDevEnvironmentHandler(ABC):
         self.handle_(settings=settings)
 
         if self.venv_info:
-            self._inject_extra_paths(settings=settings, paths=(self.venv_info.site_packages_dir,), prepend=True)
+            self._inject_extra_paths(settings=settings, paths=(self.venv_info.site_packages_dir,))
 
     @abstractmethod
     def handle_(self, *, settings: DottedDict) -> None:
@@ -60,14 +60,18 @@ class BaseDevEnvironmentHandler(ABC):
         *,
         settings: DottedDict,
         paths: Iterable[str | Path],
-        prepend: bool = False,
+        operation: Literal["append", "prepend", "replace"] = "prepend",
     ) -> None:
         """Injects the given `paths` to `XXX.analysis.extraPaths` setting."""
         current_paths: list[str] = settings.get(SERVER_SETTING_ANALYSIS_EXTRAPATHS) or []
         extra_paths = list(map(str, paths))
-        if prepend:
+        if operation == "prepend":
             next_paths = extra_paths + current_paths
-        else:
+        elif operation == "append":
             next_paths = current_paths + extra_paths
-        log_info(f"Adding extra analysis paths ({prepend = }): {paths}")
+        elif operation == "replace":
+            next_paths = extra_paths
+        else:
+            raise ValueError(f"Invalid operation: {operation}")
+        log_info(f"Modified extra analysis paths ({operation = }): {paths}")
         settings.set(SERVER_SETTING_ANALYSIS_EXTRAPATHS, next_paths)
