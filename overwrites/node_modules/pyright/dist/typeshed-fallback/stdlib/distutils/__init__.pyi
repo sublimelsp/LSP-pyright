@@ -3,15 +3,3 @@
 # - Most users already do not use stdlib distutils, due to setuptools monkeypatching
 # - We have very little quality assurance on these stubs, since due to the two above issues
 #   we allowlist all distutils errors in stubtest.
-
-"""
-distutils
-
-The main package for the Python Module Distribution Utilities.  Normally
-used from a setup script as
-
-   from distutils.core import setup
-
-   setup (...)
-"""
-
