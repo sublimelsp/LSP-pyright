@@ -1,6 +1,6 @@
 -r requirements.in
 
-mypy
-ruff>=0.6
+mypy>=1.13
+ruff>=0.7
 
 types-jmespath
