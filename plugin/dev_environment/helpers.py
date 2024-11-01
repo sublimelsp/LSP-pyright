@@ -5,7 +5,6 @@ from typing import Generator, Sequence
 
 from more_itertools import first_true
 
-from ..virtual_env.venv_info import BaseVenvInfo
 from .impl import (
     BlenderDevEnvironmentHandler,
     GdbDevEnvironmentHandler,
@@ -28,14 +27,9 @@ def get_dev_environment_handler(
     *,
     server_dir: str | Path,
     workspace_folders: Sequence[str],
-    venv_info: BaseVenvInfo | None = None,
 ) -> BaseDevEnvironmentHandler | None:
     if handler_cls := find_dev_environment_handler_class(dev_environment):
-        return handler_cls(
-            server_dir=server_dir,
-            workspace_folders=workspace_folders,
-            venv_info=venv_info,
-        )
+        return handler_cls(server_dir=server_dir, workspace_folders=workspace_folders)
     return None
 
 

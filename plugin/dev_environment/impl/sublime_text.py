@@ -19,7 +19,7 @@ class BaseSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, ABC):
         return (3, 3)
 
     def handle_(self, *, settings: DottedDict) -> None:
-        self._inject_extra_paths(settings=settings, paths=self.find_package_dependency_dirs(), operation="replace")
+        self._inject_extra_paths(settings=settings, paths=self.find_package_dependency_dirs())
 
     def find_package_dependency_dirs(self) -> list[str]:
         dep_dirs = sys.path.copy()

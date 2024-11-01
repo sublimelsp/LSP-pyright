@@ -5,27 +5,19 @@ from pathlib import Path
 from typing import Any, Iterable, Literal, Sequence, final
 
 from LSP.plugin.core.collections import DottedDict
+from more_itertools import unique_everseen
 
 from ..constants import SERVER_SETTING_ANALYSIS_EXTRAPATHS, SERVER_SETTING_DEV_ENVIRONMENT
-from ..log import log_info
+from ..log import log_debug
 from ..utils import camel_to_snake, remove_suffix
-from ..virtual_env.venv_info import BaseVenvInfo
 
 
 class BaseDevEnvironmentHandler(ABC):
-    def __init__(
-        self,
-        *,
-        server_dir: str | Path,
-        workspace_folders: Sequence[str],
-        venv_info: BaseVenvInfo | None = None,
-    ) -> None:
+    def __init__(self, *, server_dir: str | Path, workspace_folders: Sequence[str]) -> None:
         self.server_dir = Path(server_dir)
         """The language server directory."""
         self.workspace_folders = workspace_folders
         """The workspace folders."""
-        self.venv_info = venv_info
-        """The virtual environment information."""
 
     @classmethod
     def name(cls) -> str:
@@ -47,9 +39,6 @@ class BaseDevEnvironmentHandler(ABC):
     def handle(self, *, settings: DottedDict) -> None:
         """Handle this environment."""
         self.handle_(settings=settings)
-
-        if self.venv_info:
-            self._inject_extra_paths(settings=settings, paths=(self.venv_info.site_packages_dir,))
 
     @abstractmethod
     def handle_(self, *, settings: DottedDict) -> None:
@@ -73,5 +62,7 @@ class BaseDevEnvironmentHandler(ABC):
             next_paths = extra_paths
         else:
             raise ValueError(f"Invalid operation: {operation}")
-        log_info(f"Modified extra analysis paths ({operation = }): {paths}")
+
+        next_paths = list(unique_everseen(next_paths, key=Path))  # deduplication
+        log_debug(f'Due to "dev_environment", new "analysis.extraPaths" is ({operation = }): {next_paths}')
         settings.set(SERVER_SETTING_ANALYSIS_EXTRAPATHS, next_paths)

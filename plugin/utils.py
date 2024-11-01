@@ -60,6 +60,13 @@ def get_default_startupinfo() -> Any:
     return None
 
 
+def to_resolved_posix_path(path: str | Path) -> str | None:
+    try:
+        return Path(path).resolve().as_posix()
+    except Exception:
+        return None
+
+
 def run_shell_command(
     command: str | Sequence[str],
     *,
