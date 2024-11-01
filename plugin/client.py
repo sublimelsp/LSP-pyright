@@ -15,7 +15,7 @@ from sublime_lib import ResourcePath
 
 from .constants import PACKAGE_NAME, SERVER_SETTING_DEV_ENVIRONMENT
 from .dev_environment.helpers import get_dev_environment_handler
-from .log import log_error, log_info, log_warning
+from .log import log_error, log_warning
 from .utils_lsp import AbstractLspPythonPlugin, find_workspace_folder, update_view_status_bar_text, uri_to_file_path
 from .virtual_env.helpers import find_venv_by_finder_names
 
@@ -84,24 +84,6 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
                 handler.handle(settings=settings)
         except Exception as ex:
             log_error(f'Failed to update extra paths for dev environment "{dev_environment}": {ex}')
-
-        self.update_status_bar_text()
-
-    @classmethod
-    def on_pre_start(
-        cls,
-        window: sublime.Window,
-        initiating_view: sublime.View,
-        workspace_folders: list[WorkspaceFolder],
-        configuration: ClientConfig,
-    ) -> str | None:
-        super().on_pre_start(window, initiating_view, workspace_folders, configuration)
-
-        cls.update_venv_info(configuration.settings, workspace_folders, window=window)
-        if venv_info := cls.window_attrs[window].venv_info:
-            log_info(f"Using python executable: {venv_info.python_executable}")
-            configuration.settings.set("python.pythonPath", str(venv_info.python_executable))
-        return None
 
     @classmethod
     def install_or_update(cls) -> None:
