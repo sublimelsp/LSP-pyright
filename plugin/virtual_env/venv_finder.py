@@ -240,6 +240,12 @@ class PyenvVenvFinder(BaseVenvFinder):
     @see https://github.com/pyenv/pyenv
     """
 
+    result_caches: dict[int, Pep405VenvInfo | None] = {}
+    """
+    It's expensive to keep invoking `pyenv which python` for equivalent `.python-version` contents.
+    So we cache the result based on the content of `.python-version` file.
+    """
+
     @classmethod
     def can_support(cls, project_dir: Path) -> bool:
         try:
@@ -248,13 +254,27 @@ class PyenvVenvFinder(BaseVenvFinder):
             return False
 
     def find_venv_(self) -> Pep405VenvInfo | None:
-        if not (output := run_shell_command("pyenv which python", cwd=self.project_dir)):
-            return None
-        python_executable, _, _ = output
+        def _work() -> Pep405VenvInfo | None:
+            if not (output := run_shell_command("pyenv which python", cwd=self.project_dir)):
+                return None
+            python_executable, _, _ = output
 
-        if not python_executable:
-            return None
-        return Pep405VenvInfo.from_python_executable(python_executable)
+            if not python_executable:
+                return None
+            return Pep405VenvInfo.from_python_executable(python_executable)
+
+        pyver_file_sig = self.calculate_pyver_file_signature(self.project_dir / ".python-version")
+        if pyver_file_sig not in self.result_caches:
+            self.result_caches[pyver_file_sig] = _work()
+        return self.result_caches[pyver_file_sig]
+
+    @staticmethod
+    def calculate_pyver_file_signature(file: Path) -> int:
+        content = b""
+        for line in file.open("rb"):
+            if (line := line.strip()) and not line.startswith(b"#"):
+                content += line + b"\n"
+        return hash(content)
 
 
 class RyeVenvFinder(BaseVenvFinder):
