@@ -17,6 +17,7 @@ exclude = [
   "branch-*",
   "overwrites/node_modules/pyright/dist/typeshed-fallback",
   "stubs",
+  "syntaxes",
   "tests/files",
   "typings",
   "vendor",
