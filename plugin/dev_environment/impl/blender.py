@@ -21,11 +21,12 @@ class BlenderDevEnvironmentHandler(BaseDevEnvironmentHandler):
             dumper_path = Path(tmpdir) / "sys_path_dumper.py"
             dumper_path.write_text(
                 Rf"""
-import sys
+import bpy
 import json
-with open("{dumped_result}", "w", encoding="utf-8") as f:
+import sys
+with open(R"{dumped_result}", "w", encoding="utf-8") as f:
     json.dump({{"executable": sys.executable, "paths": sys.path}}, f)
-exit(0)
+bpy.ops.wm.quit_blender()
                 """.strip(),
                 encoding="utf-8",
             )
