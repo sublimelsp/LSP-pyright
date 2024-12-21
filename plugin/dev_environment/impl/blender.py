@@ -17,13 +17,16 @@ class BlenderDevEnvironmentHandler(BaseDevEnvironmentHandler):
     @classmethod
     def find_paths(cls, settings: DottedDict) -> list[str]:
         with tempfile.TemporaryDirectory() as tmpdir:
-            filepath = Path(tmpdir) / "print_sys_path.py"
-            filepath.write_text(
-                R"""
-import sys
+            dumped_result = Path(tmpdir) / "sys_path.json"
+            dumper_path = Path(tmpdir) / "sys_path_dumper.py"
+            dumper_path.write_text(
+                Rf"""
+import bpy
 import json
-json.dump({"executable": sys.executable, "paths": sys.path}, sys.stdout)
-exit(0)
+import sys
+with open(R"{dumped_result}", "w", encoding="utf-8") as f:
+    json.dump({{"executable": sys.executable, "paths": sys.path}}, f)
+bpy.ops.wm.quit_blender()
                 """.strip(),
                 encoding="utf-8",
             )
@@ -31,20 +34,11 @@ exit(0)
                 cls.get_dev_environment_subsetting(settings, "binary"),
                 "--background",
                 "--python",
-                str(filepath),
+                str(dumper_path),
             )
             result = run_shell_command(args, shell=False)
 
-        if not result or result[2] != 0:
-            raise RuntimeError(f"Failed to run command: {args}")
+            if not result or result[2] != 0:
+                raise RuntimeError(f"Failed to run command: {args}")
 
-        # Blender prints a bunch of general information to stdout before printing the output of the python
-        # script. We want to ignore that initial information. We do that by finding the start of the JSON
-        # dict. This is a bit hacky and there must be a better way.
-        if (index := result[0].find('\n{"')) == -1:
-            raise RuntimeError("Unexpected output when calling blender")
-
-        try:
-            return json.loads(result[0][index:])["paths"]
-        except json.JSONDecodeError as e:
-            raise RuntimeError(f"Failed to parse JSON: {e}")
+            return json.loads(dumped_result.read_bytes())["paths"]
