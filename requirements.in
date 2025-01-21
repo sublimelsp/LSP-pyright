@@ -1,4 +1,4 @@
 Jinja2>=3,<4
 jmespath>=1,<2
-more-itertools>=10,<11
+more-itertools>=10,<=10.5 # supports py38
 typing-extensions>=4.12

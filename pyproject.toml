@@ -26,7 +26,7 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "UP", "FURB"]
+select = ["E", "F", "W", "I", "UP", "FURB", "SIM"]
 ignore = ["E203"]
 
 [tool.ruff.lint.per-file-ignores]
