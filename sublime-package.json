@@ -61,6 +61,11 @@
                       "description": "Disables the \"Organize Imports\" command.",
                       "type": "boolean"
                     },
+                    "pyright.disableTaggedHints": {
+                      "default": false,
+                      "description": "Disables the use of hint diagnostics with special tags",
+                      "type": "boolean"
+                    },
                     "python.analysis.autoImportCompletions": {
                       "default": true,
                       "description": "Offer auto-import completions.",
