@@ -78,6 +78,8 @@
 		"pyright.disableLanguageServices": false,
 		// Disables the "Organize Imports" command.
 		"pyright.disableOrganizeImports": false,
+		// Disables the use of hint diagnostics with special tags.
+		"pyright.disableTaggedHints": false,
 		// Path to Python. Leave empty to attempt automatic resolution.
 		"python.pythonPath": "",
 		// Path to folder with a list of Virtual Environments.
