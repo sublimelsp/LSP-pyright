@@ -868,6 +868,11 @@
               "default": "none",
               "title": "Controls reporting of '# type: ignore' comments that have no effect'"
             },
+            "reportUnreachable": {
+              "$ref": "#/definitions/diagnostic",
+              "default": "none",
+              "title": "Controls reporting of code that is determined by type analysis to be unreachable"
+            },
             "reportUnsupportedDunderAll": {
               "$ref": "#/definitions/diagnostic",
               "default": "warning",
@@ -1231,6 +1236,9 @@
                   "reportUnnecessaryTypeIgnoreComment": {
                     "$ref": "#/definitions/reportUnnecessaryTypeIgnoreComment"
                   },
+                  "reportUnreachable": {
+                    "$ref": "#/definitions/reportUnreachable"
+                  },
                   "reportUnsupportedDunderAll": {
                     "$ref": "#/definitions/reportUnsupportedDunderAll"
                   },
@@ -1533,6 +1541,9 @@
             },
             "reportUnnecessaryTypeIgnoreComment": {
               "$ref": "#/definitions/reportUnnecessaryTypeIgnoreComment"
+            },
+            "reportUnreachable": {
+              "$ref": "#/definitions/reportUnreachable"
             },
             "reportUnsupportedDunderAll": {
               "$ref": "#/definitions/reportUnsupportedDunderAll"
