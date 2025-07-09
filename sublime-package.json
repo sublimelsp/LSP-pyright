@@ -310,6 +310,9 @@
                         "reportUnnecessaryTypeIgnoreComment": {
                           "$ref": "sublime://pyrightconfig#/definitions/reportUnnecessaryTypeIgnoreComment"
                         },
+                        "reportUnreachable": {
+                          "$ref": "sublime://pyrightconfig#/definitions/reportUnreachable"
+                        },
                         "reportUnsupportedDunderAll": {
                           "$ref": "sublime://pyrightconfig#/definitions/reportUnsupportedDunderAll"
                         },
