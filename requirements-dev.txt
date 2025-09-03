@@ -10,7 +10,7 @@ more-itertools==10.5.0
     # via -r requirements.in
 mypy==1.14.1
     # via -r requirements-dev.in
-mypy-extensions==1.0.0
+mypy-extensions==1.1.0
     # via mypy
 ruff==0.9.2
     # via -r requirements-dev.in
