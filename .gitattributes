@@ -16,6 +16,7 @@ mkdocs.yml export-ignore
 mypy.ini export-ignore
 pyproject.toml export-ignore
 pyrightconfig.json export-ignore
+renovate.json export-ignore
 requirements* export-ignore
 requirements.* export-ignore
 scripts/ export-ignore
