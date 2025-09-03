@@ -16,7 +16,7 @@ ruff==0.9.2
     # via -r requirements-dev.in
 tomli==2.2.1
     # via mypy
-types-jmespath==1.0.2.20240106
+types-jmespath==1.0.2.20250809
     # via -r requirements-dev.in
 typing-extensions==4.12.2
     # via
