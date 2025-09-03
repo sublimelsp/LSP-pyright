@@ -6,7 +6,7 @@ jmespath==1.0.1
     # via -r requirements.in
 markupsafe==2.1.5
     # via jinja2
-more-itertools==10.5.0
+more-itertools==10.8.0
     # via -r requirements.in
 mypy==1.14.1
     # via -r requirements-dev.in
