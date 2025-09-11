@@ -13,6 +13,7 @@
 		"statusText": "{% set parts = [] %}{% if server_version %}{% do parts.append('v' + server_version) %}{% endif %}{% if venv %}{% do parts.append('venv: ' + venv.venv_prompt) %}{% do parts.append('py: ' + venv.python_version) %}{% do parts.append('by: ' + venv.finder_name) %}{% endif %}{{ parts|join('; ') }}",
 		// The strategies used to find a virtual environment in order.
 		"venvStrategies": [
+			"st_project_data",
 			"local_dot_venv",
 			"env_var_conda_prefix",
 			"env_var_virtual_env",

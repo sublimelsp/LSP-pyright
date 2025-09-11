@@ -9,6 +9,7 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Generator, Mapping, final
 
+from LSP.plugin import Session
 from more_itertools import first_true
 
 from ..utils import camel_to_snake, iterate_by_line, remove_suffix, run_shell_command
@@ -33,6 +34,7 @@ def list_venv_finder_classes() -> Generator[type[BaseVenvFinder], None, None]:
 
     The order matters because they will be used for testing one by one.
     """
+    yield StProjectDataVenvFinder
     yield LocalDotVenvVenvFinder
     yield EnvVarCondaPrefixVenvFinder
     yield EnvVarVirtualEnvVenvFinder
@@ -46,9 +48,11 @@ def list_venv_finder_classes() -> Generator[type[BaseVenvFinder], None, None]:
 
 
 class BaseVenvFinder(ABC):
-    def __init__(self, project_dir: Path) -> None:
+    def __init__(self, *, project_dir: Path | None, session: Session) -> None:
         self.project_dir = project_dir
         """The project root directory."""
+        self.session = session
+        """The LSP client session."""
 
     @final
     @classmethod
@@ -57,7 +61,7 @@ class BaseVenvFinder(ABC):
 
     @classmethod
     @abstractmethod
-    def can_support(cls, project_dir: Path) -> bool:
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         """Check if this class support the given `project_dir`."""
 
     @final
@@ -81,10 +85,11 @@ class AnySubdirectoryVenvFinder(BaseVenvFinder):
     """Finds the virtual environment with any subdirectory."""
 
     @classmethod
-    def can_support(cls, project_dir: Path) -> bool:
-        return True
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
+        return bool(project_dir)
 
     def find_venv_(self) -> BaseVenvInfo | None:
+        assert self.project_dir
         for subproject_dir, venv_info_cls in product(self.project_dir.iterdir(), list_venv_info_classes()):
             if venv_info := venv_info_cls.from_venv_dir(subproject_dir):
                 return venv_info
@@ -99,7 +104,7 @@ class EnvVarCondaPrefixVenvFinder(BaseVenvFinder):
     """
 
     @classmethod
-    def can_support(cls, project_dir: Path) -> bool:
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         return "CONDA_PREFIX" in os.environ
 
     def find_venv_(self) -> CondaVenvInfo | None:
@@ -114,11 +119,35 @@ class EnvVarVirtualEnvVenvFinder(BaseVenvFinder):
     """
 
     @classmethod
-    def can_support(cls, project_dir: Path) -> bool:
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         return "VIRTUAL_ENV" in os.environ
 
     def find_venv_(self) -> Pep405VenvInfo | None:
         return Pep405VenvInfo.from_venv_dir(os.environ["VIRTUAL_ENV"])
+
+
+class StProjectDataVenvFinder(BaseVenvFinder):
+    """
+    Finds the virtual environment using Sublime Text project data.
+
+    @see https://www.sublimetext.com/docs/projects.html
+    """
+
+    @classmethod
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
+        project_data = session.window.project_data()
+        return isinstance(project_data, dict)
+
+    def find_venv_(self) -> Pep405VenvInfo | None:
+        project_data = self.session.window.project_data()
+        assert isinstance(project_data, dict)
+
+        # Sublime Text plugin: Virtualenv
+        # @see https://packages.sublimetext.io/packages/Virtualenv/
+        if venv_dir := project_data.get("virtualenv"):
+            return Pep405VenvInfo.from_venv_dir(venv_dir)
+
+        return None
 
 
 class LocalDotVenvVenvFinder(BaseVenvFinder):
@@ -129,10 +158,11 @@ class LocalDotVenvVenvFinder(BaseVenvFinder):
     """
 
     @classmethod
-    def can_support(cls, project_dir: Path) -> bool:
-        return True
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
+        return bool(project_dir)
 
     def find_venv_(self) -> Pep405VenvInfo | None:
+        assert self.project_dir
         return first_true(
             map(
                 Pep405VenvInfo.from_venv_dir,
@@ -149,11 +179,12 @@ class HatchVenvFinder(BaseVenvFinder):
     """
 
     @classmethod
-    def can_support(cls, project_dir: Path) -> bool:
-        return bool(shutil.which("hatch"))
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
+        return bool(project_dir and shutil.which("hatch"))
 
     def find_venv_(self) -> Pep405VenvInfo | None:
         # "hatch env find" will always provide a calculated path, where the hatch-managed venv should be at
+        assert self.project_dir
         if not (output := run_shell_command("hatch env find", cwd=self.project_dir)):
             return None
         venv_dir, _, exit_code = output
@@ -173,13 +204,14 @@ class PdmVenvFinder(BaseVenvFinder):
     """
 
     @classmethod
-    def can_support(cls, project_dir: Path) -> bool:
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         try:
-            return bool(shutil.which("pdm") and (project_dir / ".pdm-python").is_file())
+            return bool(project_dir and shutil.which("pdm") and (project_dir / ".pdm-python").is_file())
         except Exception:
             return False
 
     def find_venv_(self) -> Pep405VenvInfo | None:
+        assert self.project_dir
         if not (output := run_shell_command("pdm info --python", cwd=self.project_dir)):
             return None
         python_executable, _, _ = output
@@ -197,13 +229,14 @@ class PipenvVenvFinder(BaseVenvFinder):
     """
 
     @classmethod
-    def can_support(cls, project_dir: Path) -> bool:
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         try:
-            return bool(shutil.which("pipenv") and (project_dir / "Pipfile").is_file())
+            return bool(project_dir and shutil.which("pipenv") and (project_dir / "Pipfile").is_file())
         except Exception:
             return False
 
     def find_venv_(self) -> Pep405VenvInfo | None:
+        assert self.project_dir
         if not (output := run_shell_command("pipenv --py", cwd=self.project_dir)):
             return None
         python_executable, _, _ = output
@@ -217,13 +250,14 @@ class PoetryVenvFinder(BaseVenvFinder):
     """Finds the virtual environment using `poetry`."""
 
     @classmethod
-    def can_support(cls, project_dir: Path) -> bool:
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         try:
-            return bool(shutil.which("poetry") and (project_dir / "poetry.lock").is_file())
+            return bool(project_dir and shutil.which("poetry") and (project_dir / "poetry.lock").is_file())
         except Exception:
             return False
 
     def find_venv_(self) -> Pep405VenvInfo | None:
+        assert self.project_dir
         if not (output := run_shell_command("poetry env info -p", cwd=self.project_dir)):
             return None
         venv_dir, _, _ = output
@@ -247,9 +281,9 @@ class PyenvVenvFinder(BaseVenvFinder):
     """
 
     @classmethod
-    def can_support(cls, project_dir: Path) -> bool:
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         try:
-            return bool(shutil.which("pyenv") and (project_dir / ".python-version").is_file())
+            return bool(project_dir and shutil.which("pyenv") and (project_dir / ".python-version").is_file())
         except Exception:
             return False
 
@@ -263,6 +297,7 @@ class PyenvVenvFinder(BaseVenvFinder):
                 return None
             return Pep405VenvInfo.from_python_executable(python_executable)
 
+        assert self.project_dir
         pyver_file_sig = self.calculate_pyver_file_signature(self.project_dir / ".python-version")
         if pyver_file_sig not in self.result_caches:
             self.result_caches[pyver_file_sig] = _work()
@@ -285,13 +320,14 @@ class RyeVenvFinder(BaseVenvFinder):
     """
 
     @classmethod
-    def can_support(cls, project_dir: Path) -> bool:
+    def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         try:
-            return bool(shutil.which("rye") and (project_dir / "pyproject.toml").is_file())
+            return bool(project_dir and shutil.which("rye") and (project_dir / "pyproject.toml").is_file())
         except Exception:
             return False
 
     def find_venv_(self) -> Pep405VenvInfo | None:
+        assert self.project_dir
         if not (output := run_shell_command("rye show", cwd=self.project_dir)):
             return None
         stdout, _, _ = output

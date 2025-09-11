@@ -120,18 +120,22 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
             return
 
     def on_workspace_configuration(self, params: Any, configuration: dict[str, Any]) -> dict[str, Any]:
-        # provide detected venv information from the workspace folder
+        if not ((session := self.weaksession()) and (params.get("section") == "python")):
+            return configuration
+
+        scope_uri: str = params.get("scopeUri") or ""
+        file_path = uri_to_file_path(scope_uri)
+        wf_path = find_workspace_folder(session.window, file_path) if file_path else None
+
+        # provide detected venv information
         # note that `pyrightconfig.json` seems to be auto-prioritized by the server
         if (
-            (session := self.weaksession())
-            and (params["section"] == "python")
-            and (scope_uri := params.get("scopeUri"))
-            and (file_path := uri_to_file_path(scope_uri))
-            and (wf_path := find_workspace_folder(session.window, file_path))
-            and (venv_strategies := session.config.settings.get("venvStrategies"))
-            and (venv_info := find_venv_by_finder_names(venv_strategies, project_dir=wf_path))
+            # ...
+            (venv_strategies := session.config.settings.get("venvStrategies"))
+            and (venv_info := find_venv_by_finder_names(venv_strategies, project_dir=wf_path, session=session))
         ):
-            self.wf_attrs[wf_path].venv_info = venv_info
+            if wf_path:
+                self.wf_attrs[wf_path].venv_info = venv_info
             # When ST just starts, server session hasn't been created yet.
             # So `on_activated` can't add full information for the initial view and hence we handle it here.
             if active_view := sublime.active_window().active_view():

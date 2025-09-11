@@ -428,7 +428,8 @@
                           "pipenv",
                           "poetry",
                           "pyenv",
-                          "rye"
+                          "rye",
+                          "st_project_data"
                         ],
                         "markdownEnumDescriptions": [
                           "Finds the virtual environment with any subdirectory.",
@@ -440,7 +441,8 @@
                           "Finds the virtual environment using `pipenv`.",
                           "Finds the virtual environment using `poetry`.",
                           "Finds the virtual environment using `pyenv`.",
-                          "Finds the virtual environment using `rye`."
+                          "Finds the virtual environment using `rye`.",
+                          "Finds the virtual environment using Sublime Text project data."
                         ]
                       },
                       "type": "array"
