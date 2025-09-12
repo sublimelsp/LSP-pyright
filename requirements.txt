@@ -8,5 +8,5 @@ markupsafe==2.1.5
     # via jinja2
 more-itertools==10.5.0
     # via -r requirements.in
-typing-extensions==4.13.2
+typing-extensions==4.15.0
     # via -r requirements.in

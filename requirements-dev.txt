@@ -18,7 +18,7 @@ tomli==2.2.1
     # via mypy
 types-jmespath==1.0.2.20240106
     # via -r requirements-dev.in
-typing-extensions==4.13.2
+typing-extensions==4.15.0
     # via
     #   -r requirements.in
     #   mypy
