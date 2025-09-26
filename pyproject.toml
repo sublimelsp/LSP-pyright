@@ -7,6 +7,7 @@ requires-python = ">=3.8"
 dependencies = [
   "Jinja2==3.*",
   "jmespath>=1,<2",
+  "more-itertools>=10,<11",
   "typing-extensions>=4.12",
 ]
 
@@ -19,6 +20,24 @@ dev = [
 
 [tool.uv]
 default-groups = ["dev"]
+
+[tool.mypy]
+# ignore_missing_imports = False
+check_untyped_defs = true
+strict_optional = true
+mypy_path = 'typings:stubs'
+python_version = '3.8'
+
+[[tool.mypy.overrides]]
+module = [
+    "LSP.*",
+    "lsp_utils.*",
+    "mdpopups.*",
+    "sublime_lib.*",
+    "typings.*",
+]
+ignore_errors = true
+ignore_missing_imports = true
 
 [tool.basedpyright]
 pythonVersion = '3.8'
