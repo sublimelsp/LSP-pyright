@@ -1,3 +1,25 @@
+[project]
+name = "LSP-pyright"
+version = "0.0.0"
+description = "Python support for Sublime's LSP plugin provided through pyright."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+  "Jinja2==3.*",
+  "jmespath>=1,<2",
+  "typing-extensions>=4.12",
+]
+
+[dependency-groups]
+dev = [
+  "mypy>=1.14",
+  "ruff>=0.13",
+  "types-jmespath",
+]
+
+[tool.uv]
+default-groups = ["dev"]
+
 [tool.basedpyright]
 pythonVersion = '3.8'
 
