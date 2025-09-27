@@ -49,3 +49,7 @@ ci-fix-unsafe:
 	$(ci-base-cmd) ruff check --fix --unsafe-fixes .
 	@echo "========== fix: ruff (format) =========="
 	$(ci-base-cmd) ruff format .
+
+.PHONY: update-schema
+update-schema:
+	uv run ./scripts/update_schema.py
