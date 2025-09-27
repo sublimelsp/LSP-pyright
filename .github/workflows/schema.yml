@@ -22,11 +22,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.12
-
       - name: Update schema
         id: update-schema
         run: |
