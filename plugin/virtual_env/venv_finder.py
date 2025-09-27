@@ -180,7 +180,7 @@ class HatchVenvFinder(BaseVenvFinder):
 
     @classmethod
     def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
-        return bool(project_dir and shutil.which("hatch"))
+        return project_dir is not None and shutil.which("hatch") is not None
 
     def find_venv_(self) -> Pep405VenvInfo | None:
         # "hatch env find" will always provide a calculated path, where the hatch-managed venv should be at
@@ -206,7 +206,11 @@ class PdmVenvFinder(BaseVenvFinder):
     @classmethod
     def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         try:
-            return bool(project_dir and shutil.which("pdm") and (project_dir / ".pdm-python").is_file())
+            return (
+                project_dir is not None  # ...
+                and shutil.which("pdm") is not None
+                and (project_dir / ".pdm-python").is_file()
+            )
         except Exception:
             return False
 
@@ -231,7 +235,11 @@ class PipenvVenvFinder(BaseVenvFinder):
     @classmethod
     def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         try:
-            return bool(project_dir and shutil.which("pipenv") and (project_dir / "Pipfile").is_file())
+            return (
+                project_dir is not None  # ...
+                and shutil.which("pipenv") is not None
+                and (project_dir / "Pipfile").is_file()
+            )
         except Exception:
             return False
 
@@ -252,7 +260,11 @@ class PoetryVenvFinder(BaseVenvFinder):
     @classmethod
     def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         try:
-            return bool(project_dir and shutil.which("poetry") and (project_dir / "poetry.lock").is_file())
+            return (
+                project_dir is not None  # ...
+                and shutil.which("poetry") is not None
+                and (project_dir / "poetry.lock").is_file()
+            )
         except Exception:
             return False
 
@@ -283,7 +295,11 @@ class PyenvVenvFinder(BaseVenvFinder):
     @classmethod
     def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         try:
-            return bool(project_dir and shutil.which("pyenv") and (project_dir / ".python-version").is_file())
+            return (
+                project_dir is not None  # ...
+                and shutil.which("pyenv") is not None
+                and (project_dir / ".python-version").is_file()
+            )
         except Exception:
             return False
 
@@ -322,7 +338,11 @@ class RyeVenvFinder(BaseVenvFinder):
     @classmethod
     def can_support(cls, *, project_dir: Path | None, session: Session) -> bool:
         try:
-            return bool(project_dir and shutil.which("rye") and (project_dir / "pyproject.toml").is_file())
+            return (
+                project_dir is not None  # ...
+                and shutil.which("rye") is not None
+                and (project_dir / "pyproject.toml").is_file()
+            )
         except Exception:
             return False
 
