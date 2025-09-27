@@ -84,11 +84,14 @@ def update_schema(sublime_package_json: JsonDict, pyrightconfig_schema_json: Jso
             update_property_ref(last_component_key, setting_value, pyrightconfig_properties)
         if setting_key == "python.analysis.diagnosticSeverityOverrides":
             overrides_properties: JsonDict = setting_value["properties"]
+            deleted_keys: set[str] = set()
             for override_key, override_value in overrides_properties.items():
                 if override_key in pyrightconfig_properties:
                     update_property_ref(override_key, override_value, pyrightconfig_properties)
                 else:
-                    del overrides_properties[override_key]
+                    deleted_keys.add(override_key)
+            for key in deleted_keys:
+                del overrides_properties[key]
     # Check if there are any properties that might need to be added to the LSP properties.
     # If the property is neither in `diagnosticSeverityOverrides`, the root LSP settings nor in ignored keys
     # then it might have to be added manually.
