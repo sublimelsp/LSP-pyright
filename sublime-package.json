@@ -259,9 +259,6 @@
                         "reportSelfClsParameterName": {
                           "$ref": "sublime://pyrightconfig#/definitions/reportSelfClsParameterName"
                         },
-                        "reportShadowedImports": {
-                          "$ref": "sublime://pyrightconfig#/definitions/reportShadowedImports"
-                        },
                         "reportTypeCommentUsage": {
                           "$ref": "sublime://pyrightconfig#/definitions/reportTypeCommentUsage"
                         },
@@ -788,11 +785,6 @@
               "default": "warning",
               "title": "Controls reporting missing or misnamed self parameters"
             },
-            "reportShadowedImports": {
-              "$ref": "#/definitions/diagnostic",
-              "default": "none",
-              "title": "Controls reporting of shadowed imports of stdlib modules"
-            },
             "reportTypeCommentUsage": {
               "$ref": "#/definitions/diagnostic",
               "default": "none",
@@ -1190,9 +1182,6 @@
                   "reportSelfClsParameterName": {
                     "$ref": "#/definitions/reportSelfClsParameterName"
                   },
-                  "reportShadowedImports": {
-                    "$ref": "#/definitions/reportShadowedImports"
-                  },
                   "reportTypeCommentUsage": {
                     "$ref": "#/definitions/reportTypeCommentUsage"
                   },
@@ -1495,9 +1484,6 @@
             },
             "reportSelfClsParameterName": {
               "$ref": "#/definitions/reportSelfClsParameterName"
-            },
-            "reportShadowedImports": {
-              "$ref": "#/definitions/reportShadowedImports"
             },
             "reportTypeCommentUsage": {
               "$ref": "#/definitions/reportTypeCommentUsage"
