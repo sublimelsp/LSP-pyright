@@ -44,10 +44,13 @@ def drop_falsy(iterable: Iterable[_T | None]) -> Generator[_T, None, None]:
     yield from filter(None, iterable)
 
 
-def iterate_by_line(s: str) -> Generator[str, None, None]:
+def iterate_lines(s: str, *, keepends: bool = False) -> Generator[str, None, None]:
     """Iterates over lines of the string."""
     with io.StringIO(s) as f:
-        yield from f
+        if keepends:
+            yield from f
+        else:
+            yield from (line.rstrip("\r\n") for line in f)
 
 
 def get_default_startupinfo() -> Any:
@@ -60,9 +63,9 @@ def get_default_startupinfo() -> Any:
     return None
 
 
-def to_resolved_posix_path(path: str | Path) -> str | None:
+def resolved_posix_path(path: str | Path) -> str | None:
     try:
-        return Path(path).resolve().as_posix()
+        return Path(path).expanduser().resolve().as_posix()
     except Exception:
         return None
 

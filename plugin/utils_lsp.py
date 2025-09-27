@@ -15,7 +15,7 @@ from LSP.plugin.core.registry import windows as lsp_windows_registry
 
 from .log import log_warning
 from .template import load_string_template
-from .utils import drop_falsy, to_resolved_posix_path
+from .utils import drop_falsy, resolved_posix_path
 from .virtual_env.venv_finder import BaseVenvInfo
 
 
@@ -34,8 +34,8 @@ class AbstractLspPythonPlugin(AbstractLspPlugin, ABC):
 
 def find_workspace_folder(window: sublime.Window, path: str | Path) -> Path | None:
     """Find a workspace folder for the path. The deepest folder wins if there are multiple matches."""
-    if path_ := to_resolved_posix_path(path):
-        for folder in sorted(drop_falsy(map(to_resolved_posix_path, window.folders())), key=len, reverse=True):
+    if path_ := resolved_posix_path(path):
+        for folder in sorted(drop_falsy(map(resolved_posix_path, window.folders())), key=len, reverse=True):
             if f"{path_}/".startswith(f"{folder}/"):
                 return Path(folder)
     return None

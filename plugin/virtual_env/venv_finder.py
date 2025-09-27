@@ -12,7 +12,7 @@ from typing import Generator, Mapping, final
 from LSP.plugin import Session
 from more_itertools import first_true
 
-from ..utils import camel_to_snake, iterate_by_line, remove_suffix, run_shell_command
+from ..utils import camel_to_snake, iterate_lines, remove_suffix, run_shell_command
 from .venv_info import BaseVenvInfo, CondaVenvInfo, Pep405VenvInfo, list_venv_info_classes
 
 
@@ -352,7 +352,7 @@ class RyeVenvFinder(BaseVenvFinder):
             return None
         stdout, _, _ = output
 
-        for line in iterate_by_line(stdout):
+        for line in iterate_lines(stdout):
             pre, sep, post = line.partition(":")
             if sep and pre == "venv":
                 return Pep405VenvInfo.from_venv_dir(post.strip())
