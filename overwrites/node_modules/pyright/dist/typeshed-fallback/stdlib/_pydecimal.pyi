@@ -1,8 +1,6 @@
 # This is a slight lie, the implementations aren't exactly identical
 # However, in all likelihood, the differences are inconsequential
-
-"""Python decimal arithmetic module"""
-
+import sys
 from _decimal import *
 
 __all__ = [
@@ -44,3 +42,6 @@ __all__ = [
     "HAVE_THREADS",
     "HAVE_CONTEXTVAR",
 ]
+
+if sys.version_info >= (3, 14):
+    __all__ += ["IEEEContext", "IEEE_CONTEXT_MAX_BITS"]

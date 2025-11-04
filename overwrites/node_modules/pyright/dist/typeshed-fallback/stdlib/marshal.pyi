@@ -32,10 +32,10 @@ import builtins
 import sys
 import types
 from _typeshed import ReadableBuffer, SupportsRead, SupportsWrite
-from typing import Any
+from typing import Any, Final
 from typing_extensions import TypeAlias
 
-version: int
+version: Final[int]
 
 _Marshallable: TypeAlias = (
     # handled in w_object() in marshal.c
@@ -58,8 +58,8 @@ _Marshallable: TypeAlias = (
     | ReadableBuffer
 )
 
-if sys.version_info >= (3, 13):
-    def dump(value: _Marshallable, file: SupportsWrite[bytes], version: int = 4, /, *, allow_code: bool = True) -> None:
+if sys.version_info >= (3, 14):
+    def dump(value: _Marshallable, file: SupportsWrite[bytes], version: int = 5, /, *, allow_code: bool = True) -> None:
         """
         Write the value on the open file.
 
@@ -77,6 +77,31 @@ if sys.version_info >= (3, 13):
         to the file. The object will not be properly read back by load().
         """
         ...
+    def dumps(value: _Marshallable, version: int = 5, /, *, allow_code: bool = True) -> bytes:
+        """
+        Return the bytes object that would be written to a file by dump(value, file).
+
+          value
+            Must be a supported type.
+          version
+            Indicates the data format that dumps should use.
+          allow_code
+            Allow to write code objects.
+
+        Raise a ValueError exception if value has (or contains an object that has) an
+        unsupported type.
+        """
+        ...
+
+elif sys.version_info >= (3, 13):
+    def dump(value: _Marshallable, file: SupportsWrite[bytes], version: int = 4, /, *, allow_code: bool = True) -> None: ...
+    def dumps(value: _Marshallable, version: int = 4, /, *, allow_code: bool = True) -> bytes: ...
+
+else:
+    def dump(value: _Marshallable, file: SupportsWrite[bytes], version: int = 4, /) -> None: ...
+    def dumps(value: _Marshallable, version: int = 4, /) -> bytes: ...
+
+if sys.version_info >= (3, 13):
     def load(file: SupportsRead[bytes], /, *, allow_code: bool = True) -> Any:
         """
         Read one value from the open file and return it.
@@ -94,21 +119,6 @@ if sys.version_info >= (3, 13):
         dump(), load() will substitute None for the unmarshallable type.
         """
         ...
-    def dumps(value: _Marshallable, version: int = 4, /, *, allow_code: bool = True) -> bytes:
-        """
-        Return the bytes object that would be written to a file by dump(value, file).
-
-          value
-            Must be a supported type.
-          version
-            Indicates the data format that dumps should use.
-          allow_code
-            Allow to write code objects.
-
-        Raise a ValueError exception if value has (or contains an object that has) an
-        unsupported type.
-        """
-        ...
     def loads(bytes: ReadableBuffer, /, *, allow_code: bool = True) -> Any:
         """
         Convert the bytes-like object to a value.
@@ -122,7 +132,5 @@ if sys.version_info >= (3, 13):
         ...
 
 else:
-    def dump(value: _Marshallable, file: SupportsWrite[bytes], version: int = 4, /) -> None: ...
     def load(file: SupportsRead[bytes], /) -> Any: ...
-    def dumps(value: _Marshallable, version: int = 4, /) -> bytes: ...
     def loads(bytes: ReadableBuffer, /) -> Any: ...

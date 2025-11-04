@@ -29,13 +29,13 @@ class ChannelID:
     def recv(self) -> Self:
         """the 'recv' end of the channel"""
         ...
-    def __eq__(self, other: object) -> bool:
+    def __eq__(self, other: object, /) -> bool:
         """Return self==value."""
         ...
-    def __ge__(self, other: ChannelID) -> bool:
+    def __ge__(self, other: ChannelID, /) -> bool:
         """Return self>=value."""
         ...
-    def __gt__(self, other: ChannelID) -> bool:
+    def __gt__(self, other: ChannelID, /) -> bool:
         """Return self>value."""
         ...
     def __hash__(self) -> int:
@@ -47,13 +47,13 @@ class ChannelID:
     def __int__(self) -> int:
         """int(self)"""
         ...
-    def __le__(self, other: ChannelID) -> bool:
+    def __le__(self, other: ChannelID, /) -> bool:
         """Return self<=value."""
         ...
-    def __lt__(self, other: ChannelID) -> bool:
+    def __lt__(self, other: ChannelID, /) -> bool:
         """Return self<value."""
         ...
-    def __ne__(self, other: object) -> bool:
+    def __ne__(self, other: object, /) -> bool:
         """Return self!=value."""
         ...
 

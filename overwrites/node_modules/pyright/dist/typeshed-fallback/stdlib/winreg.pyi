@@ -99,13 +99,13 @@ if sys.platform == "win32":
     def EnableReflectionKey(key: _KeyType, /) -> None: ...
     def QueryReflectionKey(key: _KeyType, /) -> bool: ...
 
-    HKEY_CLASSES_ROOT: int
-    HKEY_CURRENT_USER: int
-    HKEY_LOCAL_MACHINE: int
-    HKEY_USERS: int
-    HKEY_PERFORMANCE_DATA: int
-    HKEY_CURRENT_CONFIG: int
-    HKEY_DYN_DATA: int
+    HKEY_CLASSES_ROOT: Final[int]
+    HKEY_CURRENT_USER: Final[int]
+    HKEY_LOCAL_MACHINE: Final[int]
+    HKEY_USERS: Final[int]
+    HKEY_PERFORMANCE_DATA: Final[int]
+    HKEY_CURRENT_CONFIG: Final[int]
+    HKEY_DYN_DATA: Final[int]
 
     KEY_ALL_ACCESS: Final = 983103
     KEY_WRITE: Final = 131078
@@ -163,7 +163,7 @@ if sys.platform == "win32":
         def __int__(self) -> int: ...
         def __enter__(self) -> Self: ...
         def __exit__(
-            self, exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: TracebackType | None
+            self, exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: TracebackType | None, /
         ) -> bool | None: ...
         def Close(self) -> None: ...
         def Detach(self) -> int: ...

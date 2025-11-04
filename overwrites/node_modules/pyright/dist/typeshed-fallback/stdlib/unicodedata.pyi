@@ -2,19 +2,19 @@
 This module provides access to the Unicode Character Database which
 defines character properties for all Unicode characters. The data in
 this database is based on the UnicodeData.txt file version
-15.1.0 which is publicly available from ftp://ftp.unicode.org/.
+16.0.0 which is publicly available from ftp://ftp.unicode.org/.
 
 The module uses the same names and symbols as defined by the
-UnicodeData File Format 15.1.0.
+UnicodeData File Format 16.0.0.
 """
 
 import sys
 from _typeshed import ReadOnlyBuffer
-from typing import Any, Literal, TypeVar, final, overload
+from typing import Any, Final, Literal, TypeVar, final, overload
 from typing_extensions import TypeAlias
 
 ucd_3_2_0: UCD
-unidata_version: str
+unidata_version: Final[str]
 
 if sys.version_info < (3, 10):
     ucnhash_CAPI: Any

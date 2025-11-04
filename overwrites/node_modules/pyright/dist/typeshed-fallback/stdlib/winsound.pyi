@@ -9,6 +9,10 @@ SND_ASYNC - PlaySound returns immediately
 SND_NODEFAULT - Do not play a default beep if the sound can not be found
 SND_NOSTOP - Do not interrupt any sounds currently playing
 SND_NOWAIT - Return immediately if the sound driver is busy
+SND_APPLICATION - sound is an application-specific alias in the registry.
+SND_SENTRY - Triggers a SoundSentry event when the sound is played.
+SND_SYNC - Play the sound synchronously, default behavior.
+SND_SYSTEM - Assign sound to the audio session for system notification sounds.
 
 Beep(frequency, duration) - Make a beep through the PC speaker.
 MessageBeep(type) - Call Windows MessageBeep.
@@ -29,12 +33,22 @@ if sys.platform == "win32":
     SND_NODEFAULT: Final = 2
     SND_NOSTOP: Final = 16
     SND_NOWAIT: Final = 8192
+    if sys.version_info >= (3, 14):
+        SND_SENTRY: Final = 524288
+        SND_SYNC: Final = 0
+        SND_SYSTEM: Final = 2097152
 
     MB_ICONASTERISK: Final = 64
     MB_ICONEXCLAMATION: Final = 48
     MB_ICONHAND: Final = 16
     MB_ICONQUESTION: Final = 32
     MB_OK: Final = 0
+    if sys.version_info >= (3, 14):
+        MB_ICONERROR: Final = 16
+        MB_ICONINFORMATION: Final = 64
+        MB_ICONSTOP: Final = 16
+        MB_ICONWARNING: Final = 48
+
     def Beep(frequency: int, duration: int) -> None: ...
     # Can actually accept anything ORed with 4, and if not it's definitely str, but that's inexpressible
     @overload

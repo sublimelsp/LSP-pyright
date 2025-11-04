@@ -29,13 +29,13 @@ without surprises: heap[0] is the smallest item, and heap.sort()
 maintains the heap invariant!
 """
 
-from typing import Any, Final, TypeVar
-
-_T = TypeVar("_T")
+import sys
+from _typeshed import SupportsRichComparisonT as _T  # All type variable use in this module requires comparability.
+from typing import Final
 
 __about__: Final[str]
 
-def heapify(heap: list[Any], /) -> None:
+def heapify(heap: list[_T], /) -> None:
     """Transform list into a heap, in-place, in O(len(heap)) time."""
     ...
 def heappop(heap: list[_T], /) -> _T:
@@ -65,3 +65,25 @@ def heapreplace(heap: list[_T], item: _T, /) -> _T:
             item = heapreplace(heap, item)
     """
     ...
+
+if sys.version_info >= (3, 14):
+    def heapify_max(heap: list[_T], /) -> None:
+        """Maxheap variant of heapify."""
+        ...
+    def heappop_max(heap: list[_T], /) -> _T:
+        """Maxheap variant of heappop."""
+        ...
+    def heappush_max(heap: list[_T], item: _T, /) -> None:
+        """Push item onto max heap, maintaining the heap invariant."""
+        ...
+    def heappushpop_max(heap: list[_T], item: _T, /) -> _T:
+        """
+        Maxheap variant of heappushpop.
+
+        The combined action runs more efficiently than heappush_max() followed by
+        a separate call to heappop_max().
+        """
+        ...
+    def heapreplace_max(heap: list[_T], item: _T, /) -> _T:
+        """Maxheap variant of heapreplace."""
+        ...

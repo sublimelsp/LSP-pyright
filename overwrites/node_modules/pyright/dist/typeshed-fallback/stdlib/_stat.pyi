@@ -31,7 +31,7 @@ S_IROTH: read by others
 S_IWOTH: write by others
 S_IXOTH: execute by others
 
-UF_SETTABLE: mask of owner changable flags
+UF_SETTABLE: mask of owner changeable flags
 UF_NODUMP: do not dump file
 UF_IMMUTABLE: file may not be changed
 UF_APPEND: file may only be appended to

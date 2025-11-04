@@ -5,15 +5,16 @@ from _typeshed import structseq
 from collections.abc import Callable
 from types import CodeType
 from typing import Any, Final, final
+from typing_extensions import disjoint_base
 
+@disjoint_base
 class Profiler:
     """
-    Profiler(timer=None, timeunit=None, subcalls=True, builtins=True)
+    Build a profiler object using the specified timer function.
 
-    Builds a profiler object using the specified timer function.
     The default timer is a fast built-in one based on real time.
-    For custom timer functions returning integers, timeunit can
-    be a float specifying a scale (i.e. how long each integer unit
+    For custom timer functions returning integers, 'timeunit' can
+    be a float specifying a scale (that is, how long each integer unit
     is, in seconds).
     """
     def __init__(
@@ -48,28 +49,21 @@ class Profiler:
         ...
     def enable(self, subcalls: bool = True, builtins: bool = True) -> None:
         """
-        enable(subcalls=True, builtins=True)
-
         Start collecting profiling information.
-        If 'subcalls' is True, also records for each function
-        statistics separated according to its current caller.
-        If 'builtins' is True, records the time spent in
-        built-in functions separately from their caller.
+
+        subcalls
+          If True, also records for each function
+          statistics separated according to its current caller.
+        builtins
+          If True, records the time spent in
+          built-in functions separately from their caller.
         """
         ...
     def disable(self) -> None:
-        """
-        disable()
-
-        Stop collecting profiling information.
-        """
+        """Stop collecting profiling information."""
         ...
     def clear(self) -> None:
-        """
-        clear()
-
-        Clear all profiling information collected so far.
-        """
+        """Clear all profiling information collected so far."""
         ...
 
 @final
