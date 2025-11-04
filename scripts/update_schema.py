@@ -116,10 +116,10 @@ def update_property_ref(property_key: str, property_schema: JsonDict, *, relativ
 
 def create_all_property_definitions(pyrightconfig_schema_json: JsonDict) -> None:
     """Modify schema so that there exists an entry in "definitions" for every of "properties"."""
-    for key, definition in pyrightconfig_schema_json['properties'].items():
-        if '$ref' in definition:
+    for key, definition in pyrightconfig_schema_json["properties"].items():
+        if "$ref" in definition:
             continue
-        pyrightconfig_schema_json['definitions'][key] = definition.copy()
+        pyrightconfig_schema_json["definitions"][key] = definition.copy()
         update_property_ref(key, definition, relative=True)
 
 
