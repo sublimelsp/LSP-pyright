@@ -8,7 +8,7 @@ from typing import Any, cast
 import jmespath
 import sublime
 import sublime_plugin
-from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response, WorkspaceFolder
+from LSP.plugin import DottedDict, MarkdownLangMap, Response
 from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
@@ -55,18 +55,6 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
         super().setup()
 
         cls.server_version = cls.parse_server_version()
-
-    @classmethod
-    def can_start(
-        cls,
-        window: sublime.Window,
-        initiating_view: sublime.View,
-        workspace_folders: list[WorkspaceFolder],
-        configuration: ClientConfig,
-    ) -> str | None:
-        if message := super().can_start(window, initiating_view, workspace_folders, configuration):
-            return message
-        return None
 
     def on_settings_changed(self, settings: DottedDict) -> None:
         super().on_settings_changed(settings)
