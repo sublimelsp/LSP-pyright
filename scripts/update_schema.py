@@ -54,6 +54,7 @@ def main() -> None:
 def read_sublime_package_json() -> tuple[JsonDict, JsonDict]:
     with urlopen(PYRIGHT_CONFIGURATION_SCHEMA_URL) as response:
         pyrightconfig_schema_json: JsonDict = json.load(response)
+    create_all_property_definitions(pyrightconfig_schema_json)
     sublime_package_schema_json: JsonDict = json.loads(SUBLIME_PACKAGE_JSON_PATH.read_bytes())
     return (pyrightconfig_schema_json, sublime_package_schema_json)
 
@@ -81,13 +82,13 @@ def update_schema(sublime_package_json: JsonDict, pyrightconfig_schema_json: Jso
         # get last dotted component.
         last_component_key = setting_key.rpartition(".")[2]
         if last_component_key in pyrightconfig_properties:
-            update_property_ref(last_component_key, setting_value, pyrightconfig_properties)
+            update_property_ref(last_component_key, setting_value)
         if setting_key == "python.analysis.diagnosticSeverityOverrides":
             overrides_properties: JsonDict = setting_value["properties"]
             deleted_keys: set[str] = set()
             for override_key, override_value in overrides_properties.items():
                 if override_key in pyrightconfig_properties:
-                    update_property_ref(override_key, override_value, pyrightconfig_properties)
+                    update_property_ref(override_key, override_value)
                 else:
                     deleted_keys.add(override_key)
             for key in deleted_keys:
@@ -108,9 +109,18 @@ def update_schema(sublime_package_json: JsonDict, pyrightconfig_schema_json: Jso
     return new_schema_keys
 
 
-def update_property_ref(property_key: str, property_schema: JsonDict, pyrightconfig_properties: JsonDict) -> None:
+def update_property_ref(property_key: str, property_schema: JsonDict, *, relative: bool = False) -> None:
     property_schema.clear()
-    property_schema["$ref"] = f"{PYRIGHTCONFIG_SCHEMA_ID}#/definitions/{property_key}"
+    property_schema["$ref"] = f"{'' if relative else PYRIGHTCONFIG_SCHEMA_ID}#/definitions/{property_key}"
+
+
+def create_all_property_definitions(pyrightconfig_schema_json: JsonDict) -> None:
+    """Modify schema so that there exists an entry in "definitions" for every of "properties"."""
+    for key, definition in pyrightconfig_schema_json['properties'].items():
+        if '$ref' in definition:
+            continue
+        pyrightconfig_schema_json['definitions'][key] = definition.copy()
+        update_property_ref(key, definition, relative=True)
 
 
 if __name__ == "__main__":
