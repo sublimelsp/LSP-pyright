@@ -466,6 +466,18 @@
               "title": "Analyze and report diagnostics for functions that have no annotations",
               "type": "boolean"
             },
+            "defineConstant": {
+              "additionalProperties": {
+                "title": "Value of constant (boolean or string)",
+                "type": [
+                  "string",
+                  "boolean"
+                ]
+              },
+              "properties": {},
+              "title": "Identifiers that should be treated as constants",
+              "type": "object"
+            },
             "deprecateTypingAliases": {
               "default": false,
               "title": "Treat typing-specific aliases to standard types as deprecated",
@@ -507,6 +519,321 @@
               "title": "Allow \"# type: ignore\" comments",
               "type": "boolean"
             },
+            "exclude": {
+              "items": {
+                "pattern": "^(.*)$",
+                "title": "File or directory to exclude from type analysis",
+                "type": "string"
+              },
+              "title": "Files and directories excluded from type analysis",
+              "type": "array"
+            },
+            "executionEnvironments": {
+              "items": {
+                "properties": {
+                  "analyzeUnannotatedFunctions": {
+                    "$ref": "#/definitions/analyzeUnannotatedFunctions"
+                  },
+                  "deprecateTypingAliases": {
+                    "$ref": "#/definitions/deprecateTypingAliases"
+                  },
+                  "disableBytesTypePromotions": {
+                    "$ref": "#/definitions/disableBytesTypePromotions"
+                  },
+                  "enableExperimentalFeatures": {
+                    "$ref": "#/definitions/enableExperimentalFeatures"
+                  },
+                  "enableReachabilityAnalysis": {
+                    "$ref": "#/definitions/enableReachabilityAnalysis"
+                  },
+                  "enableTypeIgnoreComments": {
+                    "$ref": "#/definitions/enableTypeIgnoreComments"
+                  },
+                  "extraPaths": {
+                    "$ref": "#/definitions/extraPaths"
+                  },
+                  "pythonPlatform": {
+                    "$ref": "#/definitions/pythonPlatform"
+                  },
+                  "pythonVersion": {
+                    "$ref": "#/definitions/pythonVersion"
+                  },
+                  "reportAbstractUsage": {
+                    "$ref": "#/definitions/reportAbstractUsage"
+                  },
+                  "reportArgumentType": {
+                    "$ref": "#/definitions/reportArgumentType"
+                  },
+                  "reportAssertAlwaysTrue": {
+                    "$ref": "#/definitions/reportAssertAlwaysTrue"
+                  },
+                  "reportAssertTypeFailure": {
+                    "$ref": "#/definitions/reportAssertTypeFailure"
+                  },
+                  "reportAssignmentType": {
+                    "$ref": "#/definitions/reportAssignmentType"
+                  },
+                  "reportAttributeAccessIssue": {
+                    "$ref": "#/definitions/reportAttributeAccessIssue"
+                  },
+                  "reportCallInDefaultInitializer": {
+                    "$ref": "#/definitions/reportCallInDefaultInitializer"
+                  },
+                  "reportCallIssue": {
+                    "$ref": "#/definitions/reportCallIssue"
+                  },
+                  "reportConstantRedefinition": {
+                    "$ref": "#/definitions/reportConstantRedefinition"
+                  },
+                  "reportDeprecated": {
+                    "$ref": "#/definitions/reportDeprecated"
+                  },
+                  "reportDuplicateImport": {
+                    "$ref": "#/definitions/reportDuplicateImport"
+                  },
+                  "reportFunctionMemberAccess": {
+                    "$ref": "#/definitions/reportFunctionMemberAccess"
+                  },
+                  "reportGeneralTypeIssues": {
+                    "$ref": "#/definitions/reportGeneralTypeIssues"
+                  },
+                  "reportImplicitOverride": {
+                    "$ref": "#/definitions/reportImplicitOverride"
+                  },
+                  "reportImplicitStringConcatenation": {
+                    "$ref": "#/definitions/reportImplicitStringConcatenation"
+                  },
+                  "reportImportCycles": {
+                    "$ref": "#/definitions/reportImportCycles"
+                  },
+                  "reportIncompatibleMethodOverride": {
+                    "$ref": "#/definitions/reportIncompatibleMethodOverride"
+                  },
+                  "reportIncompatibleVariableOverride": {
+                    "$ref": "#/definitions/reportIncompatibleVariableOverride"
+                  },
+                  "reportIncompleteStub": {
+                    "$ref": "#/definitions/reportIncompleteStub"
+                  },
+                  "reportInconsistentConstructor": {
+                    "$ref": "#/definitions/reportInconsistentConstructor"
+                  },
+                  "reportInconsistentOverload": {
+                    "$ref": "#/definitions/reportInconsistentOverload"
+                  },
+                  "reportIndexIssue": {
+                    "$ref": "#/definitions/reportIndexIssue"
+                  },
+                  "reportInvalidStringEscapeSequence": {
+                    "$ref": "#/definitions/reportInvalidStringEscapeSequence"
+                  },
+                  "reportInvalidStubStatement": {
+                    "$ref": "#/definitions/reportInvalidStubStatement"
+                  },
+                  "reportInvalidTypeArguments": {
+                    "$ref": "#/definitions/reportInvalidTypeArguments"
+                  },
+                  "reportInvalidTypeForm": {
+                    "$ref": "#/definitions/reportInvalidTypeForm"
+                  },
+                  "reportInvalidTypeVarUse": {
+                    "$ref": "#/definitions/reportInvalidTypeVarUse"
+                  },
+                  "reportMatchNotExhaustive": {
+                    "$ref": "#/definitions/reportMatchNotExhaustive"
+                  },
+                  "reportMissingImports": {
+                    "$ref": "#/definitions/reportMissingImports"
+                  },
+                  "reportMissingModuleSource": {
+                    "$ref": "#/definitions/reportMissingModuleSource"
+                  },
+                  "reportMissingParameterType": {
+                    "$ref": "#/definitions/reportMissingParameterType"
+                  },
+                  "reportMissingSuperCall": {
+                    "$ref": "#/definitions/reportMissingSuperCall"
+                  },
+                  "reportMissingTypeArgument": {
+                    "$ref": "#/definitions/reportMissingTypeArgument"
+                  },
+                  "reportMissingTypeStubs": {
+                    "$ref": "#/definitions/reportMissingTypeStubs"
+                  },
+                  "reportNoOverloadImplementation": {
+                    "$ref": "#/definitions/reportNoOverloadImplementation"
+                  },
+                  "reportOperatorIssue": {
+                    "$ref": "#/definitions/reportOperatorIssue"
+                  },
+                  "reportOptionalCall": {
+                    "$ref": "#/definitions/reportOptionalCall"
+                  },
+                  "reportOptionalContextManager": {
+                    "$ref": "#/definitions/reportOptionalContextManager"
+                  },
+                  "reportOptionalIterable": {
+                    "$ref": "#/definitions/reportOptionalIterable"
+                  },
+                  "reportOptionalMemberAccess": {
+                    "$ref": "#/definitions/reportOptionalMemberAccess"
+                  },
+                  "reportOptionalOperand": {
+                    "$ref": "#/definitions/reportOptionalOperand"
+                  },
+                  "reportOptionalSubscript": {
+                    "$ref": "#/definitions/reportOptionalSubscript"
+                  },
+                  "reportOverlappingOverload": {
+                    "$ref": "#/definitions/reportOverlappingOverload"
+                  },
+                  "reportPossiblyUnboundVariable": {
+                    "$ref": "#/definitions/reportPossiblyUnboundVariable"
+                  },
+                  "reportPrivateImportUsage": {
+                    "$ref": "#/definitions/reportPrivateImportUsage"
+                  },
+                  "reportPrivateUsage": {
+                    "$ref": "#/definitions/reportPrivateUsage"
+                  },
+                  "reportPropertyTypeMismatch": {
+                    "$ref": "#/definitions/reportPropertyTypeMismatch"
+                  },
+                  "reportRedeclaration": {
+                    "$ref": "#/definitions/reportRedeclaration"
+                  },
+                  "reportReturnType": {
+                    "$ref": "#/definitions/reportReturnType"
+                  },
+                  "reportSelfClsParameterName": {
+                    "$ref": "#/definitions/reportSelfClsParameterName"
+                  },
+                  "reportTypeCommentUsage": {
+                    "$ref": "#/definitions/reportTypeCommentUsage"
+                  },
+                  "reportTypedDictNotRequiredAccess": {
+                    "$ref": "#/definitions/reportTypedDictNotRequiredAccess"
+                  },
+                  "reportUnboundVariable": {
+                    "$ref": "#/definitions/reportUnboundVariable"
+                  },
+                  "reportUndefinedVariable": {
+                    "$ref": "#/definitions/reportUndefinedVariable"
+                  },
+                  "reportUnhashable": {
+                    "$ref": "#/definitions/reportUnhashable"
+                  },
+                  "reportUninitializedInstanceVariable": {
+                    "$ref": "#/definitions/reportUninitializedInstanceVariable"
+                  },
+                  "reportUnknownArgumentType": {
+                    "$ref": "#/definitions/reportUnknownArgumentType"
+                  },
+                  "reportUnknownLambdaType": {
+                    "$ref": "#/definitions/reportUnknownLambdaType"
+                  },
+                  "reportUnknownMemberType": {
+                    "$ref": "#/definitions/reportUnknownMemberType"
+                  },
+                  "reportUnknownParameterType": {
+                    "$ref": "#/definitions/reportUnknownParameterType"
+                  },
+                  "reportUnknownVariableType": {
+                    "$ref": "#/definitions/reportUnknownVariableType"
+                  },
+                  "reportUnnecessaryCast": {
+                    "$ref": "#/definitions/reportUnnecessaryCast"
+                  },
+                  "reportUnnecessaryComparison": {
+                    "$ref": "#/definitions/reportUnnecessaryComparison"
+                  },
+                  "reportUnnecessaryContains": {
+                    "$ref": "#/definitions/reportUnnecessaryContains"
+                  },
+                  "reportUnnecessaryIsInstance": {
+                    "$ref": "#/definitions/reportUnnecessaryIsInstance"
+                  },
+                  "reportUnnecessaryTypeIgnoreComment": {
+                    "$ref": "#/definitions/reportUnnecessaryTypeIgnoreComment"
+                  },
+                  "reportUnreachable": {
+                    "$ref": "#/definitions/reportUnreachable"
+                  },
+                  "reportUnsupportedDunderAll": {
+                    "$ref": "#/definitions/reportUnsupportedDunderAll"
+                  },
+                  "reportUntypedBaseClass": {
+                    "$ref": "#/definitions/reportUntypedBaseClass"
+                  },
+                  "reportUntypedClassDecorator": {
+                    "$ref": "#/definitions/reportUntypedClassDecorator"
+                  },
+                  "reportUntypedFunctionDecorator": {
+                    "$ref": "#/definitions/reportUntypedFunctionDecorator"
+                  },
+                  "reportUntypedNamedTuple": {
+                    "$ref": "#/definitions/reportUntypedNamedTuple"
+                  },
+                  "reportUnusedCallResult": {
+                    "$ref": "#/definitions/reportUnusedCallResult"
+                  },
+                  "reportUnusedClass": {
+                    "$ref": "#/definitions/reportUnusedClass"
+                  },
+                  "reportUnusedCoroutine": {
+                    "$ref": "#/definitions/reportUnusedCoroutine"
+                  },
+                  "reportUnusedExcept": {
+                    "$ref": "#/definitions/reportUnusedExcept"
+                  },
+                  "reportUnusedExpression": {
+                    "$ref": "#/definitions/reportUnusedExpression"
+                  },
+                  "reportUnusedFunction": {
+                    "$ref": "#/definitions/reportUnusedFunction"
+                  },
+                  "reportUnusedImport": {
+                    "$ref": "#/definitions/reportUnusedImport"
+                  },
+                  "reportUnusedVariable": {
+                    "$ref": "#/definitions/reportUnusedVariable"
+                  },
+                  "reportWildcardImportFromLibrary": {
+                    "$ref": "#/definitions/reportWildcardImportFromLibrary"
+                  },
+                  "root": {
+                    "default": "",
+                    "pattern": "^(.*)$",
+                    "title": "Path to code subdirectory to which these settings apply",
+                    "type": "string"
+                  },
+                  "strictDictionaryInference": {
+                    "$ref": "#/definitions/strictDictionaryInference"
+                  },
+                  "strictListInference": {
+                    "$ref": "#/definitions/strictListInference"
+                  },
+                  "strictParameterNoneValue": {
+                    "$ref": "#/definitions/strictParameterNoneValue"
+                  },
+                  "strictSetInference": {
+                    "$ref": "#/definitions/strictSetInference"
+                  }
+                },
+                "required": [
+                  "root"
+                ],
+                "title": "Analysis settings to use for specified subdirectories of code",
+                "type": "object"
+              },
+              "title": "Analysis settings to use for specified subdirectories of code",
+              "type": "array"
+            },
+            "extends": {
+              "pattern": "^(.*)$",
+              "title": "Path to configuration file that this configuration extends",
+              "type": "string"
+            },
             "extraPaths": {
               "items": {
                 "default": "",
@@ -515,6 +842,24 @@
                 "type": "string"
               },
               "title": "Additional import search resolution paths",
+              "type": "array"
+            },
+            "ignore": {
+              "items": {
+                "pattern": "^(.*)$",
+                "title": "File or directory where diagnostics should be suppressed",
+                "type": "string"
+              },
+              "title": "Files and directories whose diagnostics are suppressed",
+              "type": "array"
+            },
+            "include": {
+              "items": {
+                "pattern": "^(.*)$",
+                "title": "File or directory to include in type analysis",
+                "type": "string"
+              },
+              "title": "Files and directories included in type analysis",
               "type": "array"
             },
             "pythonPlatform": {
@@ -940,6 +1285,15 @@
               "default": "warning",
               "title": "Controls reporting of wildcard import from external library"
             },
+            "strict": {
+              "items": {
+                "pattern": "^(.*)$",
+                "title": "File or directory that should use 'strict' type checking rules",
+                "type": "string"
+              },
+              "title": "Files and directories that should use 'strict' type checking rules",
+              "type": "array"
+            },
             "strictDictionaryInference": {
               "default": false,
               "title": "Infer strict types for dictionary expressions",
@@ -959,6 +1313,57 @@
               "default": false,
               "title": "Infer strict types for set expressions",
               "type": "boolean"
+            },
+            "stubPath": {
+              "default": "./typings",
+              "examples": [
+                "src/typestubs"
+              ],
+              "pattern": "^(.*)$",
+              "title": "Path to directory containing custom type stub files",
+              "type": "string"
+            },
+            "typeCheckingMode": {
+              "default": "standard",
+              "enum": [
+                "off",
+                "basic",
+                "standard",
+                "strict"
+              ],
+              "title": "Specifies the default rule set to use for type checking",
+              "type": "string"
+            },
+            "typeshedPath": {
+              "default": "",
+              "pattern": "^(.*)$",
+              "title": "Path to directory containing typeshed type stub files",
+              "type": "string"
+            },
+            "useLibraryCodeForTypes": {
+              "default": true,
+              "title": "Use library implementations to extract type information when type stub is not present",
+              "type": "boolean"
+            },
+            "venv": {
+              "default": "",
+              "examples": [
+                "python37"
+              ],
+              "pattern": "^(.*)$",
+              "title": "Name of virtual environment subdirectory within venvPath",
+              "type": "string"
+            },
+            "venvPath": {
+              "default": "",
+              "pattern": "^(.*)$",
+              "title": "Path to directory containing a folder of virtual environments",
+              "type": "string"
+            },
+            "verboseOutput": {
+              "default": false,
+              "title": "Output verbose logging",
+              "type": "boolean"
             }
           },
           "description": "Pyright Configuration Schema",
@@ -967,16 +1372,7 @@
               "$ref": "#/definitions/analyzeUnannotatedFunctions"
             },
             "defineConstant": {
-              "additionalProperties": {
-                "title": "Value of constant (boolean or string)",
-                "type": [
-                  "string",
-                  "boolean"
-                ]
-              },
-              "properties": {},
-              "title": "Identifiers that should be treated as constants",
-              "type": "object"
+              "$ref": "#/definitions/defineConstant"
             },
             "deprecateTypingAliases": {
               "$ref": "#/definitions/deprecateTypingAliases"
@@ -994,340 +1390,22 @@
               "$ref": "#/definitions/enableTypeIgnoreComments"
             },
             "exclude": {
-              "items": {
-                "pattern": "^(.*)$",
-                "title": "File or directory to exclude from type analysis",
-                "type": "string"
-              },
-              "title": "Files and directories excluded from type analysis",
-              "type": "array"
+              "$ref": "#/definitions/exclude"
             },
             "executionEnvironments": {
-              "items": {
-                "properties": {
-                  "analyzeUnannotatedFunctions": {
-                    "$ref": "#/definitions/analyzeUnannotatedFunctions"
-                  },
-                  "deprecateTypingAliases": {
-                    "$ref": "#/definitions/deprecateTypingAliases"
-                  },
-                  "disableBytesTypePromotions": {
-                    "$ref": "#/definitions/disableBytesTypePromotions"
-                  },
-                  "enableExperimentalFeatures": {
-                    "$ref": "#/definitions/enableExperimentalFeatures"
-                  },
-                  "enableReachabilityAnalysis": {
-                    "$ref": "#/definitions/enableReachabilityAnalysis"
-                  },
-                  "enableTypeIgnoreComments": {
-                    "$ref": "#/definitions/enableTypeIgnoreComments"
-                  },
-                  "extraPaths": {
-                    "$ref": "#/definitions/extraPaths"
-                  },
-                  "pythonPlatform": {
-                    "$ref": "#/definitions/pythonPlatform"
-                  },
-                  "pythonVersion": {
-                    "$ref": "#/definitions/pythonVersion"
-                  },
-                  "reportAbstractUsage": {
-                    "$ref": "#/definitions/reportAbstractUsage"
-                  },
-                  "reportArgumentType": {
-                    "$ref": "#/definitions/reportArgumentType"
-                  },
-                  "reportAssertAlwaysTrue": {
-                    "$ref": "#/definitions/reportAssertAlwaysTrue"
-                  },
-                  "reportAssertTypeFailure": {
-                    "$ref": "#/definitions/reportAssertTypeFailure"
-                  },
-                  "reportAssignmentType": {
-                    "$ref": "#/definitions/reportAssignmentType"
-                  },
-                  "reportAttributeAccessIssue": {
-                    "$ref": "#/definitions/reportAttributeAccessIssue"
-                  },
-                  "reportCallInDefaultInitializer": {
-                    "$ref": "#/definitions/reportCallInDefaultInitializer"
-                  },
-                  "reportCallIssue": {
-                    "$ref": "#/definitions/reportCallIssue"
-                  },
-                  "reportConstantRedefinition": {
-                    "$ref": "#/definitions/reportConstantRedefinition"
-                  },
-                  "reportDeprecated": {
-                    "$ref": "#/definitions/reportDeprecated"
-                  },
-                  "reportDuplicateImport": {
-                    "$ref": "#/definitions/reportDuplicateImport"
-                  },
-                  "reportFunctionMemberAccess": {
-                    "$ref": "#/definitions/reportFunctionMemberAccess"
-                  },
-                  "reportGeneralTypeIssues": {
-                    "$ref": "#/definitions/reportGeneralTypeIssues"
-                  },
-                  "reportImplicitOverride": {
-                    "$ref": "#/definitions/reportImplicitOverride"
-                  },
-                  "reportImplicitStringConcatenation": {
-                    "$ref": "#/definitions/reportImplicitStringConcatenation"
-                  },
-                  "reportImportCycles": {
-                    "$ref": "#/definitions/reportImportCycles"
-                  },
-                  "reportIncompatibleMethodOverride": {
-                    "$ref": "#/definitions/reportIncompatibleMethodOverride"
-                  },
-                  "reportIncompatibleVariableOverride": {
-                    "$ref": "#/definitions/reportIncompatibleVariableOverride"
-                  },
-                  "reportIncompleteStub": {
-                    "$ref": "#/definitions/reportIncompleteStub"
-                  },
-                  "reportInconsistentConstructor": {
-                    "$ref": "#/definitions/reportInconsistentConstructor"
-                  },
-                  "reportInconsistentOverload": {
-                    "$ref": "#/definitions/reportInconsistentOverload"
-                  },
-                  "reportIndexIssue": {
-                    "$ref": "#/definitions/reportIndexIssue"
-                  },
-                  "reportInvalidStringEscapeSequence": {
-                    "$ref": "#/definitions/reportInvalidStringEscapeSequence"
-                  },
-                  "reportInvalidStubStatement": {
-                    "$ref": "#/definitions/reportInvalidStubStatement"
-                  },
-                  "reportInvalidTypeArguments": {
-                    "$ref": "#/definitions/reportInvalidTypeArguments"
-                  },
-                  "reportInvalidTypeForm": {
-                    "$ref": "#/definitions/reportInvalidTypeForm"
-                  },
-                  "reportInvalidTypeVarUse": {
-                    "$ref": "#/definitions/reportInvalidTypeVarUse"
-                  },
-                  "reportMatchNotExhaustive": {
-                    "$ref": "#/definitions/reportMatchNotExhaustive"
-                  },
-                  "reportMissingImports": {
-                    "$ref": "#/definitions/reportMissingImports"
-                  },
-                  "reportMissingModuleSource": {
-                    "$ref": "#/definitions/reportMissingModuleSource"
-                  },
-                  "reportMissingParameterType": {
-                    "$ref": "#/definitions/reportMissingParameterType"
-                  },
-                  "reportMissingSuperCall": {
-                    "$ref": "#/definitions/reportMissingSuperCall"
-                  },
-                  "reportMissingTypeArgument": {
-                    "$ref": "#/definitions/reportMissingTypeArgument"
-                  },
-                  "reportMissingTypeStubs": {
-                    "$ref": "#/definitions/reportMissingTypeStubs"
-                  },
-                  "reportNoOverloadImplementation": {
-                    "$ref": "#/definitions/reportNoOverloadImplementation"
-                  },
-                  "reportOperatorIssue": {
-                    "$ref": "#/definitions/reportOperatorIssue"
-                  },
-                  "reportOptionalCall": {
-                    "$ref": "#/definitions/reportOptionalCall"
-                  },
-                  "reportOptionalContextManager": {
-                    "$ref": "#/definitions/reportOptionalContextManager"
-                  },
-                  "reportOptionalIterable": {
-                    "$ref": "#/definitions/reportOptionalIterable"
-                  },
-                  "reportOptionalMemberAccess": {
-                    "$ref": "#/definitions/reportOptionalMemberAccess"
-                  },
-                  "reportOptionalOperand": {
-                    "$ref": "#/definitions/reportOptionalOperand"
-                  },
-                  "reportOptionalSubscript": {
-                    "$ref": "#/definitions/reportOptionalSubscript"
-                  },
-                  "reportOverlappingOverload": {
-                    "$ref": "#/definitions/reportOverlappingOverload"
-                  },
-                  "reportPossiblyUnboundVariable": {
-                    "$ref": "#/definitions/reportPossiblyUnboundVariable"
-                  },
-                  "reportPrivateImportUsage": {
-                    "$ref": "#/definitions/reportPrivateImportUsage"
-                  },
-                  "reportPrivateUsage": {
-                    "$ref": "#/definitions/reportPrivateUsage"
-                  },
-                  "reportPropertyTypeMismatch": {
-                    "$ref": "#/definitions/reportPropertyTypeMismatch"
-                  },
-                  "reportRedeclaration": {
-                    "$ref": "#/definitions/reportRedeclaration"
-                  },
-                  "reportReturnType": {
-                    "$ref": "#/definitions/reportReturnType"
-                  },
-                  "reportSelfClsParameterName": {
-                    "$ref": "#/definitions/reportSelfClsParameterName"
-                  },
-                  "reportTypeCommentUsage": {
-                    "$ref": "#/definitions/reportTypeCommentUsage"
-                  },
-                  "reportTypedDictNotRequiredAccess": {
-                    "$ref": "#/definitions/reportTypedDictNotRequiredAccess"
-                  },
-                  "reportUnboundVariable": {
-                    "$ref": "#/definitions/reportUnboundVariable"
-                  },
-                  "reportUndefinedVariable": {
-                    "$ref": "#/definitions/reportUndefinedVariable"
-                  },
-                  "reportUnhashable": {
-                    "$ref": "#/definitions/reportUnhashable"
-                  },
-                  "reportUninitializedInstanceVariable": {
-                    "$ref": "#/definitions/reportUninitializedInstanceVariable"
-                  },
-                  "reportUnknownArgumentType": {
-                    "$ref": "#/definitions/reportUnknownArgumentType"
-                  },
-                  "reportUnknownLambdaType": {
-                    "$ref": "#/definitions/reportUnknownLambdaType"
-                  },
-                  "reportUnknownMemberType": {
-                    "$ref": "#/definitions/reportUnknownMemberType"
-                  },
-                  "reportUnknownParameterType": {
-                    "$ref": "#/definitions/reportUnknownParameterType"
-                  },
-                  "reportUnknownVariableType": {
-                    "$ref": "#/definitions/reportUnknownVariableType"
-                  },
-                  "reportUnnecessaryCast": {
-                    "$ref": "#/definitions/reportUnnecessaryCast"
-                  },
-                  "reportUnnecessaryComparison": {
-                    "$ref": "#/definitions/reportUnnecessaryComparison"
-                  },
-                  "reportUnnecessaryContains": {
-                    "$ref": "#/definitions/reportUnnecessaryContains"
-                  },
-                  "reportUnnecessaryIsInstance": {
-                    "$ref": "#/definitions/reportUnnecessaryIsInstance"
-                  },
-                  "reportUnnecessaryTypeIgnoreComment": {
-                    "$ref": "#/definitions/reportUnnecessaryTypeIgnoreComment"
-                  },
-                  "reportUnreachable": {
-                    "$ref": "#/definitions/reportUnreachable"
-                  },
-                  "reportUnsupportedDunderAll": {
-                    "$ref": "#/definitions/reportUnsupportedDunderAll"
-                  },
-                  "reportUntypedBaseClass": {
-                    "$ref": "#/definitions/reportUntypedBaseClass"
-                  },
-                  "reportUntypedClassDecorator": {
-                    "$ref": "#/definitions/reportUntypedClassDecorator"
-                  },
-                  "reportUntypedFunctionDecorator": {
-                    "$ref": "#/definitions/reportUntypedFunctionDecorator"
-                  },
-                  "reportUntypedNamedTuple": {
-                    "$ref": "#/definitions/reportUntypedNamedTuple"
-                  },
-                  "reportUnusedCallResult": {
-                    "$ref": "#/definitions/reportUnusedCallResult"
-                  },
-                  "reportUnusedClass": {
-                    "$ref": "#/definitions/reportUnusedClass"
-                  },
-                  "reportUnusedCoroutine": {
-                    "$ref": "#/definitions/reportUnusedCoroutine"
-                  },
-                  "reportUnusedExcept": {
-                    "$ref": "#/definitions/reportUnusedExcept"
-                  },
-                  "reportUnusedExpression": {
-                    "$ref": "#/definitions/reportUnusedExpression"
-                  },
-                  "reportUnusedFunction": {
-                    "$ref": "#/definitions/reportUnusedFunction"
-                  },
-                  "reportUnusedImport": {
-                    "$ref": "#/definitions/reportUnusedImport"
-                  },
-                  "reportUnusedVariable": {
-                    "$ref": "#/definitions/reportUnusedVariable"
-                  },
-                  "reportWildcardImportFromLibrary": {
-                    "$ref": "#/definitions/reportWildcardImportFromLibrary"
-                  },
-                  "root": {
-                    "default": "",
-                    "pattern": "^(.*)$",
-                    "title": "Path to code subdirectory to which these settings apply",
-                    "type": "string"
-                  },
-                  "strictDictionaryInference": {
-                    "$ref": "#/definitions/strictDictionaryInference"
-                  },
-                  "strictListInference": {
-                    "$ref": "#/definitions/strictListInference"
-                  },
-                  "strictParameterNoneValue": {
-                    "$ref": "#/definitions/strictParameterNoneValue"
-                  },
-                  "strictSetInference": {
-                    "$ref": "#/definitions/strictSetInference"
-                  }
-                },
-                "required": [
-                  "root"
-                ],
-                "title": "Analysis settings to use for specified subdirectories of code",
-                "type": "object"
-              },
-              "title": "Analysis settings to use for specified subdirectories of code",
-              "type": "array"
+              "$ref": "#/definitions/executionEnvironments"
             },
             "extends": {
-              "pattern": "^(.*)$",
-              "title": "Path to configuration file that this configuration extends",
-              "type": "string"
+              "$ref": "#/definitions/extends"
             },
             "extraPaths": {
               "$ref": "#/definitions/extraPaths"
             },
             "ignore": {
-              "items": {
-                "pattern": "^(.*)$",
-                "title": "File or directory where diagnostics should be suppressed",
-                "type": "string"
-              },
-              "title": "Files and directories whose diagnostics are suppressed",
-              "type": "array"
+              "$ref": "#/definitions/ignore"
             },
             "include": {
-              "items": {
-                "pattern": "^(.*)$",
-                "title": "File or directory to include in type analysis",
-                "type": "string"
-              },
-              "title": "Files and directories included in type analysis",
-              "type": "array"
+              "$ref": "#/definitions/include"
             },
             "pythonPlatform": {
               "$ref": "#/definitions/pythonPlatform"
@@ -1579,13 +1657,7 @@
               "$ref": "#/definitions/reportWildcardImportFromLibrary"
             },
             "strict": {
-              "items": {
-                "pattern": "^(.*)$",
-                "title": "File or directory that should use 'strict' type checking rules",
-                "type": "string"
-              },
-              "title": "Files and directories that should use 'strict' type checking rules",
-              "type": "array"
+              "$ref": "#/definitions/strict"
             },
             "strictDictionaryInference": {
               "$ref": "#/definitions/strictDictionaryInference"
@@ -1600,55 +1672,25 @@
               "$ref": "#/definitions/strictSetInference"
             },
             "stubPath": {
-              "default": "./typings",
-              "examples": [
-                "src/typestubs"
-              ],
-              "pattern": "^(.*)$",
-              "title": "Path to directory containing custom type stub files",
-              "type": "string"
+              "$ref": "#/definitions/stubPath"
             },
             "typeCheckingMode": {
-              "default": "standard",
-              "enum": [
-                "off",
-                "basic",
-                "standard",
-                "strict"
-              ],
-              "title": "Specifies the default rule set to use for type checking",
-              "type": "string"
+              "$ref": "#/definitions/typeCheckingMode"
             },
             "typeshedPath": {
-              "default": "",
-              "pattern": "^(.*)$",
-              "title": "Path to directory containing typeshed type stub files",
-              "type": "string"
+              "$ref": "#/definitions/typeshedPath"
             },
             "useLibraryCodeForTypes": {
-              "default": true,
-              "title": "Use library implementations to extract type information when type stub is not present",
-              "type": "boolean"
+              "$ref": "#/definitions/useLibraryCodeForTypes"
             },
             "venv": {
-              "default": "",
-              "examples": [
-                "python37"
-              ],
-              "pattern": "^(.*)$",
-              "title": "Name of virtual environment subdirectory within venvPath",
-              "type": "string"
+              "$ref": "#/definitions/venv"
             },
             "venvPath": {
-              "default": "",
-              "pattern": "^(.*)$",
-              "title": "Path to directory containing a folder of virtual environments",
-              "type": "string"
+              "$ref": "#/definitions/venvPath"
             },
             "verboseOutput": {
-              "default": false,
-              "title": "Output verbose logging",
-              "type": "boolean"
+              "$ref": "#/definitions/verboseOutput"
             }
           },
           "type": "object"
