@@ -29,6 +29,7 @@
                         "sublime_text",
                         "sublime_text_33",
                         "sublime_text_38",
+                        "sublime_text_313",
                         "blender",
                         "gdb"
                       ],
@@ -37,6 +38,7 @@
                         "Suitable for people who are developing ST python plugins. The Python version which the developed plugin runs on will be used. - `sys.path` from the plugin_host will be added into \"python.analysis.extraPaths\" so that ST package dependencies can be resolved by the LSP server.",
                         "Similar to \"sublime_text\" but Python 3.3 forced.",
                         "Similar to \"sublime_text\" but Python 3.8 forced.",
+                        "Similar to \"sublime_text\" but Python 3.13 forced.",
                         "Suitable for people who are developing Blender add-ons. `sys.path` from Blender's embedded Python interpreter will be added into \"python.analysis.extraPaths\". Note that this requires invoking Blender, headless, to query the additional Python paths. The setting \"pyright.dev_environment_blender.binary\" controls which executable to call to invoke Blender.",
                         "Suitable for people who are developing GDB automation scripts. `sys.path` from GDB's embedded Python interpreter will be added into \"python.analysis.extraPaths\". Note that this requires invoking GDB, in batch mode, to query the additional Python paths. The setting \"pyright.dev_environment_gdb.binary\" controls which exectuable to call to invoke GDB."
                       ]
