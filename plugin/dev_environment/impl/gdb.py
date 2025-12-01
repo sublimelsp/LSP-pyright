@@ -11,6 +11,10 @@ from ..interfaces import BaseDevEnvironmentHandler
 
 
 class GdbDevEnvironmentHandler(BaseDevEnvironmentHandler):
+    @classmethod
+    def name(cls) -> str:
+        return "gdb"
+
     def handle_(self, *, settings: DottedDict) -> None:
         self._inject_extra_paths(settings=settings, paths=self.find_paths(settings))
 

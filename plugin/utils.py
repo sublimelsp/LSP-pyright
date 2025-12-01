@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 import os
+import re
 import subprocess
 import sys
 from collections.abc import Generator, Iterable
@@ -14,8 +15,10 @@ _T = TypeVar("_T")
 
 
 def camel_to_snake(s: str) -> str:
-    """Converts "CamelCase" to "snake_case"."""
-    return "".join((f"_{c}" if c.isupper() else c) for c in s).strip("_").lower()
+    """Converts "CamelCase33" to "snake_case_33"."""
+    s = re.sub(r"([A-Z])", r"_\1", s)
+    s = re.sub(r"([a-zA-Z])(?=\d)", r"\1_", s)
+    return s.lower().lstrip("_")
 
 
 def snake_to_camel(s: str, *, upper_first: bool = True) -> str:

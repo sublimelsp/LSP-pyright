@@ -9,7 +9,6 @@ from more_itertools import unique_everseen
 
 from ..constants import SERVER_SETTING_ANALYSIS_EXTRAPATHS, SERVER_SETTING_DEV_ENVIRONMENT
 from ..log import log_debug
-from ..utils import camel_to_snake, remove_suffix
 
 
 class BaseDevEnvironmentHandler(ABC):
@@ -20,9 +19,9 @@ class BaseDevEnvironmentHandler(ABC):
         """The workspace folders."""
 
     @classmethod
+    @abstractmethod
     def name(cls) -> str:
         """The name of this environment."""
-        return camel_to_snake(remove_suffix(cls.__name__, "DevEnvironmentHandler"))
 
     @final
     @classmethod

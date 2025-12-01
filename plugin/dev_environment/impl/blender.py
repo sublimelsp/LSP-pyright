@@ -11,6 +11,10 @@ from ..interfaces import BaseDevEnvironmentHandler
 
 
 class BlenderDevEnvironmentHandler(BaseDevEnvironmentHandler):
+    @classmethod
+    def name(cls) -> str:
+        return "blender"
+
     def handle_(self, *, settings: DottedDict) -> None:
         self._inject_extra_paths(settings=settings, paths=self.find_paths(settings))
 
