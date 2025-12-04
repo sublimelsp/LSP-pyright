@@ -37,7 +37,11 @@ class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, A
 
     @classmethod
     def can_support(cls, dev_environment: str) -> bool:
-        return super().can_support(dev_environment) and cls.is_available()
+        if not (cls.is_available() and dev_environment.startswith("sublime_text_")):
+            return False
+        wanted_version_no_dot = dev_environment.rpartition("_")[2]
+        wanted_version = (int(wanted_version_no_dot[0]), int(wanted_version_no_dot[1:]))
+        return cls.python_version >= wanted_version
 
     def handle_(self, *, settings: DottedDict) -> None:
         self._inject_extra_paths(settings=settings, paths=self.find_package_dependency_dirs())

@@ -69,6 +69,11 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
                 server_dir=server_dir,
                 workspace_folders=tuple(map(str, session.get_workspace_folders())),
             ):
+                if dev_environment.startswith("sublime_text_") and handler.name() != dev_environment:
+                    log_warning(
+                        f'Development environment "{dev_environment}" is unsupported. '
+                        f'Using "{handler.name()}" instead.',
+                    )
                 handler.handle(settings=settings)
         except Exception as ex:
             log_error(f'Failed to update extra paths for dev environment "{dev_environment}": {ex}')
