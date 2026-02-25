@@ -8,8 +8,8 @@ from typing import Any, cast
 import jmespath
 import sublime
 import sublime_plugin
-from LSP.plugin import DottedDict, MarkdownLangMap, Response
-from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
+from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response
+from LSP.protocol import CompletionItem, Hover, SignatureHelp
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
 
@@ -41,13 +41,13 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
         """
         return ">=14.18.0"
 
+    @override
     @classmethod
-    def should_ignore(cls, view: sublime.View) -> bool:
+    def is_applicable(cls, view: sublime.View, config: ClientConfig) -> bool:
         return bool(
-            # SublimeREPL views
-            view.settings().get("repl")
-            # syntax test files
-            or os.path.basename(view.file_name() or "").startswith("syntax_test")
+            super().is_applicable(view, config)
+            # REPL views (https://github.com/sublimelsp/LSP-pyright/issues/343)
+            and not view.settings().get("repl")
         )
 
     @classmethod
