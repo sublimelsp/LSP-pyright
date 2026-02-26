@@ -160,7 +160,8 @@ class CondaVenvInfo(BaseVenvInfo):
 
         self.prompt = conda_info.get("active_prefix_name", "")
         self.python_version = (
-            conda_info.get("python_version", "")
+            conda_info
+            .get("python_version", "")
             .replace(".alpha.", "a")
             .replace(".beta.", "b")
             .replace(".candidate.", "rc")

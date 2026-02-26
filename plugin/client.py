@@ -4,7 +4,6 @@ import json
 import os
 import re
 from typing import Any, cast
-from typing_extensions import override
 
 import jmespath
 import sublime
@@ -13,6 +12,7 @@ from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response
 from LSP.protocol import CompletionItem, Hover, SignatureHelp
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
+from typing_extensions import override
 
 from .constants import PACKAGE_NAME, SERVER_SETTING_DEV_ENVIRONMENT
 from .dev_environment.helpers import get_dev_environment_handler
