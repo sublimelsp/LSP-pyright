@@ -8,10 +8,11 @@ from typing import Any, cast
 import jmespath
 import sublime
 import sublime_plugin
-from LSP.plugin import DottedDict, MarkdownLangMap, Response
-from LSP.plugin.core.protocol import CompletionItem, Hover, SignatureHelp
+from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response
+from LSP.protocol import CompletionItem, Hover, SignatureHelp
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
+from typing_extensions import override
 
 from .constants import PACKAGE_NAME, SERVER_SETTING_DEV_ENVIRONMENT
 from .dev_environment.helpers import get_dev_environment_handler
@@ -33,6 +34,7 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
     server_directory = "language-server"
     server_binary_path = os.path.join(server_directory, "node_modules", "pyright", "langserver.index.js")
 
+    @override
     @classmethod
     def required_node_version(cls) -> str:
         """
@@ -41,21 +43,23 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
         """
         return ">=14.18.0"
 
+    @override
     @classmethod
-    def should_ignore(cls, view: sublime.View) -> bool:
+    def is_applicable(cls, view: sublime.View, config: ClientConfig) -> bool:
         return bool(
-            # SublimeREPL views
-            view.settings().get("repl")
-            # syntax test files
-            or os.path.basename(view.file_name() or "").startswith("syntax_test")
+            super().is_applicable(view, config)
+            # REPL views (https://github.com/sublimelsp/LSP-pyright/issues/343)
+            and not view.settings().get("repl")
         )
 
+    @override
     @classmethod
     def setup(cls) -> None:
         super().setup()
 
         cls.server_version = cls.parse_server_version()
 
+    @override
     def on_settings_changed(self, settings: DottedDict) -> None:
         super().on_settings_changed(settings)
 
@@ -78,15 +82,18 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
         except Exception as ex:
             log_error(f'Failed to update extra paths for dev environment "{dev_environment}": {ex}')
 
+    @override
     @classmethod
     def install_or_update(cls) -> None:
         super().install_or_update()
         cls.copy_overwrite_dirs()
 
+    @override
     @classmethod
     def markdown_language_id_to_st_syntax_map(cls) -> MarkdownLangMap | None:
         return {"pyright_python": (("pyright_python",), ("LSP-pyright/syntaxes/pyright",))}
 
+    @override
     def on_server_response_async(self, method: str, response: Response) -> None:
         if method == "textDocument/hover" and isinstance(response.result, dict):
             hover = cast(Hover, response.result)
@@ -112,6 +119,7 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
                         documentation["value"] = self.patch_markdown_content(documentation["value"])
             return
 
+    @override
     def on_workspace_configuration(self, params: Any, configuration: dict[str, Any]) -> dict[str, Any]:
         if not ((session := self.weaksession()) and (params.get("section") == "python")):
             return configuration
