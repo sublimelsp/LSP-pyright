@@ -4,6 +4,7 @@ import json
 import os
 import re
 from typing import Any, cast
+from typing_extensions import override
 
 import jmespath
 import sublime
@@ -33,6 +34,7 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
     server_directory = "language-server"
     server_binary_path = os.path.join(server_directory, "node_modules", "pyright", "langserver.index.js")
 
+    @override
     @classmethod
     def required_node_version(cls) -> str:
         """
@@ -50,12 +52,14 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
             and not view.settings().get("repl")
         )
 
+    @override
     @classmethod
     def setup(cls) -> None:
         super().setup()
 
         cls.server_version = cls.parse_server_version()
 
+    @override
     def on_settings_changed(self, settings: DottedDict) -> None:
         super().on_settings_changed(settings)
 
@@ -78,15 +82,18 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
         except Exception as ex:
             log_error(f'Failed to update extra paths for dev environment "{dev_environment}": {ex}')
 
+    @override
     @classmethod
     def install_or_update(cls) -> None:
         super().install_or_update()
         cls.copy_overwrite_dirs()
 
+    @override
     @classmethod
     def markdown_language_id_to_st_syntax_map(cls) -> MarkdownLangMap | None:
         return {"pyright_python": (("pyright_python",), ("LSP-pyright/syntaxes/pyright",))}
 
+    @override
     def on_server_response_async(self, method: str, response: Response) -> None:
         if method == "textDocument/hover" and isinstance(response.result, dict):
             hover = cast(Hover, response.result)
@@ -112,6 +119,7 @@ class LspPyrightPlugin(AbstractLspPythonPlugin, NpmClientHandler):
                         documentation["value"] = self.patch_markdown_content(documentation["value"])
             return
 
+    @override
     def on_workspace_configuration(self, params: Any, configuration: dict[str, Any]) -> dict[str, Any]:
         if not ((session := self.weaksession()) and (params.get("section") == "python")):
             return configuration
