@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from .client import LspPyrightPlugin, ViewEventListener
-from .commands import LspPyrightCreateConfigurationCommand
+from .commands import LspPyrightCreateConfigurationCommand, LspPyrightUpdateViewStatusTextCommand
 
 __all__ = (
     # ST: core
@@ -9,6 +9,7 @@ __all__ = (
     "plugin_unloaded",
     # ST: commands
     "LspPyrightCreateConfigurationCommand",
+    "LspPyrightUpdateViewStatusTextCommand",
     # ...
     "LspPyrightPlugin",
     "ViewEventListener",
