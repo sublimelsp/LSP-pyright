@@ -48,7 +48,7 @@ class BaseDevEnvironmentHandler(ABC):
         *,
         settings: DottedDict,
         paths: Iterable[str | Path],
-        operation: Literal["append", "prepend", "replace"] = "prepend",
+        operation: Literal["append", "prepend", "replace"] = "append",
     ) -> None:
         """Injects the given `paths` to `XXX.analysis.extraPaths` setting."""
         current_paths: list[str] = settings.get(SERVER_SETTING_ANALYSIS_EXTRAPATHS) or []
