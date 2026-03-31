@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from pathlib import Path
-
-import sublime
-from LSP.plugin import parse_uri
-
-from .utils import drop_falsy, resolved_posix_path
+from .utils import drop_falsy
+from .utils import resolved_posix_path
 from .virtual_env.venv_info import BaseVenvInfo
+from dataclasses import dataclass
+from LSP.plugin import parse_uri
+from pathlib import Path
+import sublime
 
 
 @dataclass

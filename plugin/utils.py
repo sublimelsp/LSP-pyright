@@ -1,15 +1,17 @@
 from __future__ import annotations
 
+from .log import log_error
+from collections.abc import Generator
+from collections.abc import Iterable
+from pathlib import Path
+from typing import Any
+from typing import Sequence
+from typing import TypeVar
 import io
 import os
 import re
 import subprocess
 import sys
-from collections.abc import Generator, Iterable
-from pathlib import Path
-from typing import Any, Sequence, TypeVar
-
-from .log import log_error
 
 _T = TypeVar("_T")
 

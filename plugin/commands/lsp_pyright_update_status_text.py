@@ -1,16 +1,15 @@
 from __future__ import annotations
 
-from typing import Any, final
-
-import sublime
-from LSP.plugin import LspTextCommand
-from typing_extensions import override
-
 from ..client import LspPyrightPlugin
 from ..constants import PACKAGE_NAME
 from ..log import log_warning
 from ..template import load_string_template
 from ..utils_lsp import find_workspace_folder
+from LSP.plugin import LspTextCommand
+from typing import Any
+from typing import final
+from typing_extensions import override
+import sublime
 
 
 @final

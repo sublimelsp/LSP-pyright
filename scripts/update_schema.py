@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
+from typing import Dict
 from urllib.request import urlopen
+import json
 
 PACKAGE_NAME = "LSP-pyright"
 

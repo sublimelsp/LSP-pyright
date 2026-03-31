@@ -1,16 +1,19 @@
 from __future__ import annotations
 
+from ..utils import run_shell_command
+from abc import ABC
+from abc import abstractmethod
+from dataclasses import dataclass
+from dataclasses import field
+from pathlib import Path
+from typing import Any
+from typing import final
+from typing import Generator
+from typing import TypedDict
+from typing_extensions import Self
 import configparser
 import json
 import os
-from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Generator, TypedDict, final
-
-from typing_extensions import Self
-
-from ..utils import run_shell_command
 
 
 def list_venv_info_classes() -> Generator[type[BaseVenvInfo], None, None]:

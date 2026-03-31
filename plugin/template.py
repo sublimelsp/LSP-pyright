@@ -1,11 +1,9 @@
 from __future__ import annotations
 
+from .constants import PACKAGE_NAME
 from functools import lru_cache
-
 import jinja2
 import sublime
-
-from .constants import PACKAGE_NAME
 
 JINJA_TEMPLATE_ENV = jinja2.Environment(
     extensions=[
