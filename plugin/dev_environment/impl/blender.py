@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-import json
-import tempfile
-from pathlib import Path
-
-from LSP.plugin.core.collections import DottedDict
-
 from ...utils import run_shell_command
 from ..interfaces import BaseDevEnvironmentHandler
+from LSP.plugin.core.collections import DottedDict
+from pathlib import Path
+import json
+import tempfile
 
 
 class BlenderDevEnvironmentHandler(BaseDevEnvironmentHandler):
