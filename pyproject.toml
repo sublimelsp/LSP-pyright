@@ -7,7 +7,7 @@ requires-python = ">=3.8"
 dependencies = [
   "jinja2==3.*",
   "jmespath>=1,<2",
-  "more-itertools>=10,<11",
+  "more-itertools>=11,<12",
   "typing-extensions>=4.12",
 ]
 
