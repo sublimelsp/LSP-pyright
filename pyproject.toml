@@ -64,9 +64,8 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "UP", "FURB", "SIM", "F401"]
+select = ["E", "F", "W", "I", "UP", "FURB", "SIM"]
 ignore = ["E203"]
-preview = true
 
 [tool.ruff.lint.per-file-ignores]
 "boot.py" = ["E402"]
