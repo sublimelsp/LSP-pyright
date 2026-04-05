@@ -1,26 +1,19 @@
 from __future__ import annotations
 
-from ..utils import camel_to_snake
-from ..utils import iterate_lines
-from ..utils import remove_suffix
-from ..utils import run_shell_command
-from .venv_info import BaseVenvInfo
-from .venv_info import CondaVenvInfo
-from .venv_info import list_venv_info_classes
-from .venv_info import Pep405VenvInfo
-from abc import ABC
-from abc import abstractmethod
-from functools import lru_cache
-from itertools import product
-from LSP.plugin import Session
-from more_itertools import first_true
-from pathlib import Path
-from types import MappingProxyType
-from typing import final
-from typing import Generator
-from typing import Mapping
 import os
 import shutil
+from abc import ABC, abstractmethod
+from functools import lru_cache
+from itertools import product
+from pathlib import Path
+from types import MappingProxyType
+from typing import Generator, Mapping, final
+
+from LSP.plugin import Session
+from more_itertools import first_true
+
+from ..utils import camel_to_snake, iterate_lines, remove_suffix, run_shell_command
+from .venv_info import BaseVenvInfo, CondaVenvInfo, Pep405VenvInfo, list_venv_info_classes
 
 
 @lru_cache

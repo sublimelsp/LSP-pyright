@@ -1,35 +1,26 @@
 from __future__ import annotations
 
-from .constants import PACKAGE_NAME
-from .constants import SERVER_SETTING_DEV_ENVIRONMENT
-from .dev_environment.helpers import get_dev_environment_handler
-from .log import log_error
-from .log import log_warning
-from .utils_lsp import find_workspace_folder
-from .utils_lsp import uri_to_file_path
-from .utils_lsp import WorkspaceFolderAttr
-from .virtual_env.helpers import find_venv_by_finder_names
-from collections import defaultdict
-from LSP.plugin import ClientConfig
-from LSP.plugin import DottedDict
-from LSP.plugin import MarkdownLangMap
-from LSP.plugin import Response
-from LSP.protocol import CompletionItem
-from LSP.protocol import Hover
-from LSP.protocol import SignatureHelp
-from lsp_utils import NpmClientHandler
-from pathlib import Path
-from sublime_lib import ResourcePath
-from typing import Any
-from typing import cast
-from typing import final
-from typing_extensions import override
-import jmespath
 import json
 import os
 import re
+from collections import defaultdict
+from pathlib import Path
+from typing import Any, cast, final
+
+import jmespath
 import sublime
 import sublime_plugin
+from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response
+from LSP.protocol import CompletionItem, Hover, SignatureHelp
+from lsp_utils import NpmClientHandler
+from sublime_lib import ResourcePath
+from typing_extensions import override
+
+from .constants import PACKAGE_NAME, SERVER_SETTING_DEV_ENVIRONMENT
+from .dev_environment.helpers import get_dev_environment_handler
+from .log import log_error, log_warning
+from .utils_lsp import WorkspaceFolderAttr, find_workspace_folder, uri_to_file_path
+from .virtual_env.helpers import find_venv_by_finder_names
 
 
 class ViewEventListener(sublime_plugin.ViewEventListener):

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from .venv_finder import find_finder_class_by_name
-from .venv_info import BaseVenvInfo
-from .venv_info import list_venv_info_classes
-from LSP.plugin import Session
-from more_itertools import first_true
 from pathlib import Path
 from typing import Sequence
+
+from LSP.plugin import Session
+from more_itertools import first_true
+
+from .venv_finder import find_finder_class_by_name
+from .venv_info import BaseVenvInfo, list_venv_info_classes
 
 
 def find_venv_by_finder_names(

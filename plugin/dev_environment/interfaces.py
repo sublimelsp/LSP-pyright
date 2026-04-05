@@ -1,18 +1,14 @@
 from __future__ import annotations
 
-from ..constants import SERVER_SETTING_ANALYSIS_EXTRAPATHS
-from ..constants import SERVER_SETTING_DEV_ENVIRONMENT
-from ..log import log_debug
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
+from pathlib import Path
+from typing import Any, Iterable, Literal, Sequence, final
+
 from LSP.plugin.core.collections import DottedDict
 from more_itertools import unique_everseen
-from pathlib import Path
-from typing import Any
-from typing import final
-from typing import Iterable
-from typing import Literal
-from typing import Sequence
+
+from ..constants import SERVER_SETTING_ANALYSIS_EXTRAPATHS, SERVER_SETTING_DEV_ENVIRONMENT
+from ..log import log_debug
 
 
 class BaseDevEnvironmentHandler(ABC):
