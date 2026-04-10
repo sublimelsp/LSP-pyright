@@ -89,15 +89,15 @@ class SublimeText38DevEnvironmentHandler(BaseVersionedSublimeTextDevEnvironmentH
         return 4200 >= ST_VERSION >= 4107
 
 
-class SublimeText313DevEnvironmentHandler(BaseVersionedSublimeTextDevEnvironmentHandler):
-    """This handler will just assume the project uses Python 3.13."""
+class SublimeText314DevEnvironmentHandler(BaseVersionedSublimeTextDevEnvironmentHandler):
+    """This handler will just assume the project uses Python 3.14."""
 
-    python_version = (3, 13)
-    python_version_no_dot = "313"
+    python_version = (3, 14)
+    python_version_no_dot = "314"
 
     @classmethod
     def is_available(cls) -> bool:
-        return ST_VERSION >= 4201
+        return ST_VERSION >= 4203
 
 
 def list_all_subclasses(
