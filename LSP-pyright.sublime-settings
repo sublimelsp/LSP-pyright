@@ -10,7 +10,9 @@
 	"settings": {
 		// The (Jinja2) template of the status bar text which is inside the parentheses `(...)`.
 		// See https://jinja.palletsprojects.com/templates/
-		"statusText": "{% set parts = [] %}{% if server_version %}{% do parts.append('v' + server_version) %}{% endif %}{% if venv %}{% do parts.append('venv: ' + venv.venv_prompt) %}{% do parts.append('py: ' + venv.python_version) %}{% do parts.append('by: ' + venv.finder_name) %}{% endif %}{{ parts|join('; ') }}",
+		// Examples:
+		// - server version: {% if server_version %}{% do parts.append('v' + server_version) %}{% endif %}
+		"statusText": "{% set parts = [] %}{% if venv %}{% do parts.append('venv: ' + venv.venv_prompt) %}{% do parts.append('py: ' + venv.python_version) %}{% do parts.append('by: ' + venv.finder_name) %}{% endif %}{{ parts|join('; ') }}",
 		// The strategies used to find a virtual environment in order.
 		"venvStrategies": [
 			"st_project_data",
