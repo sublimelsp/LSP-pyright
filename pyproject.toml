@@ -41,6 +41,7 @@ ignore_missing_imports = true
 
 [tool.pyright]
 pythonVersion = '3.8'
+typeCheckingMode = 'standard'
 
 [tool.ruff]
 preview = true

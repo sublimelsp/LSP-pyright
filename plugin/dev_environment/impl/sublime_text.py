@@ -54,6 +54,9 @@ class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, A
         re_pattern = re.compile(r"(python)(3\.?[0-9]+)", flags=re.IGNORECASE)
         dep_dirs = [re_pattern.sub(Rf"\g<1>{self.python_version_no_dot}", dep_dir) for dep_dir in dep_dirs]
 
+        # Expose unittesting module.
+        dep_dirs.append(os.path.join(sublime.packages_path(), "UnitTesting"))
+
         # move the "Packages/" to the last
         # @see https://github.com/sublimelsp/LSP-pyright/pull/26#discussion_r520747708
         packages_path = sublime.packages_path()
