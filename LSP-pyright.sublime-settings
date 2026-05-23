@@ -90,4 +90,7 @@
 		"python.venvPath": "",
 	},
 	"selector": "source.python",
+	"markdown_language_map": {
+		"pyright_python": [["pyright_python"], ["LSP-pyright/syntaxes/pyright"]],
+	},
 }

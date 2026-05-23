@@ -10,7 +10,7 @@ from typing import Any, cast, final
 import jmespath
 import sublime
 import sublime_plugin
-from LSP.plugin import ClientConfig, DottedDict, MarkdownLangMap, Response
+from LSP.plugin import ClientConfig, DottedDict, Response
 from LSP.protocol import CompletionItem, Hover, SignatureHelp
 from lsp_utils import NpmClientHandler
 from sublime_lib import ResourcePath
@@ -94,11 +94,6 @@ class LspPyrightPlugin(NpmClientHandler):
     def install_or_update(cls) -> None:
         super().install_or_update()
         cls.copy_overwrite_dirs()
-
-    @override
-    @classmethod
-    def markdown_language_id_to_st_syntax_map(cls) -> MarkdownLangMap | None:
-        return {"pyright_python": (("pyright_python",), ("LSP-pyright/syntaxes/pyright",))}
 
     @override
     def on_server_response_async(self, method: str, response: Response) -> None:
