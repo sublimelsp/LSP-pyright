@@ -13,9 +13,10 @@ update_typeshed() {
     # we want to use basedpyright's typeshed stubs for builtins, which has docstrings
     latest_basedpyright=$(
         curl -sI 'https://github.com/DetachHead/basedpyright/releases/latest' |
-            perl -ne '/^Location: (.*)$/ && print "$1\n"' |
-            sed 's#.*/##' # delete everything before (including) the last slash
-    )                     # e.g., "v1.13.0"
+            perl -ne '/^location: (.*)$/i && print "$1\n"' |
+            sed 's#.*/##' | # delete everything before (including) the last slash) e.g., "v1.13.0"
+            tr -d '\n\r' # trim newlines
+    )
     echo "[INFO] Latest basedpyright version: ${latest_basedpyright}"
 
     if [ -z "${latest_basedpyright}" ]; then
@@ -23,16 +24,23 @@ update_typeshed() {
         exit 1
     fi
 
-    curl -sL "https://github.com/DetachHead/basedpyright/releases/download/${latest_basedpyright}/vscode-pyright.vsix" --output 'basedpyright.zip'
+    curl -sL "https://github.com/DetachHead/basedpyright/releases/download/${latest_basedpyright}/vscode-pyright.vsix" --output 'basedpyright.zip' || { echo "Error downloading extension"; exit 1; }
     mkdir -p "${TYPESHED_DIR}/stdlib"
     unzip -jo 'basedpyright.zip' 'extension/dist/typeshed-fallback/stdlib/builtins.pyi' -d "${TYPESHED_DIR}/stdlib"
     rm -f 'basedpyright.zip'
+
+    # Convert files to unix line endings (some have Windows).
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        find "${TYPESHED_DIR}/stdlib" -type f -exec sed -i '' 's/\r//' {} +
+    else
+        find "${TYPESHED_DIR}/stdlib" -type f -exec sed -i 's/\r//' {} +
+    fi
 
     echo '[INFO] typeshed stubs updated.'
 }
 
 update_st_api_stubs() {
-    SUBLIME_PY33_TYPINGS_DIR="${OVERWRITES_DIR}/resources/typings/sublime_text_py33"
+    SUBLIME_PY33_TYPINGS_DIR="${PROJECT_DIR}/resources/typings/sublime_text_py33"
 
     mkdir -p "${SUBLIME_PY33_TYPINGS_DIR}"
 
@@ -44,7 +52,7 @@ update_st_api_stubs() {
     for filename in "${filenames[@]}"; do
         curl -sL \
             "https://raw.githubusercontent.com/jfcherng-sublime/ST-API-stubs/master/typings/${filename}" \
-            --output "${SUBLIME_PY33_TYPINGS_DIR}/${filename}"
+            --output "${SUBLIME_PY33_TYPINGS_DIR}/${filename}" || { echo "Error downloading stubs"; exit 1; }
     done
 
     echo '[INFO] Sublime Text API stubs updated.'

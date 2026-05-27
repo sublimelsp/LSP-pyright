@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Generator, Tuple, TypeVar
 
 import sublime
-from LSP.plugin.core.collections import DottedDict
+from LSP.plugin import ClientConfig
 from LSP.plugin.core.constants import ST_VERSION
 from more_itertools import first_true
 from typing_extensions import TypeAlias
@@ -43,8 +43,8 @@ class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, A
         wanted_version = (int(wanted_version_no_dot[0]), int(wanted_version_no_dot[1:]))
         return cls.python_version >= wanted_version
 
-    def handle_(self, *, settings: DottedDict) -> None:
-        self._inject_extra_paths(settings=settings, paths=self.find_package_dependency_dirs())
+    def handle_(self, *, config: ClientConfig) -> None:
+        self._inject_extra_paths(config=config, paths=self.find_package_dependency_dirs())
 
     def find_package_dependency_dirs(self) -> list[str]:
         dep_dirs = sys.path.copy()
@@ -65,7 +65,7 @@ class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, A
 
         # sublime stubs - add as first
         if self.python_version == (3, 3):
-            dep_dirs.insert(0, str(self.server_dir / "resources/typings/sublime_text_py33"))
+            dep_dirs.insert(0, str(self.package_storage_path / "resources/typings/sublime_text_py33"))
 
         return list(filter(os.path.isdir, dep_dirs))
 
@@ -135,10 +135,10 @@ class SublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
     def name(cls) -> str:
         return "sublime_text"
 
-    def handle_(self, *, settings: DottedDict) -> None:
+    def handle_(self, *, config: ClientConfig) -> None:
         handler_cls = self.resolve_handler_cls(self.detect_project_python_version())
-        handler = handler_cls(server_dir=self.server_dir, workspace_folders=self.workspace_folders)
-        return handler.handle(settings=settings)
+        handler = handler_cls(package_storage_path=self.package_storage_path, workspace_folders=self.workspace_folders)
+        return handler.handle(config=config)
 
     def detect_project_python_version(self) -> VERSION_TUPLE_2:
         try:

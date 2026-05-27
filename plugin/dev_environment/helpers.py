@@ -24,11 +24,11 @@ def find_dev_environment_handler_class(dev_environment: str) -> type[BaseDevEnvi
 def get_dev_environment_handler(
     dev_environment: str,
     *,
-    server_dir: str | Path,
+    package_storage_path: Path,
     workspace_folders: Sequence[str],
 ) -> BaseDevEnvironmentHandler | None:
     if handler_cls := find_dev_environment_handler_class(dev_environment):
-        return handler_cls(server_dir=server_dir, workspace_folders=workspace_folders)
+        return handler_cls(package_storage_path=package_storage_path, workspace_folders=workspace_folders)
     return None
 
 
