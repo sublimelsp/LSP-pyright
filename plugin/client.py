@@ -43,19 +43,23 @@ class LspPyrightPlugin(LspPlugin):
     @override
     def on_pre_start_async(cls, context: OnPreStartContext) -> None:
         package_name = cls.plugin_storage_path.name
-        server_directory = NodeManager.on_pre_start_async(
+        NodeManager.on_pre_start_async(
             context,
             cls.plugin_storage_path,
             ResourcePath("Packages", package_name, "language-server"),
             Path("node_modules", "pyright", "langserver.index.js"),
             node_version_requirement=">=14.18.0",
+            on_server_installed=cls.on_server_installed,
         )
-        if server_directory:
-            overwrites_path = ResourcePath("Packages", package_name, "overwrites")
-            try:
-                overwrites_path.copytree(server_directory, exist_ok=True)
-            except OSError:
-                raise RuntimeError(f'Failed to copy overwrite dirs from "{overwrites_path}" to "{server_directory}".')
+
+    @classmethod
+    def on_server_installed(cls, server_directory: Path) -> None:
+        package_name = cls.plugin_storage_path.name
+        overwrites_path = ResourcePath("Packages", package_name, "overwrites")
+        try:
+            overwrites_path.copytree(server_directory, exist_ok=True)
+        except OSError:
+            raise RuntimeError(f'Failed to copy overwrite dirs from "{overwrites_path}" to "{server_directory}".')
 
     @override
     def on_initialized_async(self) -> None:
