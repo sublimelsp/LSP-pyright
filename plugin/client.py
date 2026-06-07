@@ -118,7 +118,7 @@ class LspPyrightPlugin(LspPlugin):
 
     @override
     def on_pre_send_notification_async(self, notification: ClientNotification) -> None:
-        if notification['method'] == 'workspace/didChangeConfiguration' and (session := self.weaksession()):
+        if notification["method"] == "workspace/didChangeConfiguration" and (session := self.weaksession()):
             extra_paths = self.resolve_extra_paths_for_dev_environment(session)
             session.config.settings.set(SERVER_SETTING_ANALYSIS_EXTRAPATHS, extra_paths)
             # Skip updating the notification params as pyright doesn't care about those - it gets settings through
