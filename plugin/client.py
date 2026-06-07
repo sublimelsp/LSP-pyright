@@ -36,7 +36,7 @@ from .virtual_env.helpers import find_venv_by_finder_names
 
 class ViewEventListener(sublime_plugin.ViewEventListener):
     def on_activated(self) -> None:
-        if (settings := self.view.settings()) and settings.get("lsp_active"):
+        if self.view.settings().get("lsp_active"):
             self.view.run_command("lsp_pyright_update_view_status_text")
 
 
