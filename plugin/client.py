@@ -10,6 +10,7 @@ import jmespath
 import sublime
 import sublime_plugin
 from LSP.plugin import (
+    ClientNotification,
     ClientResponse,
     LspPlugin,
     OnPreStartContext,
@@ -21,7 +22,7 @@ from lsp_utils import NodeManager
 from sublime_lib import ResourcePath
 from typing_extensions import override
 
-from .constants import PACKAGE_NAME, SERVER_SETTING_DEV_ENVIRONMENT
+from .constants import PACKAGE_NAME, SERVER_SETTING_ANALYSIS_EXTRAPATHS, SERVER_SETTING_DEV_ENVIRONMENT
 from .dev_environment.helpers import get_dev_environment_handler
 from .log import log_error, log_warning
 from .utils_lsp import (
@@ -116,6 +117,15 @@ class LspPyrightPlugin(LspPlugin):
             return
 
     @override
+    def on_pre_send_notification_async(self, notification: ClientNotification) -> None:
+        if notification['method'] == 'workspace/didChangeConfiguration' and (session := self.weaksession()):
+            extra_paths = self.resolve_extra_paths_for_dev_environment(session)
+            session.config.settings.set(SERVER_SETTING_ANALYSIS_EXTRAPATHS, extra_paths)
+            # Skip updating the notification params as pyright doesn't care about those - it gets settings through
+            # the `workspace/configuration` request.
+            return
+
+    @override
     def on_pre_send_response_async(self, response: ClientResponse) -> None:
         if response["method"] == "workspace/configuration":
             self.handle_workspace_configuration(response["params"], response["result"])
@@ -124,12 +134,9 @@ class LspPyrightPlugin(LspPlugin):
     def handle_workspace_configuration(self, params: ConfigurationParams, result: list[LSPAny]) -> None:
         if not (session := self.weaksession()):
             return
-        extra_paths = self.resolve_extra_paths_for_dev_environment(session)
         for i, item in enumerate(params["items"]):
             if (configuration := result[i]) and isinstance(configuration, dict):
                 configuration_proxy = ConfigurationProxy(configuration, ConfigurationSection(item.get("section")))
-                if ConfigurationSection("python.analysis") in configuration_proxy.section:
-                    configuration_proxy.set("python.analysis.extraPaths", extra_paths)
                 self.handle_venv_strategies(session, item, configuration_proxy)
 
     def resolve_extra_paths_for_dev_environment(self, session: Session) -> list[str]:
