@@ -64,6 +64,7 @@ class LspPyrightPlugin(LspPlugin):
             node_version_requirement=">=14.18.0",
             on_server_installed=cls.on_server_installed,
         )
+        cls.handle_python_33_types()
 
     @classmethod
     def on_server_installed(cls, server_directory: Path) -> None:
@@ -73,6 +74,20 @@ class LspPyrightPlugin(LspPlugin):
             overwrites_path.copytree(server_directory, exist_ok=True)
         except OSError:
             raise RuntimeError(f'Failed to copy overwrite dirs from "{overwrites_path}" to "{server_directory}".')
+
+    @classmethod
+    def handle_python_33_types(cls) -> None:
+        package_name = cls.plugin_storage_path.name
+        dir_src = ResourcePath(f"Packages/{package_name}/resources")
+        dir_dst = cls.plugin_storage_path
+        version_file = dir_dst / 'VERSION'
+        if version_file.is_file() and version_file.read_text(encoding='utf-8') == cls.server_version:
+            return
+        try:
+            ResourcePath(dir_src).copytree(dir_dst, exist_ok=True)
+            version_file.write_text(cls.server_version, encoding='utf-8')
+        except OSError:
+            raise RuntimeError(f'Failed to copy overwrite dirs from "{dir_src}" to "{dir_dst}".')
 
     @override
     def on_server_response_async(self, response: ServerResponse) -> None:
