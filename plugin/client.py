@@ -80,12 +80,12 @@ class LspPyrightPlugin(LspPlugin):
         package_name = cls.plugin_storage_path.name
         dir_src = ResourcePath(f"Packages/{package_name}/resources")
         dir_dst = cls.plugin_storage_path
-        version_file = dir_dst / 'VERSION'
-        if version_file.is_file() and version_file.read_text(encoding='utf-8') == cls.server_version:
+        version_file = dir_dst / "VERSION"
+        if version_file.is_file() and version_file.read_text(encoding="utf-8") == cls.server_version:
             return
         try:
             ResourcePath(dir_src).copytree(dir_dst, exist_ok=True)
-            version_file.write_text(cls.server_version, encoding='utf-8')
+            version_file.write_text(cls.server_version, encoding="utf-8")
         except OSError:
             raise RuntimeError(f'Failed to copy overwrite dirs from "{dir_src}" to "{dir_dst}".')
 
