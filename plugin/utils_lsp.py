@@ -56,10 +56,11 @@ class ConfigurationProxy:
     """
     Holds full or part of the configuration and exposes access through absolute keys to that slice of configuration.
 
-    The `section` defines which slice of the whole configuration is available for access. For example the available
-    configuration might just expose the "python.analysis" sub-object of the whole configuraiton. The exposed get/set
-    methods allow accessing that slice of the configuration using absolute key. For example
-    get("python.analysis.extraPaths") returns value from within that configuration while get("python") returns `None`.
+    The `section` defines which slice of the whole configuration `configuration` contains. For example, the available
+    `configuration` might just expose the "python.analysis" sub-object of the whole configuration. The get/set methods
+    allow accessing that slice of the configuration using an absolute key. For example
+    get("python.analysis.extraPaths") returns value from within that configuration while get("python") returns `None`
+    as it's not contained within that slice.
     """
 
     def __init__(self, configuration: dict[str, Any], section: ConfigurationSection) -> None:
