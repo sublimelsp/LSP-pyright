@@ -52,19 +52,16 @@ class BaseDevEnvironmentHandler(ABC):
     ) -> list[str]:
         """Injects the given `paths` to `XXX.analysis.extraPaths` setting."""
         current_paths: list[str] = settings.get(SERVER_SETTING_ANALYSIS_EXTRAPATHS) or []
-        paths = list(map(str, paths))
-        combined_paths: list[str | Path] = []
+        extra_paths = list(map(str, paths))
         if operation == "prepend":
-            combined_paths.extend(paths)
-            combined_paths.extend(current_paths)
+            resolved_paths = extra_paths + current_paths
         elif operation == "append":
-            combined_paths.extend(current_paths)
-            combined_paths.extend(paths)
+            resolved_paths = current_paths + extra_paths
         elif operation == "replace":
-            combined_paths.extend(paths)
+            resolved_paths = extra_paths
         else:
             raise ValueError(f"Invalid operation: {operation}")
 
-        resolved_paths = list(map(str, unique_everseen(combined_paths, key=Path)))  # deduplication
+        resolved_paths = list(map(str, unique_everseen(resolved_paths, key=Path)))  # deduplication
         log_debug(f'Due to "dev_environment", new "analysis.extraPaths" is ({operation = }): {resolved_paths}')
         return resolved_paths
