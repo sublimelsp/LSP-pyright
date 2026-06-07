@@ -43,10 +43,10 @@ def uri_to_file_path(uri: str) -> str | None:
 
 class ConfigurationSection:
     def __init__(self, section: str | None) -> None:
-        self.parts = section.split('.') if section else []
+        self.parts = section.split(".") if section else []
 
     def __contains__(self, other_section: ConfigurationSection) -> bool:
-        return other_section.parts[:len(self.parts)] == self.parts
+        return other_section.parts[: len(self.parts)] == self.parts
 
     def __str__(self) -> str:
         return f"ConfigurationSection({'.'.join(self.parts)})"
@@ -71,7 +71,7 @@ class ConfigurationProxy:
         if target_section not in self.section:
             return None
         # Path relative to the object we actually hold.
-        relative_parts = target_section.parts[len(self.section.parts):]
+        relative_parts = target_section.parts[len(self.section.parts) :]
         if not relative_parts:
             return self.configuration
         node: Any = self.configuration
@@ -89,7 +89,7 @@ class ConfigurationProxy:
         if target_section not in self.section:
             return
         # Path relative to the object we actually hold.
-        relative_parts = target_section.parts[len(self.section.parts):]
+        relative_parts = target_section.parts[len(self.section.parts) :]
         if not relative_parts:
             return  # target == the section itself; can't set the root
         # Walk to the parent, creating missing intermediate dicts along the way.

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Iterable, Literal, Sequence, final
@@ -53,7 +52,6 @@ class BaseDevEnvironmentHandler(ABC):
     ) -> list[str]:
         """Injects the given `paths` to `XXX.analysis.extraPaths` setting."""
         current_paths: list[str] = settings.get(SERVER_SETTING_ANALYSIS_EXTRAPATHS) or []
-        print('CURRENT', json.dumps(current_paths, indent=4))
         paths = list(map(str, paths))
         if operation == "prepend":
             resolved_paths = paths + current_paths
@@ -66,5 +64,4 @@ class BaseDevEnvironmentHandler(ABC):
 
         resolved_paths = list(map(str, unique_everseen(resolved_paths, key=Path)))  # deduplication
         log_debug(f'Due to "dev_environment", new "analysis.extraPaths" is ({operation = }): {resolved_paths}')
-        print('NEW', json.dumps(resolved_paths, indent=4))
         return resolved_paths

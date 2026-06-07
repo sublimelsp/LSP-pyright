@@ -103,7 +103,7 @@ class LspPyrightPlugin(LspPlugin):
     @override
     def on_pre_send_response_async(self, response: ClientResponse) -> None:
         if response["method"] == "workspace/configuration":
-            self.handle_workspace_configuration(response['params'], response['result'])
+            self.handle_workspace_configuration(response["params"], response["result"])
             return
 
     def handle_workspace_configuration(self, params: ConfigurationParams, result: list[LSPAny]) -> None:
@@ -113,8 +113,8 @@ class LspPyrightPlugin(LspPlugin):
         for i, item in enumerate(params["items"]):
             if (configuration := result[i]) and isinstance(configuration, dict):
                 configuration_proxy = ConfigurationProxy(configuration, ConfigurationSection(item.get("section")))
-                if ConfigurationSection('python.analysis') in configuration_proxy.section:
-                    configuration_proxy.set('python.analysis.extraPaths', extra_paths)
+                if ConfigurationSection("python.analysis") in configuration_proxy.section:
+                    configuration_proxy.set("python.analysis.extraPaths", extra_paths)
                 self.handle_venv_strategies(session, item, configuration_proxy)
 
     def resolve_extra_paths_for_dev_environment(self, session: Session) -> list[str]:
