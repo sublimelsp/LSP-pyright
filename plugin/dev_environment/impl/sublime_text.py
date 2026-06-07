@@ -9,10 +9,10 @@ from pathlib import Path
 from typing import Generator, Tuple, TypeVar
 
 import sublime
-from LSP.plugin import ClientConfig
+from LSP.plugin import DottedDict
 from LSP.plugin.core.constants import ST_VERSION
 from more_itertools import first_true
-from typing_extensions import TypeAlias
+from typing_extensions import TypeAlias, override
 
 from ..interfaces import BaseDevEnvironmentHandler
 
@@ -43,8 +43,9 @@ class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, A
         wanted_version = (int(wanted_version_no_dot[0]), int(wanted_version_no_dot[1:]))
         return cls.python_version >= wanted_version
 
-    def handle_(self, *, config: ClientConfig) -> None:
-        self._inject_extra_paths(config=config, paths=self.find_package_dependency_dirs())
+    @override
+    def resolve_extra_paths_(self, *, settings: DottedDict) -> list[str]:
+        return self._resolve_paths(settings=settings, paths=self.find_package_dependency_dirs())
 
     def find_package_dependency_dirs(self) -> list[str]:
         dep_dirs = sys.path.copy()
@@ -135,10 +136,11 @@ class SublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
     def name(cls) -> str:
         return "sublime_text"
 
-    def handle_(self, *, config: ClientConfig) -> None:
+    @override
+    def resolve_extra_paths_(self, *, settings: DottedDict) -> list[str]:
         handler_cls = self.resolve_handler_cls(self.detect_project_python_version())
         handler = handler_cls(package_storage_path=self.package_storage_path, workspace_folders=self.workspace_folders)
-        return handler.handle(config=config)
+        return handler.resolve_extra_paths(settings=settings)
 
     def detect_project_python_version(self) -> VERSION_TUPLE_2:
         try:

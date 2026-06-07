@@ -4,12 +4,19 @@ import json
 import re
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, final
+from typing import final
 
 import jmespath
 import sublime
 import sublime_plugin
-from LSP.plugin import ClientResponse, LspPlugin, OnPreStartContext, ServerResponse
+from LSP.plugin import (
+    ClientResponse,
+    LspPlugin,
+    OnPreStartContext,
+    ServerResponse,
+    Session,
+)
+from LSP.protocol import ConfigurationItem, ConfigurationParams, LSPAny
 from lsp_utils import NodeManager
 from sublime_lib import ResourcePath
 from typing_extensions import override
@@ -17,7 +24,13 @@ from typing_extensions import override
 from .constants import PACKAGE_NAME, SERVER_SETTING_DEV_ENVIRONMENT
 from .dev_environment.helpers import get_dev_environment_handler
 from .log import log_error, log_warning
-from .utils_lsp import WorkspaceFolderAttr, find_workspace_folder, uri_to_file_path
+from .utils_lsp import (
+    ConfigurationProxy,
+    ConfigurationSection,
+    WorkspaceFolderAttr,
+    find_workspace_folder,
+    uri_to_file_path,
+)
 from .virtual_env.helpers import find_venv_by_finder_names
 
 
@@ -62,26 +75,6 @@ class LspPyrightPlugin(LspPlugin):
             raise RuntimeError(f'Failed to copy overwrite dirs from "{overwrites_path}" to "{server_directory}".')
 
     @override
-    def on_initialized_async(self) -> None:
-        if not (session := self.weaksession()):
-            return
-        dev_environment = session.config.settings.get(SERVER_SETTING_DEV_ENVIRONMENT)
-        try:
-            if handler := get_dev_environment_handler(
-                dev_environment,
-                package_storage_path=self.plugin_storage_path,
-                workspace_folders=tuple(map(str, session.get_workspace_folders())),
-            ):
-                if dev_environment.startswith("sublime_text_") and handler.name() != dev_environment:
-                    log_warning(
-                        f'Development environment "{dev_environment}" is unsupported. '
-                        f'Using "{handler.name()}" instead.',
-                    )
-                handler.handle(config=session.config)
-        except Exception as ex:
-            log_error(f'Failed to update extra paths for dev environment "{dev_environment}": {ex}')
-
-    @override
     def on_server_response_async(self, response: ServerResponse) -> None:
         if response["method"] == "textDocument/hover":
             if hover := response["result"]:
@@ -109,36 +102,65 @@ class LspPyrightPlugin(LspPlugin):
 
     @override
     def on_pre_send_response_async(self, response: ClientResponse) -> None:
-        if response["method"] == "workspace/configuration" and (session := self.weaksession()):
-            for i, item in enumerate(response["params"]["items"]):
-                if item.get("section") == "python":
-                    continue
-                configuration = response["result"][i]
-                if not isinstance(configuration, dict):
-                    continue
-                scope_uri = item.get("scopeUri", "")
-                file_path = uri_to_file_path(scope_uri)
-                wf_path = find_workspace_folder(session.window, file_path) if file_path else None
-                # provide detected venv information
-                # note that `pyrightconfig.json` seems to be auto-prioritized by the server
-                if (venv_strategies := session.config.settings.get("venvStrategies")) and (
-                    venv_info := find_venv_by_finder_names(venv_strategies, project_dir=wf_path, session=session)
-                ):
-                    if wf_path:
-                        self.wf_attrs[wf_path].venv_info = venv_info
-                    # When ST just starts, server session hasn't been created yet.
-                    # So `on_activated` can't add full information for the initial view and hence we handle it here.
-                    if active_view := sublime.active_window().active_view():
-                        active_view.run_command("lsp_pyright_update_view_status_text")
+        if response["method"] == "workspace/configuration":
+            self.handle_workspace_configuration(response['params'], response['result'])
+            return
 
-                    # modify configuration for the venv
-                    site_packages_dir = str(venv_info.site_packages_dir)
-                    conf_analysis: dict[str, Any] = configuration.setdefault("analysis", {})
-                    conf_analysis_extra_paths: list[str] = conf_analysis.setdefault("extraPaths", [])
-                    if site_packages_dir not in conf_analysis_extra_paths:
-                        conf_analysis_extra_paths.insert(0, site_packages_dir)
-                    if not configuration.get("pythonPath"):
-                        configuration["pythonPath"] = str(venv_info.python_executable)
+    def handle_workspace_configuration(self, params: ConfigurationParams, result: list[LSPAny]) -> None:
+        if not (session := self.weaksession()):
+            return
+        extra_paths = self.resolve_extra_paths_for_dev_environment(session)
+        for i, item in enumerate(params["items"]):
+            if (configuration := result[i]) and isinstance(configuration, dict):
+                configuration_proxy = ConfigurationProxy(configuration, ConfigurationSection(item.get("section")))
+                if ConfigurationSection('python.analysis') in configuration_proxy.section:
+                    configuration_proxy.set('python.analysis.extraPaths', extra_paths)
+                self.handle_venv_strategies(session, item, configuration_proxy)
+
+    def resolve_extra_paths_for_dev_environment(self, session: Session) -> list[str]:
+        dev_environment = session.config.settings.get(SERVER_SETTING_DEV_ENVIRONMENT)
+        try:
+            if handler := get_dev_environment_handler(
+                dev_environment,
+                package_storage_path=self.plugin_storage_path,
+                workspace_folders=tuple(map(str, session.get_workspace_folders())),
+            ):
+                if dev_environment.startswith("sublime_text_") and handler.name() != dev_environment:
+                    log_warning(
+                        f'Development environment "{dev_environment}" is unsupported. '
+                        f'Using "{handler.name()}" instead.',
+                    )
+                return handler.resolve_extra_paths(settings=session.config.settings)
+        except Exception as ex:
+            log_error(f'Failed to update extra paths for dev environment "{dev_environment}": {ex}')
+        return []
+
+    def handle_venv_strategies(
+        self, session: Session, item: ConfigurationItem, configuration_proxy: ConfigurationProxy
+    ) -> None:
+        if ConfigurationSection("python") not in configuration_proxy.section:
+            return
+        workspace_uri = item.get("scopeUri", "")
+        file_path = uri_to_file_path(workspace_uri)
+        wf_path = find_workspace_folder(session.window, file_path) if file_path else None
+        # provide detected venv information
+        # note that `pyrightconfig.json` seems to be auto-prioritized by the server
+        if (venv_strategies := session.config.settings.get("venvStrategies")) and (
+            venv_info := find_venv_by_finder_names(venv_strategies, project_dir=wf_path, session=session)
+        ):
+            if wf_path:
+                self.wf_attrs[wf_path].venv_info = venv_info
+            # When ST just starts, server session hasn't been created yet.
+            # So `on_activated` can't add full information for the initial view and hence we handle it here.
+            if active_view := sublime.active_window().active_view():
+                active_view.run_command("lsp_pyright_update_view_status_text")
+            # modify configuration for the venv
+            site_packages_dir = str(venv_info.site_packages_dir)
+            extra_paths: list[str] = configuration_proxy.get("python.analysis.extraPaths")
+            if site_packages_dir not in extra_paths:
+                extra_paths.insert(0, site_packages_dir)
+            if not configuration_proxy.get("python.pythonPath"):
+                configuration_proxy.set("python.pythonPath", str(venv_info.python_executable))
 
     def patch_markdown_content(self, content: str) -> str:
         # the fenced code blocks are not valid Python hence we use a custom syntax

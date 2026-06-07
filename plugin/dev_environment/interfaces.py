@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import json
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Iterable, Literal, Sequence, final
 
-from LSP.plugin import ClientConfig
+from LSP.plugin import DottedDict
 from more_itertools import unique_everseen
 
 from ..constants import SERVER_SETTING_ANALYSIS_EXTRAPATHS, SERVER_SETTING_DEV_ENVIRONMENT
@@ -25,9 +26,9 @@ class BaseDevEnvironmentHandler(ABC):
 
     @final
     @classmethod
-    def get_dev_environment_subsetting(cls, config: ClientConfig, subkey: str) -> Any:
+    def get_dev_environment_subsetting(cls, settings: DottedDict, subkey: str) -> Any:
         """Gets the sub-setting of `XXX.dev_environment_NAME.SUBKEY`."""
-        return config.settings.get(f"{SERVER_SETTING_DEV_ENVIRONMENT}_{cls.name()}.{subkey}")
+        return settings.get(f"{SERVER_SETTING_DEV_ENVIRONMENT}_{cls.name()}.{subkey}")
 
     @classmethod
     def can_support(cls, dev_environment: str) -> bool:
@@ -35,33 +36,35 @@ class BaseDevEnvironmentHandler(ABC):
         return cls.name() == dev_environment
 
     @final
-    def handle(self, *, config: ClientConfig) -> None:
-        """Handle this environment."""
-        self.handle_(config=config)
+    def resolve_extra_paths(self, *, settings: DottedDict) -> list[str]:
+        """Returns resolved `extraPaths` including `current_paths` for the environment."""
+        return self.resolve_extra_paths_(settings=settings)
 
     @abstractmethod
-    def handle_(self, *, config: ClientConfig) -> None:
+    def resolve_extra_paths_(self, *, settings: DottedDict) -> list[str]:
         """Handle this environment. (subclass)"""
 
-    def _inject_extra_paths(
+    def _resolve_paths(
         self,
         *,
-        config: ClientConfig,
+        settings: DottedDict,
         paths: Iterable[str | Path],
         operation: Literal["append", "prepend", "replace"] = "append",
-    ) -> None:
+    ) -> list[str]:
         """Injects the given `paths` to `XXX.analysis.extraPaths` setting."""
-        current_paths: list[str] = config.settings.get(SERVER_SETTING_ANALYSIS_EXTRAPATHS) or []
-        extra_paths = list(map(str, paths))
+        current_paths: list[str] = settings.get(SERVER_SETTING_ANALYSIS_EXTRAPATHS) or []
+        print('CURRENT', json.dumps(current_paths, indent=4))
+        paths = list(map(str, paths))
         if operation == "prepend":
-            next_paths = extra_paths + current_paths
+            resolved_paths = paths + current_paths
         elif operation == "append":
-            next_paths = current_paths + extra_paths
+            resolved_paths = current_paths + paths
         elif operation == "replace":
-            next_paths = extra_paths
+            resolved_paths = paths
         else:
             raise ValueError(f"Invalid operation: {operation}")
 
-        next_paths = list(unique_everseen(next_paths, key=Path))  # deduplication
-        log_debug(f'Due to "dev_environment", new "analysis.extraPaths" is ({operation = }): {next_paths}')
-        config.settings.set(SERVER_SETTING_ANALYSIS_EXTRAPATHS, next_paths)
+        resolved_paths = list(map(str, unique_everseen(resolved_paths, key=Path)))  # deduplication
+        log_debug(f'Due to "dev_environment", new "analysis.extraPaths" is ({operation = }): {resolved_paths}')
+        print('NEW', json.dumps(resolved_paths, indent=4))
+        return resolved_paths
