@@ -66,7 +66,7 @@ class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, A
 
         # sublime stubs - add as first
         if self.python_version == (3, 3):
-            dep_dirs.insert(0, str(self.package_storage_path / "typings/sublime_text_py33"))
+            dep_dirs.insert(0, str(self.package_storage_path / "typings" / "sublime_text_py33"))
 
         return list(filter(os.path.isdir, dep_dirs))
 
