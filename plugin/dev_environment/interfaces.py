@@ -12,8 +12,8 @@ from ..log import log_debug
 
 
 class BaseDevEnvironmentHandler(ABC):
-    def __init__(self, *, package_storage_path: str | Path, workspace_folders: Sequence[str]) -> None:
-        self.package_storage_path = Path(package_storage_path)
+    def __init__(self, *, package_storage_path: Path, workspace_folders: Sequence[str]) -> None:
+        self.package_storage_path = package_storage_path
         """The language server directory."""
         self.workspace_folders = workspace_folders
         """The workspace folders."""
