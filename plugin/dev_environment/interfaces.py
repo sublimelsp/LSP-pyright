@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Iterable, Literal, Sequence, final
 
-from LSP.plugin.core.collections import DottedDict
+from LSP.plugin import DottedDict
 from more_itertools import unique_everseen
 
 from ..constants import SERVER_SETTING_ANALYSIS_EXTRAPATHS, SERVER_SETTING_DEV_ENVIRONMENT
@@ -12,8 +12,8 @@ from ..log import log_debug
 
 
 class BaseDevEnvironmentHandler(ABC):
-    def __init__(self, *, server_dir: str | Path, workspace_folders: Sequence[str]) -> None:
-        self.server_dir = Path(server_dir)
+    def __init__(self, *, package_storage_path: Path, workspace_folders: Sequence[str]) -> None:
+        self.package_storage_path = package_storage_path
         """The language server directory."""
         self.workspace_folders = workspace_folders
         """The workspace folders."""
@@ -35,33 +35,33 @@ class BaseDevEnvironmentHandler(ABC):
         return cls.name() == dev_environment
 
     @final
-    def handle(self, *, settings: DottedDict) -> None:
-        """Handle this environment."""
-        self.handle_(settings=settings)
+    def resolve_extra_paths(self, *, settings: DottedDict) -> list[str]:
+        """Returns resolved `extraPaths` including `current_paths` for the environment."""
+        return self.resolve_extra_paths_(settings=settings)
 
     @abstractmethod
-    def handle_(self, *, settings: DottedDict) -> None:
+    def resolve_extra_paths_(self, *, settings: DottedDict) -> list[str]:
         """Handle this environment. (subclass)"""
 
-    def _inject_extra_paths(
+    def _resolve_paths(
         self,
         *,
         settings: DottedDict,
         paths: Iterable[str | Path],
         operation: Literal["append", "prepend", "replace"] = "append",
-    ) -> None:
+    ) -> list[str]:
         """Injects the given `paths` to `XXX.analysis.extraPaths` setting."""
         current_paths: list[str] = settings.get(SERVER_SETTING_ANALYSIS_EXTRAPATHS) or []
         extra_paths = list(map(str, paths))
         if operation == "prepend":
-            next_paths = extra_paths + current_paths
+            resolved_paths = extra_paths + current_paths
         elif operation == "append":
-            next_paths = current_paths + extra_paths
+            resolved_paths = current_paths + extra_paths
         elif operation == "replace":
-            next_paths = extra_paths
+            resolved_paths = extra_paths
         else:
             raise ValueError(f"Invalid operation: {operation}")
 
-        next_paths = list(unique_everseen(next_paths, key=Path))  # deduplication
-        log_debug(f'Due to "dev_environment", new "analysis.extraPaths" is ({operation = }): {next_paths}')
-        settings.set(SERVER_SETTING_ANALYSIS_EXTRAPATHS, next_paths)
+        resolved_paths = list(map(str, unique_everseen(resolved_paths, key=Path)))  # deduplication
+        log_debug(f'Due to "dev_environment", new "analysis.extraPaths" is ({operation = }): {resolved_paths}')
+        return resolved_paths

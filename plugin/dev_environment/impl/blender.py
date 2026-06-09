@@ -4,7 +4,8 @@ import json
 import tempfile
 from pathlib import Path
 
-from LSP.plugin.core.collections import DottedDict
+from LSP.plugin import DottedDict
+from typing_extensions import override
 
 from ...utils import run_shell_command
 from ..interfaces import BaseDevEnvironmentHandler
@@ -15,8 +16,9 @@ class BlenderDevEnvironmentHandler(BaseDevEnvironmentHandler):
     def name(cls) -> str:
         return "blender"
 
-    def handle_(self, *, settings: DottedDict) -> None:
-        self._inject_extra_paths(settings=settings, paths=self.find_paths(settings))
+    @override
+    def resolve_extra_paths_(self, *, settings: DottedDict) -> list[str]:
+        return self._resolve_paths(settings=settings, paths=self.find_paths(settings))
 
     @classmethod
     def find_paths(cls, settings: DottedDict) -> list[str]:
