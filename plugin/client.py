@@ -119,7 +119,8 @@ class LspPyrightPlugin(LspPlugin):
     @override
     def on_pre_send_notification_async(self, notification: ClientNotification) -> None:
         if notification["method"] == "workspace/didChangeConfiguration" and (session := self.weaksession()):
-            extra_paths = self.resolve_extra_paths_for_dev_environment(session)
+            extra_paths: list[str] = session.config.settings.get(SERVER_SETTING_ANALYSIS_EXTRAPATHS, [])
+            extra_paths.extend(self.resolve_extra_paths_for_dev_environment(session))
             session.config.settings.set(SERVER_SETTING_ANALYSIS_EXTRAPATHS, extra_paths)
             # Skip updating the notification params as pyright doesn't care about those - it gets settings through
             # the `workspace/configuration` request.
@@ -160,29 +161,32 @@ class LspPyrightPlugin(LspPlugin):
     def handle_venv_strategies(
         self, session: Session, item: ConfigurationItem, configuration_proxy: ConfigurationProxy
     ) -> None:
-        if ConfigurationSection("python") not in configuration_proxy.section:
-            return
-        workspace_uri = item.get("scopeUri", "")
-        file_path = uri_to_file_path(workspace_uri)
-        wf_path = find_workspace_folder(session.window, file_path) if file_path else None
-        # provide detected venv information
-        # note that `pyrightconfig.json` seems to be auto-prioritized by the server
-        if (venv_strategies := session.config.settings.get("venvStrategies")) and (
-            venv_info := find_venv_by_finder_names(venv_strategies, project_dir=wf_path, session=session)
-        ):
-            if wf_path:
-                self.wf_attrs[wf_path].venv_info = venv_info
-            # When ST just starts, server session hasn't been created yet.
-            # So `on_activated` can't add full information for the initial view and hence we handle it here.
-            if active_view := sublime.active_window().active_view():
-                active_view.run_command("lsp_pyright_update_view_status_text")
-            # modify configuration for the venv
-            site_packages_dir = str(venv_info.site_packages_dir)
-            extra_paths: list[str] = configuration_proxy.get("python.analysis.extraPaths")
-            if site_packages_dir not in extra_paths:
-                extra_paths.insert(0, site_packages_dir)
-            if not configuration_proxy.get("python.pythonPath"):
-                configuration_proxy.set("python.pythonPath", str(venv_info.python_executable))
+        python_section = ConfigurationSection("python")
+        pythonanalysis_section = ConfigurationSection("python.analysis")
+        if python_section in configuration_proxy.section or pythonanalysis_section in configuration_proxy.section:
+            workspace_uri = item.get("scopeUri", "")
+            file_path = uri_to_file_path(workspace_uri)
+            wf_path = find_workspace_folder(session.window, file_path) if file_path else None
+            # provide detected venv information
+            # note that `pyrightconfig.json` seems to be auto-prioritized by the server
+            if (venv_strategies := session.config.settings.get("venvStrategies")) and (
+                venv_info := find_venv_by_finder_names(venv_strategies, project_dir=wf_path, session=session)
+            ):
+                if wf_path:
+                    self.wf_attrs[wf_path].venv_info = venv_info
+                # When ST just starts, server session hasn't been created yet.
+                # So `on_activated` can't add full information for the initial view and hence we handle it here.
+                if active_view := sublime.active_window().active_view():
+                    active_view.run_command("lsp_pyright_update_view_status_text")
+                # modify configuration for the venv
+                if pythonanalysis_section in configuration_proxy.section:
+                    site_packages_dir = str(venv_info.site_packages_dir)
+                    extra_paths: list[str] = configuration_proxy.get("python.analysis.extraPaths")
+                    if site_packages_dir not in extra_paths:
+                        extra_paths.insert(0, site_packages_dir)
+                else:
+                    if not configuration_proxy.get("python.pythonPath"):
+                        configuration_proxy.set("python.pythonPath", str(venv_info.python_executable))
 
     def patch_markdown_content(self, content: str) -> str:
         # the fenced code blocks are not valid Python hence we use a custom syntax
