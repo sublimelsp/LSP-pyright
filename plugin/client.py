@@ -17,7 +17,7 @@ from LSP.plugin import (
     ServerResponse,
     Session,
 )
-from LSP.protocol import ConfigurationItem, ConfigurationParams, LSPAny
+from LSP.protocol import ConfigurationItem, LSPAny
 from lsp_utils import NodeManager
 from sublime_lib import ResourcePath
 from typing_extensions import override
@@ -129,16 +129,35 @@ class LspPyrightPlugin(LspPlugin):
     @override
     def on_pre_send_response_async(self, response: ClientResponse) -> None:
         if response["method"] == "workspace/configuration":
-            self.handle_workspace_configuration(response["params"], response["result"])
+            items = response["params"]["items"]
+            configurations = response["result"]
+            self.handle_workspace_configuration(items, configurations)
+            self.handle_stub_path_configuration(items, configurations)
             return
 
-    def handle_workspace_configuration(self, params: ConfigurationParams, result: list[LSPAny]) -> None:
+    def handle_workspace_configuration(self, items: list[ConfigurationItem], configurations: list[LSPAny]) -> None:
         if not (session := self.weaksession()):
             return
-        for i, item in enumerate(params["items"]):
-            if (configuration := result[i]) and isinstance(configuration, dict):
+        for i, item in enumerate(items):
+            if (configuration := configurations[i]) and isinstance(configuration, dict):
                 configuration_proxy = ConfigurationProxy(configuration, ConfigurationSection(item.get("section")))
                 self.handle_venv_strategies(session, item, configuration_proxy)
+
+    def handle_stub_path_configuration(self, items: list[ConfigurationItem], configurations: list[LSPAny]) -> None:
+        # If stubPath is not set, remove it rather than sending default value.
+        # This lets the server know that it's unset rather than explicitly set to the default value (typings)
+        # so it can behave differently.
+        for i, item in enumerate(items):
+            result = configurations[i]
+            if (
+                isinstance(result, dict)
+                and (
+                    (item.get("section") == "python" and (analysisConfig := result["analysis"]))
+                    or (item.get("section") == "python.analysis" and (analysisConfig := result))
+                )
+                and analysisConfig["stubPath"] == "typings"
+            ):
+                del analysisConfig["stubPath"]
 
     def resolve_extra_paths_for_dev_environment(self, session: Session) -> list[str]:
         dev_environment = session.config.settings.get(SERVER_SETTING_DEV_ENVIRONMENT)

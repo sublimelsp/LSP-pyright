@@ -1322,7 +1322,7 @@
               "type": "boolean"
             },
             "stubPath": {
-              "default": "./typings",
+              "default": "typings",
               "examples": [
                 "src/typestubs"
               ],

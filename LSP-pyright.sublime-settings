@@ -56,7 +56,7 @@
 		// Additional import search resolution paths
 		"python.analysis.extraPaths": [],
 		// Path to directory containing custom type stub files.
-		"python.analysis.stubPath": "./typings",
+		"python.analysis.stubPath": "typings",
 		// "openFilesOnly" or "workspace"
 		"python.analysis.diagnosticMode": "openFilesOnly",
 		// Allows a user to override the severity levels for individual diagnostics.
