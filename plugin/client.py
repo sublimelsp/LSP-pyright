@@ -155,7 +155,7 @@ class LspPyrightPlugin(LspPlugin):
                     (item.get("section") == "python" and (analysisConfig := result["analysis"]))
                     or (item.get("section") == "python.analysis" and (analysisConfig := result))
                 )
-                and analysisConfig["stubPath"] == "typings"
+                and analysisConfig["stubPath"] == "./typings"
             ):
                 del analysisConfig["stubPath"]
 
