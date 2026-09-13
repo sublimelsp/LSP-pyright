@@ -64,7 +64,12 @@ class BaseVenvInfo(ABC):
         if os.name == "nt":
             return self.lib_dir / "site-packages"
         python_version = ".".join(self.python_version.split(".")[:2])
-        return self.lib_dir / f"python{python_version}/site-packages"
+        site_packages_dir = self.lib_dir / f"python{python_version}/site-packages"
+        if site_packages_dir.is_dir():
+            return site_packages_dir
+        # Free-threaded (GIL-disabled, sysconfig.get_config_var("Py_GIL_DISABLED") == 1)
+        # CPython builds appends "t" to the Python version string, i.e. "python3.13t".
+        return self.lib_dir / f"python{python_version}t/site-packages"
 
     @property
     def python_executable(self) -> Path:
