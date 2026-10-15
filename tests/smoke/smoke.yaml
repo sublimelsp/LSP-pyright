@@ -1,0 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/sublimelsp/lsp_smoke_test/v1/smoke.schema.json
+file: sample.py
+expected_diagnostics:
+  source: Pyright
+  code: reportAssignmentType
