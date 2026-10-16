@@ -1,0 +1,12 @@
+name: Smoke test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    uses: sublimelsp/lsp_smoke_test/.github/workflows/smoke-test.yml@v1
