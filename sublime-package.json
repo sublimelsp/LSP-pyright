@@ -874,7 +874,7 @@
               "examples": [
                 "Linux"
               ],
-              "pattern": "^(Linux|Windows|Darwin|iOS|Android|All)$",
+              "pattern": "^(Linux|Windows|Darwin|All)$",
               "title": "Python platform to assume during type analysis",
               "type": "string"
             },
