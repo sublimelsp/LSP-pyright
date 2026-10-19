@@ -1,4 +1,4 @@
-name: Update schema in Dependabot PR
+name: Update schema in Renovate PR
 
 on:
   pull_request:
@@ -8,42 +8,94 @@ on:
       - 'language-server/package.json'
 
 permissions:
-  contents: write
+  contents: read
   pull-requests: write
-  repository-projects: write
+
+concurrency:
+  group: schema-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   update_schema:
     name: Run schema update
+    # Only for Renovate branches in this repository. The schema PR is stacked on top of the Renovate PR, so its base is
+    # not master and this workflow doesn't run for it.
+    if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'renovate/')
     runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PR_BRANCH: ${{ github.head_ref }}
+      SCHEMA_BRANCH: schema/${{ github.head_ref }}
 
     steps:
+      # Pushes and PRs made with GITHUB_TOKEN don't trigger workflows, so the schema PR wouldn't get CI.
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ vars.SUBLIMELSP_APP_ID || secrets.SUBLIMELSP_APP_ID }}
+          private-key: ${{ secrets.SUBLIMELSP_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
       - uses: astral-sh/setup-uv@v10.3.0
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Update schema
         id: update-schema
+        # The script exits with 1 when the schema has new keys that need to be added manually.
         run: |
+          status=0
+          output=$(make update-schema 2>&1) || status=$?
+          echo "$output"
           {
-            echo 'OUTPUT<<EOF'
-            make update-schema
-            echo EOF
+            echo 'output<<SCHEMA_OUTPUT_EOF'
+            echo "$output"
+            echo 'SCHEMA_OUTPUT_EOF'
+            echo "status=$status"
+            if git diff --quiet; then echo 'changed=false'; else echo 'changed=true'; fi
           } >> "$GITHUB_OUTPUT"
 
-      - name: Check for modified files
-        id: git-check
-        run: echo "GIT_MODIFIED=$(if [ -n "$(git status --porcelain)" ]; then echo "true"; else echo "false"; fi)" >> "$GITHUB_OUTPUT"
+      - name: Create or update schema PR
+        id: schema-pr
+        if: steps.update-schema.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          OUTPUT: ${{ steps.update-schema.outputs.output }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git commit -am 'chore: update schema'
+          git push --force origin "HEAD:refs/heads/$SCHEMA_BRANCH"
+          cat > "$RUNNER_TEMP/body.md" <<EOF
+          Schema changes for #$PR_NUMBER. Make sure that those are reflected in \`LSP-pyright.sublime-settings\` and \`sublime-package.json\`, then merge this PR before #$PR_NUMBER.
 
-      - name: Update changes in the PR
-        if: steps.git-check.outputs.GIT_MODIFIED == 'true'
-        run:  |
-          git config --global user.name github-actions[bot]
-          git config --global user.email github-actions[bot]@users.noreply.github.com
-          git add -A
-          git commit -m '[automated commit] update schema'
-          git push
+          This branch is regenerated when #$PR_NUMBER is updated, which overwrites any changes pushed to it.
+
+          \`\`\`
+          $OUTPUT
+          \`\`\`
+          EOF
+          number=$(gh pr list --head "$SCHEMA_BRANCH" --base "$PR_BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh pr edit "$number" --body-file "$RUNNER_TEMP/body.md"
+          else
+            url=$(gh pr create --head "$SCHEMA_BRANCH" --base "$PR_BRANCH" --title "chore: update schema for #$PR_NUMBER" --body-file "$RUNNER_TEMP/body.md")
+            number=${url##*/}
+          fi
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+
+      - name: Close stale schema PR
+        if: steps.update-schema.outputs.changed == 'false'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          number=$(gh pr list --head "$SCHEMA_BRANCH" --base "$PR_BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh pr close "$number" --delete-branch --comment "No schema changes needed anymore for #$PR_NUMBER."
+          fi
 
       - name: Find Comment
         uses: peter-evans/find-comment@v4
@@ -58,9 +110,15 @@ jobs:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Following are the schema changes in the new version. Make sure that those are reflected in `LSP-pyright.sublime-settings` and `sublime-package.json` files.
+            ${{ steps.schema-pr.outputs.number && format('Schema changes are in #{0}. Review and merge it before merging this PR.', steps.schema-pr.outputs.number) || 'No changes to `sublime-package.json`.' }}
 
             ```
-            ${{ steps.update-schema.outputs.OUTPUT }}
+            ${{ steps.update-schema.outputs.output }}
             ```
           edit-mode: replace
+
+      - name: Fail if the schema needs review
+        if: steps.update-schema.outputs.changed == 'true' || steps.update-schema.outputs.status != '0'
+        run: |
+          echo "::error::The schema needs review, see the PR comment."
+          exit 1
