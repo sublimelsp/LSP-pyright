@@ -11,9 +11,8 @@ PACKAGE_NAME = "LSP-pyright"
 
 PROJECT_ROOT = Path(__file__).parents[1]
 PYRIGHTCONFIG_SCHEMA_ID = "sublime://pyrightconfig"
-PYRIGHT_CONFIGURATION_SCHEMA_URL = (
-    "https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json"  # noqa: E501
-)
+PYRIGHT_CONFIGURATION_SCHEMA_URL = "https://raw.githubusercontent.com/microsoft/pyright/{version}/packages/vscode-pyright/schemas/pyrightconfig.schema.json"  # noqa: E501
+SERVER_PACKAGE_JSON_PATH = PROJECT_ROOT / "language-server" / "package.json"
 SUBLIME_PACKAGE_JSON_PATH = PROJECT_ROOT / "sublime-package.json"
 # Keys that are in the pyrightconfig.json schema but should not raise a comment when not present in the LSP schema.
 IGNORED_PYRIGHTCONFIG_KEYS = {
@@ -47,12 +46,14 @@ def main() -> None:
         print("No updates done to sublime-package.json.")
     if new_schema_keys:
         new_schema_keys_text = "".join(map(lambda k: f"\n - {k}", new_schema_keys))
-        print(f"\nNew keys found in the latest pyrightconfig.json schema: {new_schema_keys_text}\n\n")
+        print(f"\nNew keys found in the pyrightconfig.json schema: {new_schema_keys_text}\n\n")
         print("Ensure that those are added to the sublime-package.json manually, if relevant.")
 
 
 def read_sublime_package_json() -> tuple[JsonDict, JsonDict]:
-    with urlopen(PYRIGHT_CONFIGURATION_SCHEMA_URL) as response:
+    pyright_version: str = json.loads(SERVER_PACKAGE_JSON_PATH.read_bytes())["dependencies"]["pyright"]
+    print(f"Using pyrightconfig.json schema from pyright {pyright_version}.")
+    with urlopen(PYRIGHT_CONFIGURATION_SCHEMA_URL.format(version=pyright_version)) as response:
         pyrightconfig_schema_json: JsonDict = json.load(response)
     create_all_property_definitions(pyrightconfig_schema_json)
     sublime_package_schema_json: JsonDict = json.loads(SUBLIME_PACKAGE_JSON_PATH.read_bytes())
