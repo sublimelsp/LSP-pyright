@@ -37,18 +37,22 @@ jobs:
           permission-contents: write
           permission-pull-requests: write
 
-      - uses: astral-sh/setup-uv@v10.3.0
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ steps.app-token.outputs.token }}
+      - uses: astral-sh/setup-uv@v10.3.0
+
+      # So that uv's output from creating the environment isn't included in the script output.
+      - name: Install dependencies
+        run: make install-dev
 
       - name: Update schema
         id: update-schema
         # The script exits with 1 when the schema has new keys that need to be added manually.
         run: |
           status=0
-          output=$(make update-schema 2>&1) || status=$?
+          output=$(make --silent update-schema 2>&1) || status=$?
           echo "$output"
           {
             echo 'output<<SCHEMA_OUTPUT_EOF'
