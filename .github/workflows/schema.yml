@@ -1,4 +1,4 @@
-name: Update schema in Renovate PR
+name: Update schema
 
 on:
   pull_request:
@@ -18,11 +18,12 @@ concurrency:
 jobs:
   update_schema:
     name: Run schema update
-    # Only for Renovate branches in this repository. The schema PR is stacked on top of the Renovate PR, so its base is
-    # not master and this workflow doesn't run for it.
-    if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'renovate/')
+    # The schema PR is stacked on top of the PR, so its base is not master and this workflow doesn't run for it.
+    if: ${{ !startsWith(github.head_ref, 'schema/') }}
     runs-on: ubuntu-latest
     env:
+      # PRs from forks get a read-only token and no secrets, so the schema PR and the comment are skipped for them.
+      IS_FORK: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
       PR_BRANCH: ${{ github.head_ref }}
       SCHEMA_BRANCH: schema/${{ github.head_ref }}
@@ -31,6 +32,7 @@ jobs:
       # Pushes and PRs made with GITHUB_TOKEN don't trigger workflows, so the schema PR wouldn't get CI.
       - uses: actions/create-github-app-token@v3
         id: app-token
+        if: env.IS_FORK == 'false'
         with:
           client-id: ${{ vars.SUBLIMELSP_APP_CLIENT_ID }}
           private-key: ${{ secrets.SUBLIMELSP_APP_PRIVATE_KEY }}
@@ -40,7 +42,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token || github.token }}
       - uses: astral-sh/setup-uv@v10.3.0
 
       # So that uv's output from creating the environment isn't included in the script output.
@@ -54,6 +56,8 @@ jobs:
           status=0
           output=$(make --silent update-schema 2>&1) || status=$?
           echo "$output"
+          # shellcheck disable=SC2016 # Markdown code fence, not a command substitution.
+          printf '```\n%s\n```\n' "$output" >> "$GITHUB_STEP_SUMMARY"
           {
             echo 'output<<SCHEMA_OUTPUT_EOF'
             echo "$output"
@@ -64,7 +68,7 @@ jobs:
 
       - name: Create or update schema PR
         id: schema-pr
-        if: steps.update-schema.outputs.changed == 'true'
+        if: env.IS_FORK == 'false' && steps.update-schema.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           OUTPUT: ${{ steps.update-schema.outputs.output }}
@@ -92,7 +96,7 @@ jobs:
           echo "number=$number" >> "$GITHUB_OUTPUT"
 
       - name: Close stale schema PR
-        if: steps.update-schema.outputs.changed == 'false'
+        if: env.IS_FORK == 'false' && steps.update-schema.outputs.changed == 'false'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
@@ -104,12 +108,14 @@ jobs:
       - name: Find Comment
         uses: peter-evans/find-comment@v4
         id: find-comment
+        if: env.IS_FORK == 'false'
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
 
       - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v5
+        if: env.IS_FORK == 'false'
         with:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
@@ -124,5 +130,9 @@ jobs:
       - name: Fail if the schema needs review
         if: steps.update-schema.outputs.changed == 'true' || steps.update-schema.outputs.status != '0'
         run: |
-          echo "::error::The schema needs review, see the PR comment."
+          if [ "$IS_FORK" = 'true' ]; then
+            echo "::error::The schema needs review. Run \`make update-schema\` and see the job summary."
+          else
+            echo "::error::The schema needs review, see the PR comment."
+          fi
           exit 1
