@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 from typing import Any, Dict
 from urllib.request import urlopen
@@ -48,6 +49,7 @@ def main() -> None:
         new_schema_keys_text = "".join(map(lambda k: f"\n - {k}", new_schema_keys))
         print(f"\nNew keys found in the pyrightconfig.json schema: {new_schema_keys_text}\n\n")
         print("Ensure that those are added to the sublime-package.json manually, if relevant.")
+        sys.exit(1)
 
 
 def read_sublime_package_json() -> tuple[JsonDict, JsonDict]:
