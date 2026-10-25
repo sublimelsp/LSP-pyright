@@ -4,8 +4,6 @@ on:
   pull_request:
     branches:
       - master
-    paths:
-      - 'language-server/package.json'
 
 permissions:
   contents: read
