@@ -103,6 +103,18 @@ jobs:
             gh pr close "$number" --delete-branch --comment "No schema changes needed anymore for #$PR_NUMBER."
           fi
 
+      - name: Check if the server was changed
+        id: server-changed
+        if: env.IS_FORK == 'false'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          if gh pr diff "$PR_NUMBER" --name-only | grep -qx 'language-server/package.json'; then
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Find Comment
         uses: peter-evans/find-comment@v4
         id: find-comment
@@ -111,9 +123,16 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
 
+      # Skip the comment when there is nothing to report, unless an existing comment has to be updated.
       - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v5
-        if: env.IS_FORK == 'false'
+        if: >-
+          env.IS_FORK == 'false' && (
+            steps.server-changed.outputs.changed == 'true' ||
+            steps.schema-pr.outputs.number ||
+            steps.update-schema.outputs.status != '0' ||
+            steps.find-comment.outputs.comment-id
+          )
         with:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
