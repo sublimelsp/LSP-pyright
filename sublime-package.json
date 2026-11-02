@@ -378,7 +378,7 @@
                       "$ref": "sublime://pyrightconfig#/definitions/extraPaths"
                     },
                     "python.analysis.logLevel": {
-                      "default": "Information",
+                      "default": "Warning",
                       "description": "Specifies the level of logging for the Output panel",
                       "enum": [
                         "Error",
