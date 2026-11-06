@@ -10,11 +10,12 @@ from typing import Generator, Tuple, TypeVar
 
 import sublime
 from LSP.plugin import DottedDict
-from LSP.plugin.core.constants import ST_VERSION
 from more_itertools import first_true
 from typing_extensions import TypeAlias, override
 
 from ..interfaces import BaseDevEnvironmentHandler
+
+ST_VERSION = int(sublime.version())
 
 T = TypeVar("T")
 
