@@ -35,5 +35,5 @@ def get_dev_environment_handler(
 def list_dev_environment_handler_classes() -> Generator[type[BaseDevEnvironmentHandler], None, None]:
     yield BlenderDevEnvironmentHandler
     yield GdbDevEnvironmentHandler
-    yield from VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS  # sublime_text_33, sublime_text_38, etc
+    yield from VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS  # sublime_text_38, sublime_text_314
     yield SublimeTextDevEnvironmentHandler  # sublime_text

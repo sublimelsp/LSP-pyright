@@ -33,7 +33,9 @@
 		//                   The Python version which the developed plugin runs on will be used.
 		//                   `sys.path` from plugin_host will be added into "python.analysis.extraPaths"
 		//                   so ST package dependecies can be resolved by the LSP server.
-		// - "sublime_text_33": Similar to "sublime_text" but Python 3.3 forced.
+		//                   Types of the ST API ("sublime", "sublime_plugin") come from sublime-text-stubs
+		//                   (https://github.com/SublimeText/sublime-text-stubs), installed into the package storage,
+		//                   rather than from the running ST.
 		// - "sublime_text_38": Similar to "sublime_text" but Python 3.8 forced.
 		// - "sublime_text_314": Similar to "sublime_text" but Python 3.14 forced.
 		// - "blender": Suitable for people who are developing Blender add-ons. `sys.path` from Blender's embedded

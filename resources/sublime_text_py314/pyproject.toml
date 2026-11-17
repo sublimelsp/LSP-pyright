@@ -1,0 +1,7 @@
+# Typing stubs of the Sublime Text API for the Python 3.14 plugin host.
+# Installed into the package storage when "pyright.dev_environment" targets Python 3.14.
+[project]
+name = "lsp-pyright-sublime-text-py314"
+version = "0.0.0"
+requires-python = ">=3.13"
+dependencies = ["sublime-text-stubs==4213.1"]

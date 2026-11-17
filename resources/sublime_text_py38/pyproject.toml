@@ -1,0 +1,7 @@
+# Typing stubs of the Sublime Text API for the Python 3.8 plugin host.
+# Installed into the package storage when "pyright.dev_environment" targets Python 3.8.
+[project]
+name = "lsp-pyright-sublime-text-py38"
+version = "0.0.0"
+requires-python = ">=3.8"
+dependencies = ["sublime-text-stubs==4200.2"]
