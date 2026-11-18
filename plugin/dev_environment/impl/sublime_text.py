@@ -1,29 +1,26 @@
 from __future__ import annotations
 
-import inspect
 import os
 import re
 import sys
-from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Generator, Tuple, TypeVar
+from typing import Tuple
 
 import sublime
 from LSP.plugin import DottedDict
+from lsp_utils import UvVenvManager
 from more_itertools import first_true
+from sublime_lib import ResourcePath
 from typing_extensions import TypeAlias, override
 
+from ...constants import PACKAGE_NAME
 from ..interfaces import BaseDevEnvironmentHandler
-
-ST_VERSION = int(sublime.version())
-
-T = TypeVar("T")
 
 VERSION_TUPLE_2: TypeAlias = Tuple[int, int]
 """E.g., `(3, 8)` means Python 3.8."""
 
 
-class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, ABC):
+class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
     python_version: VERSION_TUPLE_2 = (-1, -1)
     python_version_no_dot: str = ""
 
@@ -32,17 +29,28 @@ class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, A
         return f"sublime_text_{cls.python_version_no_dot}"
 
     @classmethod
-    @abstractmethod
-    def is_available(cls) -> bool:
-        """Check if this handler is available in the current ST version."""
-
-    @classmethod
     def can_support(cls, dev_environment: str) -> bool:
-        if not (cls.is_available() and dev_environment.startswith("sublime_text_")):
+        if not dev_environment.startswith("sublime_text_"):
             return False
         wanted_version_no_dot = dev_environment.rpartition("_")[2]
         wanted_version = (int(wanted_version_no_dot[0]), int(wanted_version_no_dot[1:]))
         return cls.python_version >= wanted_version
+
+    @classmethod
+    def stubs_venv_manager(cls, package_storage_path: Path) -> UvVenvManager:
+        """Manages the venv with the Sublime Text API stubs for this Python version (`resources/sublime_text_pyXY`)."""
+        return UvVenvManager(
+            package_storage_path,
+            ResourcePath("Packages", PACKAGE_NAME, "resources", f"sublime_text_py{cls.python_version_no_dot}"),
+        )
+
+    def find_stubs_dir(self) -> Path | None:
+        """The `site-packages` dir of the stubs venv, which contains the `*-stubs` packages."""
+        venv_path = self.stubs_venv_manager(self.package_storage_path).venv_path
+        return first_true(
+            (*venv_path.glob("lib/python*/site-packages"), venv_path / "Lib" / "site-packages"),
+            pred=Path.is_dir,
+        )
 
     @override
     def resolve_extra_paths_(self, *, settings: DottedDict) -> list[str]:
@@ -65,22 +73,12 @@ class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler, A
         dep_dirs.remove(packages_path)
         dep_dirs.append(packages_path)
 
-        # sublime stubs - add as first
-        if self.python_version == (3, 3):
-            dep_dirs.insert(0, str(self.package_storage_path / "typings" / "sublime_text_py33"))
+        # Sublime Text API stubs - add as first so that they take precedence over the API modules
+        # (`sublime.py`, `sublime_plugin.py`) of the running Sublime Text, which are found in `sys.path`.
+        if stubs_dir := self.find_stubs_dir():
+            dep_dirs.insert(0, str(stubs_dir))
 
         return list(filter(os.path.isdir, dep_dirs))
-
-
-class SublimeText33DevEnvironmentHandler(BaseVersionedSublimeTextDevEnvironmentHandler):
-    """This handler will just assume the project uses Python 3.3."""
-
-    python_version = (3, 3)
-    python_version_no_dot = "33"
-
-    @classmethod
-    def is_available(cls) -> bool:
-        return True
 
 
 class SublimeText38DevEnvironmentHandler(BaseVersionedSublimeTextDevEnvironmentHandler):
@@ -89,10 +87,6 @@ class SublimeText38DevEnvironmentHandler(BaseVersionedSublimeTextDevEnvironmentH
     python_version = (3, 8)
     python_version_no_dot = "38"
 
-    @classmethod
-    def is_available(cls) -> bool:
-        return 4200 >= ST_VERSION >= 4107
-
 
 class SublimeText314DevEnvironmentHandler(BaseVersionedSublimeTextDevEnvironmentHandler):
     """This handler will just assume the project uses Python 3.14."""
@@ -100,32 +94,22 @@ class SublimeText314DevEnvironmentHandler(BaseVersionedSublimeTextDevEnvironment
     python_version = (3, 14)
     python_version_no_dot = "314"
 
-    @classmethod
-    def is_available(cls) -> bool:
-        return ST_VERSION >= 4203
+
+VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS: list[type[BaseVersionedSublimeTextDevEnvironmentHandler]] = [
+    SublimeText38DevEnvironmentHandler,
+    SublimeText314DevEnvironmentHandler,
+]
+"""All versioned ST dev environment handlers. Must be sorted by `python_version` ascending."""
 
 
-def list_all_subclasses(
-    root: type[T],
-    skip_abstract: bool = False,
-    skip_self: bool = False,
-) -> Generator[type[T], None, None]:
-    """Gets all sub-classes of the root class."""
-    if not skip_self and not (skip_abstract and inspect.isabstract(root)):
-        yield root
-    for leaf in root.__subclasses__():
-        yield from list_all_subclasses(leaf, skip_self=False, skip_abstract=skip_abstract)
+def install_sublime_text_stubs(package_storage_path: Path) -> None:
+    """Installs the Sublime Text API stubs for all supported Python versions. Blocks while installing."""
+    for handler_cls in VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS:
+        handler_cls.stubs_venv_manager(package_storage_path).install_async()
 
 
-VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS = sorted(
-    list_all_subclasses(BaseVersionedSublimeTextDevEnvironmentHandler, skip_abstract=True),  # type: ignore
-    key=lambda cls: cls.python_version,
-)
-"""Collects all versioned ST dev environment handlers. Sorted by `python_version` ascending."""
-
-AVAILABLE_ST_DEV_ENV_HANDLERS = [cls for cls in VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS if cls.is_available()]
-LATEST_ST_DEV_ENV_HANDLER = AVAILABLE_ST_DEV_ENV_HANDLERS[-1]
-OLDEST_ST_DEV_ENV_HANDLER = AVAILABLE_ST_DEV_ENV_HANDLERS[0]
+LATEST_ST_DEV_ENV_HANDLER = VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS[-1]
+OLDEST_ST_DEV_ENV_HANDLER = VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS[0]
 
 
 class SublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
@@ -139,9 +123,11 @@ class SublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
 
     @override
     def resolve_extra_paths_(self, *, settings: DottedDict) -> list[str]:
+        return self.resolve_handler().resolve_extra_paths(settings=settings)
+
+    def resolve_handler(self) -> BaseVersionedSublimeTextDevEnvironmentHandler:
         handler_cls = self.resolve_handler_cls(self.detect_project_python_version())
-        handler = handler_cls(package_storage_path=self.package_storage_path, workspace_folders=self.workspace_folders)
-        return handler.resolve_extra_paths(settings=settings)
+        return handler_cls(package_storage_path=self.package_storage_path, workspace_folders=self.workspace_folders)
 
     def detect_project_python_version(self) -> VERSION_TUPLE_2:
         try:
@@ -165,7 +151,7 @@ class SublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
     def resolve_handler_cls(wanted_version: VERSION_TUPLE_2) -> type[BaseVersionedSublimeTextDevEnvironmentHandler]:
         """Returns the best matching handler class for the wanted Python version."""
         return first_true(
-            AVAILABLE_ST_DEV_ENV_HANDLERS,
+            VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS,
             pred=lambda cls: cls.python_version >= wanted_version,
             default=LATEST_ST_DEV_ENV_HANDLER,
         )

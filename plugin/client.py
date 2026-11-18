@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 from collections import defaultdict
 from pathlib import Path
 from typing import final
@@ -24,6 +25,7 @@ from typing_extensions import override
 
 from .constants import PACKAGE_NAME, SERVER_SETTING_ANALYSIS_EXTRAPATHS, SERVER_SETTING_DEV_ENVIRONMENT
 from .dev_environment.helpers import get_dev_environment_handler
+from .dev_environment.impl.sublime_text import install_sublime_text_stubs
 from .log import log_error, log_warning
 from .utils_lsp import (
     ConfigurationProxy,
@@ -65,7 +67,8 @@ class LspPyrightPlugin(LspPlugin):
             node_version_requirement=">=14.18.0",
             on_server_installed=cls.on_server_installed,
         )
-        cls.handle_python_33_types()
+        cls.remove_legacy_files()
+        install_sublime_text_stubs(cls.plugin_storage_path)
 
     @classmethod
     def on_server_installed(cls, server_directory: Path) -> None:
@@ -77,18 +80,10 @@ class LspPyrightPlugin(LspPlugin):
             raise RuntimeError(f'Failed to copy overwrite dirs from "{overwrites_path}" to "{server_directory}".')
 
     @classmethod
-    def handle_python_33_types(cls) -> None:
-        package_name = cls.plugin_storage_path.name
-        dir_src = ResourcePath(f"Packages/{package_name}/resources")
-        dir_dst = cls.plugin_storage_path
-        version_file = dir_dst / "VERSION"
-        if version_file.is_file() and version_file.read_text(encoding="utf-8") == cls.server_version:
-            return
-        try:
-            ResourcePath(dir_src).copytree(dir_dst, exist_ok=True)
-            version_file.write_text(cls.server_version, encoding="utf-8")
-        except OSError:
-            raise RuntimeError(f'Failed to copy overwrite dirs from "{dir_src}" to "{dir_dst}".')
+    def remove_legacy_files(cls) -> None:
+        # Older versions copied bundled Python 3.3 stubs into the plugin storage.
+        shutil.rmtree(cls.plugin_storage_path / "typings", ignore_errors=True)
+        (cls.plugin_storage_path / "VERSION").unlink(missing_ok=True)
 
     @override
     def on_server_response_async(self, response: ServerResponse) -> None:

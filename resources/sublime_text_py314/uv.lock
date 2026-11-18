@@ -1,0 +1,23 @@
+version = 1
+revision = 5
+requires-python = ">=3.13"
+
+[[package]]
+name = "lsp-pyright-sublime-text-py314"
+version = "0.0.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "sublime-text-stubs" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "sublime-text-stubs", specifier = "==4213.1" }]
+
+[[package]]
+name = "sublime-text-stubs"
+version = "4213.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ba/19/6d63141554e05edb20ef98379988fb88cdce3973065d828c6fbdabe58ff0/sublime_text_stubs-4213.1.tar.gz", hash = "sha256:797a0f219846fb2dc155e585371686a407d62277c8608d09317d107f4bf53515", size = 86185, upload-time = "2026-11-05T00:38:15.271Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/08/c4/62427d627269109ca3d8f353d9dd17c11b97ea3fa00d7d15b2718a14d2fa/sublime_text_stubs-4213.1-py3-none-any.whl", hash = "sha256:7f30dfad8d0a85b8518d3f96757af298448b1ec0d5c8511a072b6c8a30995cee", size = 37876, upload-time = "2026-11-05T00:38:14.023Z" },
+]

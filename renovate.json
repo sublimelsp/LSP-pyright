@@ -3,5 +3,19 @@
   "extends": [
     "github>sublimelsp/renovate-preset",
     "github>sublimelsp/renovate-preset:automerge-server"
+  ],
+  "packageRules": [
+    {
+      "description": "Sublime Text API stubs are shipped to users, so their updates are fixes that get released",
+      "matchFileNames": ["resources/sublime_text_py*/**"],
+      "matchPackageNames": ["sublime-text-stubs"],
+      "semanticCommitType": "fix"
+    },
+    {
+      "description": "Sublime Text build 4200 is the last one with the Python 3.8 plugin host",
+      "matchFileNames": ["resources/sublime_text_py38/**"],
+      "matchPackageNames": ["sublime-text-stubs"],
+      "allowedVersions": "<4201"
+    }
   ]
 }

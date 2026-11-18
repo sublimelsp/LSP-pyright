@@ -39,24 +39,4 @@ update_typeshed() {
     echo '[INFO] typeshed stubs updated.'
 }
 
-update_st_api_stubs() {
-    SUBLIME_PY33_TYPINGS_DIR="${PROJECT_DIR}/resources/typings/sublime_text_py33"
-
-    mkdir -p "${SUBLIME_PY33_TYPINGS_DIR}"
-
-    filenames=(
-        '_sublime_types.pyi'
-        'sublime.pyi'
-        'sublime_plugin.pyi'
-    )
-    for filename in "${filenames[@]}"; do
-        curl -sL \
-            "https://raw.githubusercontent.com/jfcherng-sublime/ST-API-stubs/master/typings/${filename}" \
-            --output "${SUBLIME_PY33_TYPINGS_DIR}/${filename}" || { echo "Error downloading stubs"; exit 1; }
-    done
-
-    echo '[INFO] Sublime Text API stubs updated.'
-}
-
 update_typeshed
-update_st_api_stubs
