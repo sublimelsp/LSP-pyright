@@ -34,6 +34,9 @@ class BaseDevEnvironmentHandler(ABC):
         """Check if this class support the given `dev_environment`."""
         return cls.name() == dev_environment
 
+    def install_async(self) -> None:
+        """Installs what this environment needs before the server starts. Blocks while installing. (subclass)"""
+
     @final
     def resolve_extra_paths(self, *, settings: DottedDict) -> list[str]:
         """Returns resolved `extraPaths` including `current_paths` for the environment."""
