@@ -44,6 +44,11 @@ class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
             ResourcePath("Packages", PACKAGE_NAME, "resources", f"sublime_text_py{cls.python_version_no_dot}"),
         )
 
+    @override
+    def install_async(self) -> None:
+        """Installs the Sublime Text API stubs for this Python version. Blocks while installing."""
+        self.stubs_venv_manager(self.package_storage_path).install_async()
+
     def find_stubs_dir(self) -> Path | None:
         """The `site-packages` dir of the stubs venv, which contains the `*-stubs` packages."""
         venv_path = self.stubs_venv_manager(self.package_storage_path).venv_path
@@ -102,12 +107,6 @@ VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS: list[type[BaseVersionedSublimeT
 """All versioned ST dev environment handlers. Must be sorted by `python_version` ascending."""
 
 
-def install_sublime_text_stubs(package_storage_path: Path) -> None:
-    """Installs the Sublime Text API stubs for all supported Python versions. Blocks while installing."""
-    for handler_cls in VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS:
-        handler_cls.stubs_venv_manager(package_storage_path).install_async()
-
-
 LATEST_ST_DEV_ENV_HANDLER = VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS[-1]
 OLDEST_ST_DEV_ENV_HANDLER = VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS[0]
 
@@ -120,6 +119,10 @@ class SublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
     @classmethod
     def name(cls) -> str:
         return "sublime_text"
+
+    @override
+    def install_async(self) -> None:
+        self.resolve_handler().install_async()
 
     @override
     def resolve_extra_paths_(self, *, settings: DottedDict) -> list[str]:

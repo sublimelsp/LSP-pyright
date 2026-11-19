@@ -25,7 +25,6 @@ from typing_extensions import override
 
 from .constants import PACKAGE_NAME, SERVER_SETTING_ANALYSIS_EXTRAPATHS, SERVER_SETTING_DEV_ENVIRONMENT
 from .dev_environment.helpers import get_dev_environment_handler
-from .dev_environment.impl.sublime_text import install_sublime_text_stubs
 from .log import log_error, log_warning
 from .utils_lsp import (
     ConfigurationProxy,
@@ -68,7 +67,6 @@ class LspPyrightPlugin(LspPlugin):
             on_server_installed=cls.on_server_installed,
         )
         cls.remove_legacy_files()
-        install_sublime_text_stubs(cls.plugin_storage_path)
 
     @classmethod
     def on_server_installed(cls, server_directory: Path) -> None:
@@ -167,6 +165,7 @@ class LspPyrightPlugin(LspPlugin):
                         f'Development environment "{dev_environment}" is unsupported. '
                         f'Using "{handler.name()}" instead.',
                     )
+                handler.install_async()
                 return handler.resolve_extra_paths(settings=session.config.settings)
         except Exception as ex:
             log_error(f'Failed to update extra paths for dev environment "{dev_environment}": {ex}')

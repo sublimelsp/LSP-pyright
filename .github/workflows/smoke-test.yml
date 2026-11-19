@@ -10,3 +10,7 @@ on:
 jobs:
   smoke:
     uses: sublimelsp/lsp_smoke_test/.github/workflows/smoke-test.yml@v1
+    with:
+      fixture-dir: |
+        tests/smoke/basic
+        tests/smoke/sublime_text
