@@ -16,6 +16,8 @@ from typing_extensions import TypeAlias, override
 from ...constants import PACKAGE_NAME
 from ..interfaces import BaseDevEnvironmentHandler
 
+ST_VERSION = int(sublime.version())
+
 VERSION_TUPLE_2: TypeAlias = Tuple[int, int]
 """E.g., `(3, 8)` means Python 3.8."""
 
@@ -27,6 +29,11 @@ class BaseVersionedSublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
     @classmethod
     def name(cls) -> str:
         return f"sublime_text_{cls.python_version_no_dot}"
+
+    @classmethod
+    def is_available(cls) -> bool:
+        """Whether the running Sublime Text has a plugin host (and a `Lib/pythonXY` dir) for this Python version."""
+        return True
 
     @classmethod
     def can_support(cls, dev_environment: str) -> bool:
@@ -92,12 +99,22 @@ class SublimeText38DevEnvironmentHandler(BaseVersionedSublimeTextDevEnvironmentH
     python_version = (3, 8)
     python_version_no_dot = "38"
 
+    @classmethod
+    @override
+    def is_available(cls) -> bool:
+        return 4200 >= ST_VERSION >= 4107
+
 
 class SublimeText314DevEnvironmentHandler(BaseVersionedSublimeTextDevEnvironmentHandler):
     """This handler will just assume the project uses Python 3.14."""
 
     python_version = (3, 14)
     python_version_no_dot = "314"
+
+    @classmethod
+    @override
+    def is_available(cls) -> bool:
+        return ST_VERSION >= 4203
 
 
 VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS: list[type[BaseVersionedSublimeTextDevEnvironmentHandler]] = [
@@ -107,8 +124,14 @@ VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS: list[type[BaseVersionedSublimeT
 """All versioned ST dev environment handlers. Must be sorted by `python_version` ascending."""
 
 
-LATEST_ST_DEV_ENV_HANDLER = VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS[-1]
-OLDEST_ST_DEV_ENV_HANDLER = VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS[0]
+AVAILABLE_ST_DEV_ENV_HANDLERS = [
+    cls for cls in VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS if cls.is_available()
+] or VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS
+"""Versioned handlers whose Python runtime the running ST provides (all of them if none matches this ST build).
+Only these are picked by `"sublime_text"` so that package dependencies in `Lib/pythonXY` can be resolved."""
+
+LATEST_ST_DEV_ENV_HANDLER = AVAILABLE_ST_DEV_ENV_HANDLERS[-1]
+OLDEST_ST_DEV_ENV_HANDLER = AVAILABLE_ST_DEV_ENV_HANDLERS[0]
 
 
 class SublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
@@ -154,7 +177,7 @@ class SublimeTextDevEnvironmentHandler(BaseDevEnvironmentHandler):
     def resolve_handler_cls(wanted_version: VERSION_TUPLE_2) -> type[BaseVersionedSublimeTextDevEnvironmentHandler]:
         """Returns the best matching handler class for the wanted Python version."""
         return first_true(
-            VERSIONED_SUBLIME_TEXT_DEV_ENVIRONMENT_HANDLERS,
+            AVAILABLE_ST_DEV_ENV_HANDLERS,
             pred=lambda cls: cls.python_version >= wanted_version,
             default=LATEST_ST_DEV_ENV_HANDLER,
         )
